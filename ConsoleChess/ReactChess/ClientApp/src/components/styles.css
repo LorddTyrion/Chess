@@ -1,0 +1,12 @@
+.table tbody tr td{
+    padding: 0px 0px 0px 0px;
+    width: fit-content;
+    height: fit-content;
+    box-sizing: border-box;
+}
+.table{
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+    line-height: 0;
+}
