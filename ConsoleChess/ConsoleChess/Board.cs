@@ -19,6 +19,7 @@ namespace ConsoleChess
         public Square[,] squares = new Square[8, 8];
         public List<string> moves = new List<string>();
         public Color turnOf;
+        public int FiftyMoveRule = 0;
         public BoardState(BoardState old)
         {
             turnOf = old.turnOf;
@@ -69,7 +70,20 @@ namespace ConsoleChess
             
             squares = new Square[8, 8];
             moves = new List<string>();
-    }
+        }
+        public bool PositionEquals(BoardState other)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (squares[i, j].Piece == null && other.squares[i, j].Piece != null) return false;
+                    if (squares[i, j].Piece != null && other.squares[i, j].Piece == null) return false;
+                    if(squares[i, j].Piece != null && other.squares[i,j].Piece!=null && squares[i, j].Piece.PieceName!=other.squares[i, j].Piece.PieceName) return false;
+                }
+            }
+            return true;
+        }
        
     }
     public class Board
@@ -81,6 +95,7 @@ namespace ConsoleChess
         //public List<string> moves = new List<string>();
         //public Color turnOf;
         public BoardState boardState=new BoardState();
+        public List<BoardState> States=new List<BoardState>();
         public Board()
         {
             boardState.turnOf=Color.WHITE;
@@ -207,6 +222,7 @@ namespace ConsoleChess
             if(TryMove(initialSquare, targetSquare, newState, promoteTo))
             {
                 boardState=newState;
+                States.Add(boardState);
                 return true;
             }
             return false;
@@ -237,6 +253,13 @@ namespace ConsoleChess
                 if (sum == 0 && !isCheck(boardState)) return Color.DRAW;
             }
             if (checkSufficientMaterial() == Color.NONE) return Color.DRAW;
+            int repetition = 0;
+            for (int i = 0; i < States.Count; i++)
+            {
+                if (boardState.PositionEquals(States[i])) repetition++;
+            }
+            if (repetition >= 3) return Color.DRAW;
+            if(boardState.FiftyMoveRule>=50) return Color.DRAW;
             return Color.NONE;
         }
         private bool canPromote (Piece piece, Square target, BoardState boardState)
@@ -288,10 +311,12 @@ namespace ConsoleChess
             targetSquare.Piece = null;
             if (boardState.turnOf == Color.WHITE && temp != null)
             {
+                boardState.FiftyMoveRule = 0;
                 boardState.BlackPieces.Remove(temp);
             }
             else if (boardState.turnOf == Color.BLACK && temp != null)
             {
+                boardState.FiftyMoveRule = 0;
                 boardState.WhitePieces.Remove(temp);
             }
             if (boardState.turnOf == Color.WHITE)
@@ -368,6 +393,8 @@ namespace ConsoleChess
         {
             if (initialSquare.Piece == null) return false;
             bool hasMoved = initialSquare.Piece.HasMoved;
+            if (initialSquare.Piece.PieceName == PieceName.PAWN) boardState.FiftyMoveRule = 0;
+            else boardState.FiftyMoveRule++;
             bool moveValid=false;
             Square emulatedInitialSquare=new Square(), emulatedTargetSquare=new Square();
             for(int i=0; i<8; i++)
@@ -432,15 +459,18 @@ namespace ConsoleChess
                 && ((Pawn)boardState.squares[emulatedInitialSquare.X, emulatedTargetSquare.Y].Piece).EnPassantable)                
             { 
                 temp = boardState.squares[emulatedInitialSquare.X, emulatedTargetSquare.Y].Piece;
-                wasEP= true;
+                boardState.FiftyMoveRule = 0;
+                wasEP = true;
             }
             //emulatedTargetSquare.Piece = null;
             if (boardState.turnOf == Color.WHITE && temp!=null)
             {
+                boardState.FiftyMoveRule = 0;
                 boardState.BlackPieces.Remove(temp);
             }
             else if(boardState.turnOf == Color.BLACK && temp != null)
             {
+                boardState.FiftyMoveRule = 0;
                 boardState.WhitePieces.Remove(temp);
             }
             if (emulatedInitialSquare.Piece.Move(emulatedTargetSquare.X, emulatedTargetSquare.Y, boardState.squares))
