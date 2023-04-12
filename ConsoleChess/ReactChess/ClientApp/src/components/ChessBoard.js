@@ -3,6 +3,7 @@ import { HubConnectionBuilder } from '@microsoft/signalr';
 import authService from './api-authorization/AuthorizeService'
 import { HttpTransportType } from '@microsoft/signalr';
 import { LogLevel } from '@microsoft/signalr';
+
 import './styles.css';
 
 var gameConnection = new HubConnectionBuilder()
@@ -19,7 +20,7 @@ export class ChessBoard extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { board: [], loading: true, isWhite: true, turnOf: true, duringMove: false, prevx:0, prevy:0 };
+        this.state = { board: [], loading: true, isWhite: true, turnOf: true, duringMove: false, prevx: 0, prevy: 0, promoteTo: 1, winner: 3 };
 
         gameConnection.on('GameCreated', (board) => {
             this.setState({
@@ -29,10 +30,15 @@ export class ChessBoard extends Component {
             this.forceUpdate()
 
         })
-        gameConnection.on('RefreshBoard', (board, success)=>{
-            this.setState({board: board})
+        gameConnection.on('RefreshBoard', (board, success) => {
+            this.setState({ board: board })
             console.log(this.state.board)
-            if(!success) console.log("Rossz lépés")
+            if (!success) console.log("Rossz lépés")
+            this.forceUpdate()
+        })
+
+        gameConnection.on('GameEnds', (result) => {
+            this.setState({ winner: result })
             this.forceUpdate()
         })
 
@@ -53,7 +59,7 @@ export class ChessBoard extends Component {
 
             const cols = [];
             for (let j = 0; j < 8; j++) {
-                cols.push(<td><button style={this.returnColor((i + j) % 2 === 0)} onClick={()=>this.onClick(i,j)}>{this.returnText(i, j)}</button></td>);
+                cols.push(<td><button style={this.returnColor((i + j) % 2 === 0)} onClick={() => this.onClick(i, j)}>{this.returnText(i, j)}</button></td>);
             }
             rows.push(<tr>{cols}</tr>)
         }
@@ -65,15 +71,50 @@ export class ChessBoard extends Component {
                     </tbody>
                 </table>
             </div>)
-        
+
 
     }
+
+    renderPromoteSelection() {
+        console.log(this.state.promoteTo)
+        return (
+            <div onChange={this.handleChange}>
+                <input type="radio" value="Queen" name="promote" /> Queen
+                <input type="radio" value="Knight" name="promote" /> Knight
+                <input type="radio" value="Bishop" name="promote" /> Bishop
+                <input type="radio" value="Rook" name="promote" /> Rook
+            </div>
+        );
+    }
+
     returnColor(white) {
         if (white === true) {
             return { backgroundColor: 'white', color: 'black', width: '100px', height: '100px', border: 'none', borderRadius: '0px 0px 0px 0px', borderWidth: '0px', textAlign: 'center', bottom: '0', fontSize: '26px' };
         }
         return { backgroundColor: 'black', color: 'white', width: '100px', height: '100px', border: 'none', borderRadius: '0px 0px 0px 0px', borderWidth: '0px', textAlign: 'center', bottom: '0', fontSize: '26px' };
     }
+
+    handleChange = (e) => {
+        switch (e.target.value) {
+            case "Queen":
+                this.setState({ promoteTo: 1 })
+                break;
+            case "Knight":
+                this.setState({ promoteTo: 2 })
+                break;
+            case "Bishop":
+                this.setState({ promoteTo: 3 })
+                break;
+            case "Rook":
+                this.setState({ promoteTo: 4 })
+                break;
+            default:
+                break;
+        }
+
+    }
+
+
     setBackground() {
         return ({
             height: 'fit-content',
@@ -107,9 +148,27 @@ export class ChessBoard extends Component {
 
     render() {
         let content = this.state.loading ? <div></div> : this.renderWhite()
+        let promote = this.renderPromoteSelection()
+        let win = <div></div>
+        switch (this.state.winner) {
+            case 0:
+                win = <p>White wins!</p>
+                break;
+            case 1:
+                win = <p>Black wins!</p>
+                break;
+            case 2:
+                win = <p>Draw!</p>
+                break;
+            default:
+                break;
+
+        }
         return (
             <div>
                 {content}
+                {promote}
+                {win}
             </div>
 
         );
@@ -128,14 +187,14 @@ export class ChessBoard extends Component {
         }
     }
     onClick = async (x, y) => {
-        console.log(x+" "+y+" meg lett nyomva")
-        if(this.state.board[8 * x + y].piece == null && !this.state.duringMove) return
-        if(!this.state.duringMove){
-            this.setState({duringMove: true, prevx: x, prevy: y})            
+        console.log(x + " " + y + " meg lett nyomva")
+        if (this.state.board[8 * x + y].piece == null && !this.state.duringMove) return
+        if (!this.state.duringMove) {
+            this.setState({ duringMove: true, prevx: x, prevy: y })
         }
-        else{
-            this.setState({duringMove: false});
-            await gameConnection.invoke('MakeMove', this.state.prevx, this.state.prevy, x, y);
+        else {
+            this.setState({ duringMove: false });
+            await gameConnection.invoke('MakeMove', this.state.prevx, this.state.prevy, x, y, this.state.promoteTo);
         }
     }
 }

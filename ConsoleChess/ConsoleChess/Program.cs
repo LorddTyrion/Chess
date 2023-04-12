@@ -7,22 +7,7 @@ Console.WriteLine("SAKK");
 Console.WriteLine();
 Board board = new Board();
 BoardView bw=new BoardView(board);
-//bw.Draw();
-//bw.ListPossibleMoves(1, 3);
-//bool result = board.Move(1, 3, 3, 3);
-//bw.Draw();
-//bw.ListPossibleMoves(6, 1);
-//result = board.Move(6, 1, 4, 1);
-//bw.Draw();
-//bw.ListPossibleMoves(3, 3);
-//result = board.Move(3, 3, 4, 3);
-//bw.Draw();
-//bw.ListPossibleMoves(6, 4);
-//result = board.Move(6, 4, 4, 4);
-//bw.Draw();
-//bw.ListPossibleMoves(4, 3);
-//result = board.Move(4, 3, 5, 4);
-//bw.Draw();
+
 string moveString = "";
 bw.Draw();
 bool running = true;
@@ -40,8 +25,29 @@ while (running)
     int oldY= moveChars[0] - 'a';
     int newX= moveChars[3] - '1';
     int newY= moveChars[2] - 'a';
+    PieceName promoteTo = PieceName.QUEEN;
+    if (moveChars.Length == 5)
+    {
+        switch (moveChars[4])
+        {
+            case 'q':
+                promoteTo = PieceName.QUEEN;
+                break;
+            case 'r':
+                promoteTo = PieceName.ROOK;
+                break;
+            case 'n':
+                promoteTo = PieceName.KNIGHT;
+                break;
+            case 'b':
+                promoteTo = PieceName.BISHOP;
+                break;
+            default:
+                break;
+        }
+    }
 
-    while (!board.Move(oldX, oldY, newX, newY))
+    while (!board.Move(oldX, oldY, newX, newY, promoteTo))
     {
         Console.WriteLine("Hibás lépés, add meg újra!");
         moveChars = Console.ReadLine().ToLower().ToCharArray();
@@ -54,6 +60,27 @@ while (running)
         oldY = moveChars[0] - 'a';
         newX = moveChars[3] - '1';
         newY = moveChars[2] - 'a';
+        promoteTo = PieceName.QUEEN;
+        if (moveChars.Length == 5)
+        {
+            switch (moveChars[4])
+            {
+                case 'q':
+                    promoteTo = PieceName.QUEEN;
+                    break;
+                case 'r':
+                    promoteTo = PieceName.ROOK;
+                    break;
+                case 'n':
+                    promoteTo = PieceName.KNIGHT;
+                    break;
+                case 'b':
+                    promoteTo = PieceName.BISHOP;
+                    break;
+                default:
+                    break;
+            }
+        }
     }
     bw.Draw();
     switch (board.CheckEndGame())

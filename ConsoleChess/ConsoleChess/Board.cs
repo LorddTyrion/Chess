@@ -172,7 +172,7 @@ namespace ConsoleChess
                     //idk if necessary
                     if (newState.squares[x,y].Piece.IsSteppable(i,j, newState.squares) || newState.squares[x, y].Piece.IsAttacked(i, j, newState.squares))
                     {
-                        bool valid=TryMove(newState.squares[x, y], newState.squares[i, j], newState);
+                        bool valid=TryMove(newState.squares[x, y], newState.squares[i, j], newState, PieceName.QUEEN);
                         if (!valid) 
                         {
                             newState = new BoardState(boardState);
@@ -194,14 +194,17 @@ namespace ConsoleChess
             }
             return possibleMoves;
         }
-        public bool Move(int initialX, int initialY, int targetX, int targetY)
+        public bool Move(int initialX, int initialY, int targetX, int targetY, PieceName promoteTo=PieceName.QUEEN)
         {
             Square initialSquare = boardState.squares[initialX, initialY];
             Square targetSquare=boardState.squares[targetX, targetY];
-            if (boardState.squares[initialX, initialY].Piece.IsWhite && boardState.turnOf == Color.BLACK) return false;
-            if (!boardState.squares[initialX, initialY].Piece.IsWhite && boardState.turnOf == Color.WHITE) return false;
+            if (boardState.squares[initialX, initialY].Piece != null)
+            {
+                if (boardState.squares[initialX, initialY].Piece.IsWhite && boardState.turnOf == Color.BLACK) return false;
+                if (!boardState.squares[initialX, initialY].Piece.IsWhite && boardState.turnOf == Color.WHITE) return false;
+            }
             BoardState newState=new BoardState(boardState);
-            if(TryMove(initialSquare, targetSquare, newState))
+            if(TryMove(initialSquare, targetSquare, newState, promoteTo))
             {
                 boardState=newState;
                 return true;
@@ -361,7 +364,7 @@ namespace ConsoleChess
             boardState.moves.Add(temp.MoveNotation(targetSquare.X, targetSquare.Y, boardState.squares, isChecked, PieceName.PAWN));
             return true;
         }
-        public bool TryMove(Square initialSquare, Square targetSquare, BoardState boardState)
+        public bool TryMove(Square initialSquare, Square targetSquare, BoardState boardState, PieceName promoteTo)
         {
             if (initialSquare.Piece == null) return false;
             bool hasMoved = initialSquare.Piece.HasMoved;
@@ -400,20 +403,19 @@ namespace ConsoleChess
             bool prom = canPromote(emulatedInitialSquare.Piece, emulatedTargetSquare, boardState);
             if (canPromote(emulatedInitialSquare.Piece, emulatedTargetSquare, boardState))
             {
-                Console.WriteLine("1 Bishop, 2 Knight, 3 Rook, 4 Queen");
-                int result = Convert.ToInt32(Console.ReadLine());
-                switch (result)
+                
+                switch (promoteTo)
                 {
-                    case 1:
+                    case PieceName.BISHOP:
                         moveValid = Promote(emulatedInitialSquare, emulatedTargetSquare, PieceName.BISHOP, boardState);
                         break;
-                    case 2:
+                    case PieceName.KNIGHT:
                         moveValid = Promote(emulatedInitialSquare, emulatedTargetSquare, PieceName.KNIGHT, boardState);
                         break;
-                    case 3:
+                    case PieceName.ROOK:
                         moveValid = Promote(emulatedInitialSquare, emulatedTargetSquare, PieceName.ROOK, boardState);
                         break;
-                    case 4:
+                    case PieceName.QUEEN:
                         moveValid = Promote(emulatedInitialSquare, emulatedTargetSquare, PieceName.QUEEN, boardState);
                         break;
                     default:

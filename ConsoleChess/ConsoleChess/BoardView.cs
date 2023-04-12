@@ -69,9 +69,10 @@ namespace ConsoleChess
         }
         public bool ValidateInput(char[] chars)
         {
-            if (chars == null || chars.Length != 4) return false;
+            if (chars == null || (chars.Length != 4 && chars.Length!=5)) return false;
             if (chars[0] < 'a' || chars[0] > 'h' || chars[2] < 'a' || chars[2] > 'h') return false;
             if (chars[1] < '1' || chars[1] > '8' || chars[3] < '1' || chars[3] > '8') return false;
+            if (chars.Length == 5 && (chars[4] != 'q' && chars[4] != 'r' && chars[4] != 'b' && chars[4] != 'n')) return false;
             return true;
         }
     }

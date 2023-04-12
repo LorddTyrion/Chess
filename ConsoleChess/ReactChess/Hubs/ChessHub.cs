@@ -1,5 +1,6 @@
 ﻿
 using ConsoleChess;
+using ConsoleChess.Pieces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
@@ -17,12 +18,15 @@ namespace ReactChess.Hubs
             List<Square> b =boardToList(board);
             await Clients.All.GameCreated(b);
         }
-        public async Task MakeMove(int initialX, int initialY, int targetX, int targetY)
+        public async Task MakeMove(int initialX, int initialY, int targetX, int targetY, int promoteTo)
         {
-            bool result = board.Move(initialX, initialY, targetX, targetY);
+            bool result = board.Move(initialX, initialY, targetX, targetY, (PieceName)promoteTo);
+            Color end=board.CheckEndGame();
+            
             if (result) await Clients.All.RefreshBoard(boardToList(board), true);
             else await Clients.All.RefreshBoard(boardToList(board), false);
 
+            if (end != Color.NONE) await Clients.All.GameEnds((int)end);
         }
 
         private List<Square> boardToList(Board board)

@@ -308,8 +308,6 @@ namespace ChessTest
             board.boardState.squares[6, 2].Piece = p;
             board.boardState.WhitePieces.Add(p);
 
-            var input = new StringReader("4\n4");
-            Console.SetIn(input);
             bool result = board.Move(6, 2, 7, 2);
             Assert.True(result);
         }
