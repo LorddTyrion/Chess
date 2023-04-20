@@ -59,12 +59,14 @@ namespace ConsoleChess
         }
         public void ListPossibleMoves(int x, int y)
         {
-            List<string> list=board.getPossibleMoves(x, y);
-            foreach (string move in list)
+            List<Move> list=board.getPossibleMoves(x, y);
+            Console.Write("PM: ");
+            foreach (Move move in list)
             {
-                Console.Write(move+" ");
-                Console.WriteLine();
+                Console.Write(move.ToString()+" ");
+                
             }
+            Console.WriteLine();
 
         }
         public bool ValidateInput(char[] chars)

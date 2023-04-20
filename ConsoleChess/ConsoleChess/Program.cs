@@ -83,6 +83,8 @@ while (running)
         }
     }
     bw.Draw();
+    Console.WriteLine(board.boardState.moves[board.boardState.moves.Count-1]);
+    bw.ListPossibleMoves(0, 4);
     switch (board.CheckEndGame())
     {
         case Color.WHITE:

@@ -47,45 +47,6 @@ namespace ConsoleChess.Pieces
         }
         public abstract bool IsSteppable(int xNew, int yNew, Square[,] Squares);
         public abstract bool IsAttacked(int xNew, int yNew, Square[,] Squares);
-        public virtual string MoveNotation(int xNew, int yNew, Square[,] Squares, bool isCheck, PieceName promoted)
-        {
-            string initial = "";
-            char column = 'a';
-            column = (char)(Convert.ToUInt16(column) + Y);
-            initial += column;
-            initial += (X+1);
-            if (IsAttacked(xNew, yNew, Squares) && Squares[xNew, yNew].Piece!=null && Squares[xNew, yNew].Piece.IsWhite != IsWhite)
-            {
-                initial += "x";
-            }
-            column = 'a';
-            column = (char)(Convert.ToUInt16(column)+yNew);
-            initial += column;
-            initial += (xNew+1);
-            switch (promoted)
-            {
-                case PieceName.PAWN:
-                    break;
-                case PieceName.ROOK:
-                    initial += "=R";
-                    break;
-                case PieceName.BISHOP:
-                    initial += "=B";
-                    break;
-                case PieceName.KNIGHT:
-                    initial += "=N";
-                    break;
-                case PieceName.QUEEN:
-                    initial += "=Q";
-                    break;
-                case PieceName.KING:
-                    break;
-                default:
-                    break;
-            }
-            if (isCheck) initial += "+";
-            return initial;
-            
-        }
+       
     }
 }

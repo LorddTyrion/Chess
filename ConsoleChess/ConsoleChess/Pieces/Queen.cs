@@ -19,12 +19,7 @@ namespace ConsoleChess.Pieces
         {
 			return IsSteppable(xNew, yNew, Squares);
 		}
-		public override string MoveNotation(int yNew, int xNew, Square[,] Squares, bool isCheck, PieceName promoted)
-		{
-			string initial = "Q";
-			initial += base.MoveNotation(yNew, xNew, Squares, isCheck, promoted);
-			return initial;
-		}
+		
 
 		public override bool IsSteppable(int xNew, int yNew, Square[,] Squares)
         {

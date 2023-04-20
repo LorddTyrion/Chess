@@ -16,12 +16,7 @@ namespace ConsoleChess.Pieces
         {
             return PieceName.KNIGHT;
         }
-		public override string MoveNotation(int xNew, int yNew, Square[,] Squares, bool isCheck, PieceName promoted)
-		{
-			string initial = "N";
-			initial += base.MoveNotation(xNew, yNew, Squares, isCheck, promoted);
-			return initial;
-		}
+	
 
 		public override bool IsAttacked(int xNew, int yNew, Square[,] Squares)
         {

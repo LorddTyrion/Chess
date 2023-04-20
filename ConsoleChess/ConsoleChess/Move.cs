@@ -28,6 +28,17 @@ namespace ConsoleChess
             Piece = PieceName.PAWN;
             PromoteTo = PieceName.PAWN;
         }
+        public Move(Move old)
+        {
+            InitialX = old.InitialX;                
+            InitialY = old.InitialY;
+            TargetX = old.TargetX;
+            TargetY = old.TargetY;
+            isCheck = old.isCheck;
+            isCapture = old.isCapture;
+            Piece = old.Piece;
+            PromoteTo = old.PromoteTo;
+        }
 
         public override string ToString()
         {

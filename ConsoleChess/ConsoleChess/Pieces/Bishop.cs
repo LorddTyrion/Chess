@@ -15,12 +15,7 @@ namespace ConsoleChess.Pieces
         {
             return PieceName.BISHOP;
         }
-		public override string MoveNotation(int xNew, int yNew, Square[,] Squares, bool isCheck, PieceName promoted)
-        {
-            string initial = "B";
-			initial+=base.MoveNotation(xNew, yNew, Squares, isCheck, promoted);
-			return initial;
-        }
+	
 
 
 		public override bool IsAttacked(int xNew, int yNew, Square[,] Squares)

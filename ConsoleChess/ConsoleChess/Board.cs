@@ -17,7 +17,7 @@ namespace ConsoleChess
         public List<Piece> BlackPieces = new List<Piece>();
         public King WhiteKing, BlackKing;
         public Square[,] squares = new Square[8, 8];
-        public List<string> moves = new List<string>();
+        public List<Move> moves = new List<Move>();
         public Color turnOf;
         public int FiftyMoveRule = 0;
         public BoardState(BoardState old)
@@ -36,7 +36,7 @@ namespace ConsoleChess
                 }
             }
 
-            moves = new List<string>();
+            moves = new List<Move>();
             for (int i = 0; i < old.moves.Count; i++)
             {
                 moves.Add(old.moves[i]);
@@ -69,7 +69,7 @@ namespace ConsoleChess
             BlackPieces = new List<Piece>();
             
             squares = new Square[8, 8];
-            moves = new List<string>();
+            moves = new List<Move>();
         }
         public bool PositionEquals(BoardState other)
         {
@@ -176,35 +176,46 @@ namespace ConsoleChess
             
             return false;
         }
-        public List<string> getPossibleMoves(int x, int y)
+        public List<Move> getPossibleMoves(int x, int y)
         {
-            List<string> possibleMoves = new List<string>();
+            List<Move> possibleMoves = new List<Move>();
+            
             BoardState newState = new BoardState(boardState);
+            if (newState.squares[x, y].Piece.IsWhite && boardState.turnOf == Color.BLACK) return possibleMoves;
+            if (!newState.squares[x, y].Piece.IsWhite && boardState.turnOf == Color.WHITE) return possibleMoves;
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    //idk if necessary
-                    if (newState.squares[x,y].Piece.IsSteppable(i,j, newState.squares) || newState.squares[x, y].Piece.IsAttacked(i, j, newState.squares))
+                    bool isEmpty = newState.squares[i, j].Piece == null;
+                    PieceName pieceName = PieceName.PAWN;
+                    if (newState.squares[x, y].Piece != null) pieceName = newState.squares[x, y].Piece.PieceName;
+                    bool valid=TryMove(newState.squares[x, y], newState.squares[i, j], newState, PieceName.QUEEN);
+                    if (!valid) 
                     {
-                        bool valid=TryMove(newState.squares[x, y], newState.squares[i, j], newState, PieceName.QUEEN);
-                        if (!valid) 
-                        {
-                            newState = new BoardState(boardState);
-                            break; 
-                        }
-                        bool isChecked = isCheck(newState);
-                        if(canPromote(boardState.squares[x,y].Piece, boardState.squares[i, j], boardState))
-                        {
-                            possibleMoves.Add(boardState.squares[x, y].Piece.MoveNotation(i, j, boardState.squares, isChecked, PieceName.BISHOP));
-                            possibleMoves.Add(boardState.squares[x, y].Piece.MoveNotation(i, j, boardState.squares, isChecked, PieceName.KNIGHT));
-                            possibleMoves.Add(boardState.squares[x, y].Piece.MoveNotation(i, j, boardState.squares, isChecked, PieceName.ROOK));
-                            possibleMoves.Add(boardState.squares[x, y].Piece.MoveNotation(i, j, boardState.squares, isChecked, PieceName.QUEEN));
-
-                        }
-                        else { possibleMoves.Add(boardState.squares[x, y].Piece.MoveNotation(i, j, boardState.squares, isChecked, PieceName.PAWN)); }
                         newState = new BoardState(boardState);
+                        continue; 
                     }
+                    Move possibleMove = new Move();
+                    possibleMove.isCheck = isCheck(newState);
+                    possibleMove.isCapture = !isEmpty;
+                    possibleMove.InitialX = x;
+                    possibleMove.InitialY = y;
+                    possibleMove.TargetX = i;
+                    possibleMove.TargetY = j;
+                    possibleMove.Piece = pieceName;
+                    possibleMove.PromoteTo = PieceName.PAWN;
+                    if(canPromote(boardState.squares[x,y].Piece, boardState.squares[i, j], boardState))
+                    {
+                        Move bishopMove=new Move(possibleMove); bishopMove.PromoteTo = PieceName.BISHOP; possibleMoves.Add(bishopMove);
+                        Move queenMove = new Move(possibleMove); bishopMove.PromoteTo = PieceName.QUEEN; possibleMoves.Add(queenMove);
+                        Move knightMove = new Move(possibleMove); bishopMove.PromoteTo = PieceName.KNIGHT; possibleMoves.Add(knightMove);
+                        Move rookMove = new Move(possibleMove); bishopMove.PromoteTo = PieceName.ROOK; possibleMoves.Add(rookMove);
+
+                    }
+                    else { possibleMoves.Add(possibleMove); }
+                    newState = new BoardState(boardState);
+                    
                 }
             }
             return possibleMoves;
@@ -307,7 +318,8 @@ namespace ConsoleChess
             Piece temp = initialSquare.Piece;
             initialSquare.Piece = null;
             Piece tempTarget = null;
-            if (targetSquare.Piece != null) { tempTarget = targetSquare.Piece; }
+            bool isCapture = false;
+            if (targetSquare.Piece != null) { tempTarget = targetSquare.Piece; isCapture = true; }
             targetSquare.Piece = null;
             if (boardState.turnOf == Color.WHITE && temp != null)
             {
@@ -337,7 +349,16 @@ namespace ConsoleChess
             bool isChecked=isCheck(boardState);
             if (isBoardValid(boardState))
             {
-                boardState.moves.Add(temp.MoveNotation(targetSquare.X, targetSquare.Y, boardState.squares, isChecked, piece));
+                Move possibleMove = new Move();
+                possibleMove.isCheck = isChecked;
+                possibleMove.isCapture = isCapture;
+                possibleMove.InitialX = initialSquare.X;
+                possibleMove.InitialY = initialSquare.Y;
+                possibleMove.TargetX = targetSquare.X;
+                possibleMove.TargetY = targetSquare.Y;
+                possibleMove.Piece = PieceName.PAWN;
+                possibleMove.PromoteTo = piece;
+                boardState.moves.Add(possibleMove);
                 return true;
             }
             return false;
@@ -386,7 +407,16 @@ namespace ConsoleChess
                 boardState.squares[targetSquare.X, 7].Piece = null;
             }
             bool isChecked = isCheck(boardState);
-            boardState.moves.Add(temp.MoveNotation(targetSquare.X, targetSquare.Y, boardState.squares, isChecked, PieceName.PAWN));
+            Move possibleMove = new Move();
+            possibleMove.isCheck = isChecked;
+            possibleMove.isCapture = false;
+            possibleMove.InitialX = initialSquare.X;
+            possibleMove.InitialY = initialSquare.Y;
+            possibleMove.TargetX = targetSquare.X;
+            possibleMove.TargetY = targetSquare.Y;
+            possibleMove.Piece = PieceName.KING;
+            possibleMove.PromoteTo = PieceName.PAWN;
+            boardState.moves.Add(possibleMove);
             return true;
         }
         public bool TryMove(Square initialSquare, Square targetSquare, BoardState boardState, PieceName promoteTo)
@@ -453,8 +483,11 @@ namespace ConsoleChess
             }
             Piece temp=null;
             bool wasEP = false;
-            if(emulatedTargetSquare.Piece != null) { temp= emulatedTargetSquare.Piece; }
+            bool isCapture = false;
+            PieceName pieceName = emulatedInitialSquare.Piece.PieceName;
+            if(emulatedTargetSquare.Piece != null) { temp= emulatedTargetSquare.Piece; isCapture = true; }
             if(emulatedInitialSquare.Piece.getPieceName()==PieceName.PAWN && emulatedTargetSquare.Piece==null 
+                && boardState.squares[emulatedInitialSquare.X, emulatedTargetSquare.Y].Piece!=null
                 && boardState.squares[emulatedInitialSquare.X, emulatedTargetSquare.Y].Piece.getPieceName()==PieceName.PAWN 
                 && ((Pawn)boardState.squares[emulatedInitialSquare.X, emulatedTargetSquare.Y].Piece).EnPassantable)                
             { 
@@ -480,7 +513,16 @@ namespace ConsoleChess
                 bool isChecked = isCheck(boardState);
                 if (isBoardValid(boardState))
                 {
-                    boardState.moves.Add(emulatedTargetSquare.Piece.MoveNotation(emulatedTargetSquare.X, emulatedTargetSquare.Y, boardState.squares, isChecked, PieceName.PAWN));
+                    Move possibleMove = new Move();
+                    possibleMove.isCheck = isChecked;
+                    possibleMove.isCapture = isCapture;
+                    possibleMove.InitialX = initialSquare.X;
+                    possibleMove.InitialY = initialSquare.Y;
+                    possibleMove.TargetX = targetSquare.X;
+                    possibleMove.TargetY = targetSquare.Y;
+                    possibleMove.Piece = pieceName;
+                    possibleMove.PromoteTo = PieceName.PAWN;
+                    boardState.moves.Add(possibleMove);
                     moveValid = true;
                 }
             }
