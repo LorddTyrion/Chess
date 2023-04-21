@@ -515,7 +515,7 @@ namespace ConsoleChess
                 {
                     Move possibleMove = new Move();
                     possibleMove.isCheck = isChecked;
-                    possibleMove.isCapture = isCapture;
+                    possibleMove.isCapture = isCapture || wasEP;
                     possibleMove.InitialX = initialSquare.X;
                     possibleMove.InitialY = initialSquare.Y;
                     possibleMove.TargetX = targetSquare.X;

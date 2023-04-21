@@ -7,5 +7,7 @@ namespace ReactChess.Hubs
         Task GameCreated(List<Square> board);
         Task RefreshBoard(List<Square> board, bool success);
         Task GameEnds(int result);
+        Task AddToGame(List<string> players);
+        Task SetColor(bool isWhite);
     }
 }

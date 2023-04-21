@@ -20,11 +20,22 @@ export class ChessBoard extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { board: [], loading: true, isWhite: true, turnOf: true, duringMove: false, prevx: 0, prevy: 0, promoteTo: 1, winner: 3 };
+        this.state = { board: [], players: [], loading: true, started: false, joined: false, isWhite: true, turnOf: true, duringMove: false, prevx: 0, prevy: 0, promoteTo: 1, winner: 3 };
+
+        gameConnection.on('AddToGame', (playerlist) =>{
+            this.setState({players: playerlist})
+            
+            this.forceUpdate()
+        })
+
+        gameConnection.on('SetColor', (isWhite)=>{
+            this.setState({isWhite: isWhite})
+            this.forceUpdate()
+        })
 
         gameConnection.on('GameCreated', (board) => {
             this.setState({
-                board: board, loading: false
+                board: board, loading: false, started:true
             })
             console.log("Game started")
             this.forceUpdate()
@@ -34,6 +45,7 @@ export class ChessBoard extends Component {
             this.setState({ board: board })
             console.log(this.state.board)
             if (!success) console.log("Rossz lépés")
+            else this.setState({turnOf: !this.state.turnOf})
             this.forceUpdate()
         })
 
@@ -53,9 +65,54 @@ export class ChessBoard extends Component {
 
     }
 
-    renderWhite() {
+    renderJoin(players){
+        return (
+            <div>
+                <button  onClick={this.onJoinGame}>Join game</button>
+                <button  onClick={this.onStartGame}>Start game</button>
+                <table className='table table-striped' aria-labelledby="tabelLabel">
+                    <thead>
+                        <tr>
+                            <th>Players</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {players.map(players =>
+                            <tr key={Math.random() * 1000000 + 1}>
+                                <td>{players}</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+
+            </div>)
+
+    }
+
+    renderBlack() {
         const rows = [];
         for (let i = 0; i < 8; i++) {
+
+            const cols = [];
+            for (let j = 0; j < 8; j++) {
+                cols.push(<td><button style={this.returnColor((i + j) % 2 === 0)} onClick={() => this.onClick(i, j)}>{this.returnText(i, j)}</button></td>);
+            }
+            rows.push(<tr>{cols}</tr>)
+        }
+        return (
+            <div>
+                <table style={this.setBackground()} className='table' aria-labelledby="tabelLabel">
+                    <tbody>
+                        {rows}
+                    </tbody>
+                </table>
+            </div>)
+
+
+    }
+    renderWhite() {
+        const rows = [];
+        for (let i = 7; i >= 0; i--) {
 
             const cols = [];
             for (let j = 0; j < 8; j++) {
@@ -147,9 +204,18 @@ export class ChessBoard extends Component {
     }
 
     render() {
-        let content = this.state.loading ? <div></div> : this.renderWhite()
+        let join=this.state.started?<div></div> : this.renderJoin(this.state.players)
+        console.log(this.state.started)
+        let content = <div></div>
+        if(this.state.isWhite){
+            content=this.state.loading ? <div></div> : this.renderWhite()
+        }
+        else{
+            content=this.state.loading ? <div></div> : this.renderBlack()
+        }
         let promote = this.renderPromoteSelection()
         let win = <div></div>
+        
         switch (this.state.winner) {
             case 0:
                 win = <p>White wins!</p>
@@ -164,11 +230,15 @@ export class ChessBoard extends Component {
                 break;
 
         }
-        return (
-            <div>
+        let all=!this.state.started ? <div>{join}</div>:<div>
                 {content}
                 {promote}
                 {win}
+            </div>
+
+        return (
+            <div>
+                {all}
             </div>
 
         );
@@ -179,7 +249,7 @@ export class ChessBoard extends Component {
         try {
             await gameConnection.start();
             console.log("SignalR (game) Connected.");
-            await gameConnection.invoke('GameStarted');
+            //await gameConnection.invoke('GameStarted');
 
         } catch (err) {
             console.log("Start hiba:" + err);
@@ -189,6 +259,7 @@ export class ChessBoard extends Component {
     onClick = async (x, y) => {
         console.log(x + " " + y + " meg lett nyomva")
         if (this.state.board[8 * x + y].piece == null && !this.state.duringMove) return
+        if(this.state.turnOf !== this.state.isWhite) return
         if (!this.state.duringMove) {
             this.setState({ duringMove: true, prevx: x, prevy: y })
         }
@@ -196,5 +267,30 @@ export class ChessBoard extends Component {
             this.setState({ duringMove: false });
             await gameConnection.invoke('MakeMove', this.state.prevx, this.state.prevy, x, y, this.state.promoteTo);
         }
+    }
+    onJoinGame = async (e)=>{
+        e.preventDefault()
+        if(!this.state.joined){
+            this.setState({joined: false})
+            await gameConnection.invoke('EnterGame')
+        }
+        
+    }
+    onStartGame=async (e)=>{
+        e.preventDefault();
+        try {
+            if (this.state.players.length===2) {
+                this.setState({started: true})
+
+                await gameConnection.invoke('GameStarted');
+
+            }
+            else {
+                alert("Not enough players")
+            }
+        } catch (err) {
+            console.error(err)
+        }
+        
     }
 }
