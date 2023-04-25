@@ -65,9 +65,15 @@ namespace ReactChess.Services
             }
             return null;
         }
-        public bool IsValid(string name)
-        {
-            return true;
+        public bool IsValid(string name, int gameid)
+        {         
+            int id= IdByName(name);
+            if(id!=gameid) return false;
+            Game game=GameById(id);
+            if (game.State != GameState.STARTED) return false;
+            if (game.BlackPlayer == name && game.Board.boardState.turnOf == Color.BLACK) return true;
+            if(game.WhitePlayer==name && game.Board.boardState.turnOf == Color.WHITE) return true;
+            return false;
         }
     }
 }

@@ -232,8 +232,8 @@ export class ChessBoard extends Component {
         let all=!this.state.started ? <div>{join}</div>:<div>
                 {content}
                 {promote}
-                {win}
             </div>
+        if(this.state.winner<=2) all=win
 
         return (
             <div>

@@ -37,14 +37,18 @@ namespace ReactChess.Hubs
             var username = user.UserName;
             int gameID=gameController.IdByName(username);
             Game game=gameController.GameById(gameID);
-            if (gameController.IsValid(username))
+            if (gameController.IsValid(username, gameID))
             {
                 bool result = game.Board.Move(initialX, initialY, targetX, targetY, (PieceName)promoteTo);
                 Color end = game.Board.CheckEndGame();
                 if (result) await Clients.Group(gameID.ToString()).RefreshBoard(boardToList(game.Board), true);
                 else await Clients.Group(gameID.ToString()).RefreshBoard(boardToList(game.Board), false);
 
-                if (end != Color.NONE) await Clients.Group(gameID.ToString()).GameEnds((int)end);
+                if (end != Color.NONE)
+                {
+                    game.State = GameState.FINISHED;
+                    await Clients.Group(gameID.ToString()).GameEnds((int)end);
+                }
             }
 
             /*bool result = board.Move(initialX, initialY, targetX, targetY, (PieceName)promoteTo);
