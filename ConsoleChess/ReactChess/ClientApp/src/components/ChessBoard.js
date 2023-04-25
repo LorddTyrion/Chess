@@ -68,8 +68,7 @@ export class ChessBoard extends Component {
     renderJoin(players){
         return (
             <div>
-                <button  onClick={this.onJoinGame}>Join game</button>
-                <button  onClick={this.onStartGame}>Start game</button>
+                <button  onClick={this.onJoinGame}>Join game</button>                
                 <table className='table table-striped' aria-labelledby="tabelLabel">
                     <thead>
                         <tr>

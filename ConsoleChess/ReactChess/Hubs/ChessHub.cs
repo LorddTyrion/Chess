@@ -4,12 +4,14 @@ using ConsoleChess.Pieces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using ReactChess.Data;
+using ReactChess.Services;
 
 namespace ReactChess.Hubs
 {
     [Authorize]
     public class ChessHub : Hub<ChessClient>
     {
+        public static GameController gameController=new GameController();
       
         public static Board board=new Board();
         public ApplicationDbContext _context;
@@ -31,17 +33,31 @@ namespace ReactChess.Hubs
         }
         public async Task MakeMove(int initialX, int initialY, int targetX, int targetY, int promoteTo)
         {
-            bool result = board.Move(initialX, initialY, targetX, targetY, (PieceName)promoteTo);
+            var user = _context.Users.Where(au => au.Id == CurrentUserId).FirstOrDefault();
+            var username = user.UserName;
+            int gameID=gameController.IdByName(username);
+            Game game=gameController.GameById(gameID);
+            if (gameController.IsValid(username))
+            {
+                bool result = game.Board.Move(initialX, initialY, targetX, targetY, (PieceName)promoteTo);
+                Color end = game.Board.CheckEndGame();
+                if (result) await Clients.Group(gameID.ToString()).RefreshBoard(boardToList(game.Board), true);
+                else await Clients.Group(gameID.ToString()).RefreshBoard(boardToList(game.Board), false);
+
+                if (end != Color.NONE) await Clients.Group(gameID.ToString()).GameEnds((int)end);
+            }
+
+            /*bool result = board.Move(initialX, initialY, targetX, targetY, (PieceName)promoteTo);
             Color end=board.CheckEndGame();
             
             if (result) await Clients.All.RefreshBoard(boardToList(board), true);
             else await Clients.All.RefreshBoard(boardToList(board), false);
 
-            if (end != Color.NONE) await Clients.All.GameEnds((int)end);
+            if (end != Color.NONE) await Clients.All.GameEnds((int)end);*/
         }
         public async Task EnterGame()
         {
-            if (playerCount <= 1)
+            /*if (playerCount <= 1)
             {
                 var user = _context.Users.Where(au => au.Id == CurrentUserId).FirstOrDefault();
                 var username = user.UserName;
@@ -60,6 +76,19 @@ namespace ReactChess.Hubs
                     await Clients.Caller.SetColor(firstColor != 2);
                 }
                 
+            }*/
+            var user = _context.Users.Where(au => au.Id == CurrentUserId).FirstOrDefault();
+            var username = user.UserName;
+            bool result=gameController.AddPlayer(username);
+            int gameID = gameController.IdByName(username);
+            await Groups.AddToGroupAsync(Context.ConnectionId, gameID.ToString());
+            await Clients.Group(gameID.ToString()).AddToGame(gameController.PlayersById(gameID));
+            if(gameController.GameById(gameID).WhitePlayer==username) await Clients.Caller.SetColor(true);
+            else if(gameController.GameById(gameID).BlackPlayer == username) await Clients.Caller.SetColor(false);
+            if (result)
+            {
+                List<Square> b = boardToList(gameController.GameById(gameID).Board);
+                await Clients.Group(gameID.ToString()).GameCreated(b);
             }
         }
 
