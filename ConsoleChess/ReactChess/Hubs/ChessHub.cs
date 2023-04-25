@@ -11,33 +11,27 @@ namespace ReactChess.Hubs
     [Authorize]
     public class ChessHub : Hub<ChessClient>
     {
-        public static GameController gameController=new GameController();
       
-        public static Board board=new Board();
         public ApplicationDbContext _context;
+        public GameController _gameController;
         private string? CurrentUserId => Context.UserIdentifier;
 
-        private static int playerCount = 0;
-        private static int firstColor=0;
 
-        static List<string> _players = new List<string>();
-        public ChessHub(ApplicationDbContext context)
+
+       
+        public ChessHub(ApplicationDbContext context, GameController gameController)
         {
             _context = context;
+            _gameController = gameController;
         }
-        public async Task GameStarted()
-        {
-            board= new Board();
-            List<Square> b =boardToList(board);
-            await Clients.All.GameCreated(b);
-        }
+        
         public async Task MakeMove(int initialX, int initialY, int targetX, int targetY, int promoteTo)
         {
             var user = _context.Users.Where(au => au.Id == CurrentUserId).FirstOrDefault();
             var username = user.UserName;
-            int gameID=gameController.IdByName(username);
-            Game game=gameController.GameById(gameID);
-            if (gameController.IsValid(username, gameID))
+            int gameID=_gameController.IdByName(username);
+            Game game=_gameController.GameById(gameID);
+            if (_gameController.IsValid(username, gameID))
             {
                 bool result = game.Board.Move(initialX, initialY, targetX, targetY, (PieceName)promoteTo);
                 Color end = game.Board.CheckEndGame();
@@ -51,47 +45,21 @@ namespace ReactChess.Hubs
                 }
             }
 
-            /*bool result = board.Move(initialX, initialY, targetX, targetY, (PieceName)promoteTo);
-            Color end=board.CheckEndGame();
-            
-            if (result) await Clients.All.RefreshBoard(boardToList(board), true);
-            else await Clients.All.RefreshBoard(boardToList(board), false);
-
-            if (end != Color.NONE) await Clients.All.GameEnds((int)end);*/
+          
         }
         public async Task EnterGame()
         {
-            /*if (playerCount <= 1)
-            {
-                var user = _context.Users.Where(au => au.Id == CurrentUserId).FirstOrDefault();
-                var username = user.UserName;
-                playerCount++;
-                _players.Add(username);
-                if (firstColor == 0)
-                {
-                    Random vel=new Random();
-                    firstColor = vel.Next(1, 3);
-                    await Clients.All.AddToGame(_players);
-                    await Clients.Caller.SetColor(firstColor == 2);
-                }
-                else
-                {
-                    await Clients.All.AddToGame(_players);
-                    await Clients.Caller.SetColor(firstColor != 2);
-                }
-                
-            }*/
             var user = _context.Users.Where(au => au.Id == CurrentUserId).FirstOrDefault();
             var username = user.UserName;
-            bool result=gameController.AddPlayer(username);
-            int gameID = gameController.IdByName(username);
+            bool result=_gameController.AddPlayer(username);
+            int gameID = _gameController.IdByName(username);
             await Groups.AddToGroupAsync(Context.ConnectionId, gameID.ToString());
-            await Clients.Group(gameID.ToString()).AddToGame(gameController.PlayersById(gameID));
-            if(gameController.GameById(gameID).WhitePlayer==username) await Clients.Caller.SetColor(true);
-            else if(gameController.GameById(gameID).BlackPlayer == username) await Clients.Caller.SetColor(false);
+            await Clients.Group(gameID.ToString()).AddToGame(_gameController.PlayersById(gameID));
+            if(_gameController.GameById(gameID).WhitePlayer==username) await Clients.Caller.SetColor(true);
+            else if(_gameController.GameById(gameID).BlackPlayer == username) await Clients.Caller.SetColor(false);
             if (result)
             {
-                List<Square> b = boardToList(gameController.GameById(gameID).Board);
+                List<Square> b = boardToList(_gameController.GameById(gameID).Board);
                 await Clients.Group(gameID.ToString()).GameCreated(b);
             }
         }

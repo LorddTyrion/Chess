@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using ReactChess.Data;
 using ReactChess.Models;
 using ReactChess.Hubs;
+using ReactChess.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,8 @@ builder.Services.AddSignalR(options =>
 });
 
 builder.Services.AddSingleton<IUserIdProvider, IdBasedUserIdProvider>();
+
+builder.Services.AddSingleton<GameController>();
 
 builder.Services.AddCors(options =>
 {
