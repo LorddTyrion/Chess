@@ -9,5 +9,6 @@ namespace ReactChess.Hubs
         Task GameEnds(int result);
         Task AddToGame(List<string> players);
         Task SetColor(bool isWhite);
+        Task GetPossibleMoves(List<Move> moves);
     }
 }

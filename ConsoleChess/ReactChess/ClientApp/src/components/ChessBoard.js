@@ -20,22 +20,25 @@ export class ChessBoard extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { board: [], players: [], loading: true, started: false, joined: false, isWhite: true, turnOf: true, duringMove: false, prevx: 0, prevy: 0, promoteTo: 1, winner: 3 };
+        this.state = {
+            board: [], players: [], loading: true, started: false, joined: false, isWhite: true, turnOf: true, duringMove: false, prevx: 0, prevy: 0, promoteTo: 1, winner: 3,
+            possibleMoves: [], promotionVisible: false
+        };
 
-        gameConnection.on('AddToGame', (playerlist) =>{
-            this.setState({players: playerlist})
-            
+        gameConnection.on('AddToGame', (playerlist) => {
+            this.setState({ players: playerlist })
+
             this.forceUpdate()
         })
 
-        gameConnection.on('SetColor', (isWhite)=>{
-            this.setState({isWhite: isWhite})
+        gameConnection.on('SetColor', (isWhite) => {
+            this.setState({ isWhite: isWhite })
             this.forceUpdate()
         })
 
         gameConnection.on('GameCreated', (board) => {
             this.setState({
-                board: board, loading: false, started:true
+                board: board, loading: false, started: true
             })
             console.log("Game started")
             this.forceUpdate()
@@ -45,7 +48,11 @@ export class ChessBoard extends Component {
             this.setState({ board: board })
             console.log(this.state.board)
             if (!success) console.log("Rossz lépés")
-            else this.setState({turnOf: !this.state.turnOf})
+            else this.setState({ turnOf: !this.state.turnOf })
+            this.forceUpdate()
+        })
+        gameConnection.on('GetPossibleMoves', (moves) => {
+            this.setState({ possibleMoves: moves })
             this.forceUpdate()
         })
 
@@ -65,10 +72,10 @@ export class ChessBoard extends Component {
 
     }
 
-    renderJoin(players){
+    renderJoin(players) {
         return (
             <div>
-                <button  onClick={this.onJoinGame}>Join game</button>                
+                <button onClick={this.onJoinGame}>Join game</button>
                 <table className='table table-striped' aria-labelledby="tabelLabel">
                     <thead>
                         <tr>
@@ -94,7 +101,19 @@ export class ChessBoard extends Component {
 
             const cols = [];
             for (let j = 0; j < 8; j++) {
-                cols.push(<td><button className='chess' style={this.returnColor((i + j) % 2 === 0)} onClick={() => this.onClick(i, j)}>{this.returnText(i, j)}&#xFE0E;</button></td>);
+                var ishighlighted=false;
+                
+                for(let p=0; p<this.state.possibleMoves.length; p++){
+                    if(this.state.possibleMoves[p].targetX===i && this.state.possibleMoves[p].targetY===j){
+                        ishighlighted=true;
+                    }
+                }
+                if(ishighlighted && this.state.turnOf===this.state.isWhite && this.state.duringMove){
+                    cols.push(<td><button className='chess' style={this.returnColor((i + j) % 2 === 0, true)} onClick={() => this.onClick(i, j)}>{this.returnText(i, j)}&#xFE0E;</button></td>);
+                }
+                else {
+                    cols.push(<td><button className='chess' style={this.returnColor((i + j) % 2 === 0, false)} onClick={() => this.onClick(i, j)}>{this.returnText(i, j)}&#xFE0E;</button></td>);
+                }
             }
             rows.push(<tr>{cols}</tr>)
         }
@@ -115,7 +134,19 @@ export class ChessBoard extends Component {
 
             const cols = [];
             for (let j = 0; j < 8; j++) {
-                cols.push(<td><button className='chess' style={this.returnColor((i + j) % 2 === 0)} onClick={() => this.onClick(i, j)}>{this.returnText(i, j)}&#xFE0E;</button></td>);
+                var ishighlighted=false;
+                
+                for(let p=0; p<this.state.possibleMoves.length; p++){
+                    if(this.state.possibleMoves[p].targetX===i && this.state.possibleMoves[p].targetY===j){
+                        ishighlighted=true;
+                    }
+                }
+                if(ishighlighted&& this.state.turnOf===this.state.isWhite&& this.state.duringMove){
+                    cols.push(<td><button className='chess' style={this.returnColor((i + j) % 2 === 0, true)} onClick={() => this.onClick(i, j)}>{this.returnText(i, j)}&#xFE0E;</button></td>);
+                }
+                else {
+                    cols.push(<td><button className='chess' style={this.returnColor((i + j) % 2 === 0, false)} onClick={() => this.onClick(i, j)}>{this.returnText(i, j)}&#xFE0E;</button></td>);
+                }
             }
             rows.push(<tr>{cols}</tr>)
         }
@@ -143,11 +174,19 @@ export class ChessBoard extends Component {
         );
     }
 
-    returnColor(white) {
-        if (white === true) {
-            return { backgroundColor: 'white', color: 'black', width: '100px', height: '100px', border: 'none', borderRadius: '0px 0px 0px 0px', borderWidth: '0px', textAlign: 'center', bottom: '0', fontSize: '80px' };
+    returnColor(white, highlighted) {
+        if (!highlighted) {
+            if (white === true) {
+                return { backgroundColor: 'white', color: 'black', width: '100px', height: '100px', border: 'none', borderRadius: '0px 0px 0px 0px', borderWidth: '0px', textAlign: 'center', bottom: '0', fontSize: '80px' };
+            }
+            return { backgroundColor: 'darkgreen', color: 'black', width: '100px', height: '100px', border: 'none', borderRadius: '0px 0px 0px 0px', borderWidth: '0px', textAlign: 'center', bottom: '0', fontSize: '80px' };
         }
-        return { backgroundColor: 'green', color: 'black', width: '100px', height: '100px', border: 'none', borderRadius: '0px 0px 0px 0px', borderWidth: '0px', textAlign: 'center', bottom: '0', fontSize: '80px' };
+        else{
+            if (white === true) {
+                return { backgroundColor: 'lightgrey', color: 'black', width: '100px', height: '100px', border: 'none', borderRadius: '0px 0px 0px 0px', borderWidth: '0px', textAlign: 'center', bottom: '0', fontSize: '80px' };
+            }
+            return { backgroundColor: 'limegreen', color: 'black', width: '100px', height: '100px', border: 'none', borderRadius: '0px 0px 0px 0px', borderWidth: '0px', textAlign: 'center', bottom: '0', fontSize: '80px' };
+        }
     }
 
     handleChange = (e) => {
@@ -203,18 +242,18 @@ export class ChessBoard extends Component {
     }
 
     render() {
-        let join=this.state.started?<div></div> : this.renderJoin(this.state.players)
-        console.log(this.state.started)
+        let join = this.state.started ? <div></div> : this.renderJoin(this.state.players)
+        console.log(this.state.possibleMoves)
         let content = <div></div>
-        if(this.state.isWhite){
-            content=this.state.loading ? <div></div> : this.renderWhite()
+        if (this.state.isWhite) {
+            content = this.state.loading ? <div></div> : this.renderWhite()
         }
-        else{
-            content=this.state.loading ? <div></div> : this.renderBlack()
+        else {
+            content = this.state.loading ? <div></div> : this.renderBlack()
         }
-        let promote = this.renderPromoteSelection()
+        let promote = !this.state.promotionVisible?<div></div>:this.renderPromoteSelection()
         let win = <div></div>
-        
+
         switch (this.state.winner) {
             case 0:
                 win = <p>White wins!</p>
@@ -229,11 +268,11 @@ export class ChessBoard extends Component {
                 break;
 
         }
-        let all=!this.state.started ? <div>{join}</div>:<div>
-                {content}
-                {promote}
-            </div>
-        if(this.state.winner<=2) all=win
+        let all = !this.state.started ? <div>{join}</div> : <div>
+            {content}
+            {promote}
+        </div>
+        if (this.state.winner <= 2) all = win
 
         return (
             <div>
@@ -258,28 +297,31 @@ export class ChessBoard extends Component {
     onClick = async (x, y) => {
         console.log(x + " " + y + " meg lett nyomva")
         if (this.state.board[8 * x + y].piece == null && !this.state.duringMove) return
-        if(this.state.turnOf !== this.state.isWhite) return
+        if (this.state.turnOf !== this.state.isWhite) return
         if (!this.state.duringMove) {
             this.setState({ duringMove: true, prevx: x, prevy: y })
+            if(this.state.isWhite && x===6 && this.state.board[8 * x + y].piece.pieceName===5 && this.state.board[8 * x + y].piece.isWhite) this.setState({promotionVisible: true})
+            else if(!this.state.isWhite && x===1 && this.state.board[8 * x + y].piece.pieceName===5 && !this.state.board[8 * x + y].piece.isWhite) this.setState({promotionVisible: true})
+            await gameConnection.invoke('PossibleMoves', x, y);
         }
         else {
-            this.setState({ duringMove: false });
+            this.setState({ duringMove: false, possibleMoves: [], promotionVisible:false });
             await gameConnection.invoke('MakeMove', this.state.prevx, this.state.prevy, x, y, this.state.promoteTo);
         }
     }
-    onJoinGame = async (e)=>{
+    onJoinGame = async (e) => {
         e.preventDefault()
-        if(!this.state.joined){
-            this.setState({joined: false})
+        if (!this.state.joined) {
+            this.setState({ joined: false })
             await gameConnection.invoke('EnterGame')
         }
-        
+
     }
-    onStartGame=async (e)=>{
+    onStartGame = async (e) => {
         e.preventDefault();
         try {
-            if (this.state.players.length===2) {
-                this.setState({started: true})
+            if (this.state.players.length === 2) {
+                this.setState({ started: true })
 
                 await gameConnection.invoke('GameStarted');
 
@@ -290,6 +332,6 @@ export class ChessBoard extends Component {
         } catch (err) {
             console.error(err)
         }
-        
+
     }
 }

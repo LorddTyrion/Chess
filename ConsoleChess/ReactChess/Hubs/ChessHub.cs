@@ -61,6 +61,15 @@ namespace ReactChess.Hubs
                 await Clients.Group(gameID.ToString()).GameCreated(b);
             }
         }
+        public async Task PossibleMoves(int x, int y)
+        {
+            var user = _context.Users.Where(au => au.Id == CurrentUserId).FirstOrDefault();
+            var username = user.UserName;
+            int gameID = _gameController.IdByName(username);
+            Game game = _gameController.GameById(gameID);
+            List<Move> possibleMoves = game.Board.getPossibleMoves(x, y);
+            await Clients.Group(gameID.ToString()).GetPossibleMoves(possibleMoves);
+        }
 
         private List<Square> boardToList(Board board)
         {
