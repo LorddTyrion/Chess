@@ -16,8 +16,6 @@ namespace ReactChess.Hubs
         public GameController _gameController;
         private string? CurrentUserId => Context.UserIdentifier;
 
-
-
        
         public ChessHub(ApplicationDbContext context, GameController gameController)
         {

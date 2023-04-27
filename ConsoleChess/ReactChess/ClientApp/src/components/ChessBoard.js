@@ -94,7 +94,7 @@ export class ChessBoard extends Component {
 
             const cols = [];
             for (let j = 0; j < 8; j++) {
-                cols.push(<td><button style={this.returnColor((i + j) % 2 === 0)} onClick={() => this.onClick(i, j)}>{this.returnText(i, j)}</button></td>);
+                cols.push(<td><button className='chess' style={this.returnColor((i + j) % 2 === 0)} onClick={() => this.onClick(i, j)}>{this.returnText(i, j)}&#xFE0E;</button></td>);
             }
             rows.push(<tr>{cols}</tr>)
         }
@@ -115,7 +115,7 @@ export class ChessBoard extends Component {
 
             const cols = [];
             for (let j = 0; j < 8; j++) {
-                cols.push(<td><button style={this.returnColor((i + j) % 2 === 0)} onClick={() => this.onClick(i, j)}>{this.returnText(i, j)}</button></td>);
+                cols.push(<td><button className='chess' style={this.returnColor((i + j) % 2 === 0)} onClick={() => this.onClick(i, j)}>{this.returnText(i, j)}&#xFE0E;</button></td>);
             }
             rows.push(<tr>{cols}</tr>)
         }
@@ -145,9 +145,9 @@ export class ChessBoard extends Component {
 
     returnColor(white) {
         if (white === true) {
-            return { backgroundColor: 'white', color: 'black', width: '100px', height: '100px', border: 'none', borderRadius: '0px 0px 0px 0px', borderWidth: '0px', textAlign: 'center', bottom: '0', fontSize: '26px' };
+            return { backgroundColor: 'white', color: 'black', width: '100px', height: '100px', border: 'none', borderRadius: '0px 0px 0px 0px', borderWidth: '0px', textAlign: 'center', bottom: '0', fontSize: '80px' };
         }
-        return { backgroundColor: 'black', color: 'white', width: '100px', height: '100px', border: 'none', borderRadius: '0px 0px 0px 0px', borderWidth: '0px', textAlign: 'center', bottom: '0', fontSize: '26px' };
+        return { backgroundColor: 'green', color: 'black', width: '100px', height: '100px', border: 'none', borderRadius: '0px 0px 0px 0px', borderWidth: '0px', textAlign: 'center', bottom: '0', fontSize: '80px' };
     }
 
     handleChange = (e) => {
@@ -186,17 +186,17 @@ export class ChessBoard extends Component {
         if (this.state.board[8 * x + y].piece == null) return ""
         switch (this.state.board[8 * x + y].piece.pieceName) {
             case 0:
-                return this.state.board[8 * x + y].piece.isWhite ? "WK" : "BK"
+                return this.state.board[8 * x + y].piece.isWhite ? "♔" : "♚"
             case 1:
-                return this.state.board[8 * x + y].piece.isWhite ? "WQ" : "BQ"
+                return this.state.board[8 * x + y].piece.isWhite ? "♕" : "♛"
             case 2:
-                return this.state.board[8 * x + y].piece.isWhite ? "WN" : "BN"
+                return this.state.board[8 * x + y].piece.isWhite ? "♘" : "♞"
             case 3:
-                return this.state.board[8 * x + y].piece.isWhite ? "WB" : "BB"
+                return this.state.board[8 * x + y].piece.isWhite ? "♗" : "♝"
             case 4:
-                return this.state.board[8 * x + y].piece.isWhite ? "WR" : "BR"
+                return this.state.board[8 * x + y].piece.isWhite ? "♖" : "♜"
             case 5:
-                return this.state.board[8 * x + y].piece.isWhite ? "WP" : "BP"
+                return this.state.board[8 * x + y].piece.isWhite ? "♙" : "♟"
             default:
                 break;
         }
