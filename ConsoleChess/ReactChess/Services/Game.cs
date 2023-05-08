@@ -13,11 +13,27 @@ namespace ReactChess.Services
         public string BlackPlayer { get; set; }
         public int GameID { get; set; }
         public GameState State { get; set; }
+        public Color Result { get; set; }
         public Game()
         {
             Random random = new Random();
             GameID=random.Next(1,int.MaxValue);
             Board = new Board();
+            Result = Color.NONE;
+        }
+        public void LoseGame(string user)
+        {
+            if (State != GameState.STARTED) return;
+            if (WhitePlayer == user)
+            {
+                Result = Color.BLACK;
+                State = GameState.FINISHED;
+            }
+            else if(BlackPlayer == user)
+            {
+                Result=Color.WHITE;
+                State = GameState.FINISHED;
+            }
         }
     }
 }

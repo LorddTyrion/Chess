@@ -103,15 +103,15 @@ export class ChessBoard extends Component {
             clock: new Clock({
                 ...fischer,
                 updateInterval,
-                callback: (state)=>{
+                callback: async(state)=>{
                     if(state.status === "done"){
-                        if (state.white === 0) {
+                        if (this.state.turnOf && this.state.isWhite) {
                             console.log("black wins")
-                            this.setState({winner:1})
+                            await gameConnection.invoke('LoseGame');
                         }
-                        else {
+                        else if(!this.state.turnOf && !this.state.isWhite) {
                             console.log("white wins")
-                            this.setState({winner:0})
+                            await gameConnection.invoke('LoseGame');
                         }
                     }
                 }
@@ -146,6 +146,10 @@ export class ChessBoard extends Component {
     }
 
     renderBlack() {
+        let whiteminutes = Math.floor(this.state.clock.state.remainingTime[0] / 60000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
+        let blackminutes = Math.floor(this.state.clock.state.remainingTime[1] / 60000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
+        let whiteseconds = Math.floor((this.state.clock.state.remainingTime[0] % 60000) / 1000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
+        let blackseconds = Math.floor((this.state.clock.state.remainingTime[1] % 60000) / 1000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
         const rows = [];
         for (let i = 0; i < 8; i++) {
 
@@ -169,16 +173,23 @@ export class ChessBoard extends Component {
         }
         return (
             <div>
+                <strong>{whiteminutes}:{whiteseconds}</strong>
                 <table style={this.setBackground()} className='table' aria-labelledby="tabelLabel">
                     <tbody>
                         {rows}
                     </tbody>
                 </table>
+                <strong>{blackminutes}:{blackseconds}</strong>
+                <button onClick={()=>this.onResign()}>Resign</button>
             </div>)
 
 
     }
     renderWhite() {
+        let whiteminutes = Math.floor(this.state.clock.state.remainingTime[0] / 60000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
+        let blackminutes = Math.floor(this.state.clock.state.remainingTime[1] / 60000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
+        let whiteseconds = Math.floor((this.state.clock.state.remainingTime[0] % 60000) / 1000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
+        let blackseconds = Math.floor((this.state.clock.state.remainingTime[1] % 60000) / 1000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
         const rows = [];
         for (let i = 7; i >= 0; i--) {
 
@@ -202,11 +213,15 @@ export class ChessBoard extends Component {
         }
         return (
             <div>
+                
+                <strong>{blackminutes}:{blackseconds}</strong>
                 <table style={this.setBackground()} className='table' aria-labelledby="tabelLabel">
                     <tbody>
                         {rows}
                     </tbody>
                 </table>
+                <strong>{whiteminutes}:{whiteseconds}</strong>
+                <button onClick={()=>this.onResign()}>Resign</button>
             </div>)
 
 
@@ -292,9 +307,7 @@ export class ChessBoard extends Component {
     }
 
     render() {
-        if (this.state.clock.state.status === "done") {
-            
-        }
+        
         let join = this.state.started ? <div></div> : this.renderJoin(this.state.players)
         console.log(this.state.possibleMoves)
         let content = <div></div>
@@ -321,15 +334,11 @@ export class ChessBoard extends Component {
                 break;
 
         }
-        let whiteminutes = Math.floor(this.state.clock.state.remainingTime[0] / 60000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
-        let blackminutes = Math.floor(this.state.clock.state.remainingTime[1] / 60000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
-        let whiteseconds = Math.floor((this.state.clock.state.remainingTime[0] % 60000) / 1000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
-        let blackseconds = Math.floor((this.state.clock.state.remainingTime[1] % 60000) / 1000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
+        
         let all = !this.state.started ? <div>{join}</div> : <div>
             {content}
             {promote}
-            <p aria-live="polite">White time: <strong>{whiteminutes}:{whiteseconds}</strong></p>
-            <p aria-live="polite">Black time: <strong>{blackminutes}:{blackseconds}</strong></p>
+            
         </div>
         if (this.state.winner <= 2) all = win
 
@@ -369,6 +378,9 @@ export class ChessBoard extends Component {
             this.setState({ duringMove: false, possibleMoves: [], promotionVisible: false });
             await gameConnection.invoke('MakeMove', this.state.prevx, this.state.prevy, x, y, this.state.promoteTo);
         }
+    }
+    onResign=async()=>{
+        await gameConnection.invoke('LoseGame');
     }
     onJoinGame = async (e) => {
         e.preventDefault()
