@@ -13,3 +13,10 @@
 .chess{
     font-family:monospace;
 }
+.container.moveContainer{
+    columns: 2 auto;
+}
+.flexing{
+    display: flex;
+    flex-direction: row;
+}
