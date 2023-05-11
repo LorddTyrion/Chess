@@ -75,5 +75,9 @@ namespace ReactChess.Services
             if(game.WhitePlayer==name && game.Board.boardState.turnOf == Color.WHITE) return true;
             return false;
         }
+        public void DeleteGame(Game game)
+        {
+            games.Remove(game);
+        }
     }
 }

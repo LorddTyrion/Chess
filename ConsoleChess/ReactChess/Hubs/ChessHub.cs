@@ -46,6 +46,7 @@ namespace ReactChess.Hubs
                     game.State = GameState.FINISHED;
                     game.Result = end;
                     await Clients.Group(gameID.ToString()).GameEnds((int)end);
+                    _gameController.DeleteGame(game);
                 }
             }
 
@@ -86,6 +87,7 @@ namespace ReactChess.Hubs
             Game game = _gameController.GameById(gameID);
             game.LoseGame(username);
             await Clients.Group(gameID.ToString()).GameEnds((int)game.Result);
+            _gameController.DeleteGame(game);
         }
 
         private List<Square> boardToList(Board board)
