@@ -6,9 +6,10 @@ import { LogLevel } from '@microsoft/signalr';
 import { Clock } from 'chess-clock'
 
 
+
 import './styles.css';
 
-const fischer = Clock.getConfig('Fischer Rapid 1|5')
+const fischer = Clock.getConfig('Fischer Rapid 5|5')
 const updateInterval = 500
 const callback = console.info
 
@@ -49,7 +50,7 @@ export class ChessBoard extends Component {
         })
 
         gameConnection.on('SetColor', (isWhite, username) => {
-            this.setState({ isWhite: isWhite, ownuser: username })
+            this.setState({ isWhite: isWhite, ownuser: username, joined: true })
             this.forceUpdate()
         })
 
@@ -139,25 +140,16 @@ export class ChessBoard extends Component {
     }
 
     renderJoin(players) {
+        if(!this.state.joined)
         return (
-            <div>
-                <button onClick={this.onJoinGame}>Join game</button>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Players</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {players.map(players =>
-                            <tr key={Math.random() * 1000000 + 1}>
-                                <td>{players}</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-
+            <div className='end-screen'>
+                <button className='btn btn-secondary btn-lg' onClick={this.onJoinGame}>Join game</button>
             </div>)
+        else return (
+            <div className='end-screen'>
+                <p>Searching for opponent...</p>
+            </div>
+        )
 
     }
     renderMoves() {
@@ -182,9 +174,13 @@ export class ChessBoard extends Component {
         }
 
         return (
-            <div>
+            <div className='moves'>
                 <strong>Moves</strong>
-                <table >
+                <table className='moves-table'>
+                    <thead>
+                        <th>White moves</th>
+                        <th>Black moves</th>
+                    </thead>
                     <tbody>
                         {rows}
                     </tbody>
@@ -274,18 +270,22 @@ export class ChessBoard extends Component {
         }
         return (
             <div>
-                <strong>{whiteminutes}:{whiteseconds}</strong>
-                <strong>   {this.state.otheruser}</strong>
-                <strong>   {this.state.whitepoints > this.state.blackpoints ? ("+") + (this.state.whitepoints - this.state.blackpoints) : ""}</strong>
+                <div className='flexing info-bar'>
+                    <strong>{whiteminutes}:{whiteseconds}</strong>
+                    <strong>{this.state.otheruser}</strong>
+                    <strong>{this.state.whitepoints > this.state.blackpoints ? ("+") + (this.state.whitepoints - this.state.blackpoints) : ""}</strong>
+                </div>
                 <table style={this.setBackground()} className='table' aria-labelledby="tabelLabel">
                     <tbody>
                         {rows}
                     </tbody>
                 </table>
-                <strong>{blackminutes}:{blackseconds}</strong>
-                <strong>   {this.state.ownuser}</strong>
-                <strong>   {this.state.whitepoints < this.state.blackpoints ? ("+") + (this.state.blackpoints - this.state.whitepoints) : ""}</strong>
-                <button onClick={() => this.onResign()}>Resign</button>
+                <div className='flexing info-bar'>
+                    <strong>{blackminutes}:{blackseconds}</strong>
+                    <strong>{this.state.ownuser}</strong>
+                    <strong>{this.state.whitepoints < this.state.blackpoints ? ("+") + (this.state.blackpoints - this.state.whitepoints) : ""}</strong>
+                    <div className='flexing resign-button'><button className='btn btn-secondary' onClick={() => this.onResign()}>Resign</button></div>
+                </div>
             </div>)
 
 
@@ -318,19 +318,22 @@ export class ChessBoard extends Component {
         }
         return (
             <div>
-
-                <strong>{blackminutes}:{blackseconds}</strong>
-                <strong>   {this.state.otheruser}</strong>
-                <strong>   {this.state.whitepoints < this.state.blackpoints ? ("+") + (this.state.blackpoints - this.state.whitepoints) : ""}</strong>
+                <div className='flexing info-bar'>
+                    <strong>{blackminutes}:{blackseconds}</strong>
+                    <strong>{this.state.otheruser}</strong>
+                    <strong>{this.state.whitepoints < this.state.blackpoints ? ("+") + (this.state.blackpoints - this.state.whitepoints) : ""}</strong>
+                </div>
                 <table style={this.setBackground()} className='table' aria-labelledby="tabelLabel">
                     <tbody>
                         {rows}
                     </tbody>
                 </table>
-                <strong>{whiteminutes}:{whiteseconds}</strong>
-                <strong>   {this.state.ownuser}</strong>
-                <strong>   {this.state.whitepoints > this.state.blackpoints ? ("+") + (this.state.whitepoints - this.state.blackpoints) : ""}</strong>
-                <button onClick={() => this.onResign()}>Resign</button>
+                <div className='flexing info-bar'>
+                    <strong>{whiteminutes}:{whiteseconds}</strong>
+                    <strong>{this.state.ownuser}</strong>
+                    <strong>{this.state.whitepoints > this.state.blackpoints ? ("+") + (this.state.whitepoints - this.state.blackpoints) : ""}</strong>
+                    <div className='flexing resign-button'><button className='btn btn-secondary' onClick={() => this.onResign()}>Resign</button></div>
+                </div>
             </div>)
 
 
@@ -353,7 +356,7 @@ export class ChessBoard extends Component {
             if (white === true) {
                 return { backgroundColor: 'white', color: 'black', width: '100px', height: '100px', border: 'none', borderRadius: '0px 0px 0px 0px', borderWidth: '0px', textAlign: 'center', bottom: '0', fontSize: '80px' };
             }
-            return { backgroundColor: 'darkgreen', color: 'black', width: '100px', height: '100px', border: 'none', borderRadius: '0px 0px 0px 0px', borderWidth: '0px', textAlign: 'center', bottom: '0', fontSize: '80px' };
+            return { backgroundColor: 'darkslategray', color: 'black', width: '100px', height: '100px', border: 'none', borderRadius: '0px 0px 0px 0px', borderWidth: '0px', textAlign: 'center', bottom: '0', fontSize: '80px' };
         }
         else {
             if (white === true) {
@@ -430,21 +433,21 @@ export class ChessBoard extends Component {
 
         switch (this.state.winner) {
             case 0:
-                win = <div>
+                win = <div className='end-screen'>
                     <p>White wins!</p>
-                    <button onClick={this.restart}>OK</button>
+                    <button className='btn btn-secondary' onClick={this.restart}>OK</button>
                 </div>
                 break;
             case 1:
-                win = <div>
+                win = <div className='end-screen'>
                     <p>Black wins!</p>
-                    <button onClick={this.restart}>OK</button>
+                    <button className='btn btn-secondary' onClick={this.restart}>OK</button>
                 </div>
                 break;
             case 2:
-                <div>
+                <div className='end-screen'>
                     <p>Draw!</p>
-                    <button onClick={this.restart}>OK</button>
+                    <button className='btn btn-secondary' onClick={this.restart}>OK</button>
                 </div>
                 break;
             default:
@@ -463,7 +466,7 @@ export class ChessBoard extends Component {
 
 
         return (
-            <div>
+            <div className='chess-page'>
                 {all}
             </div>
 
@@ -525,32 +528,34 @@ export class ChessBoard extends Component {
         }
 
     }
-    restart=()=>{
-        this.setState({board: [], players: [], loading: true, started: false, joined: false, isWhite: true, turnOf: true, duringMove: false, prevx: 0, prevy: 0, promoteTo: 1, winner: 3,
+    restart = () => {
+        this.setState({
+            board: [], players: [], loading: true, started: false, joined: false, isWhite: true, turnOf: true, duringMove: false, prevx: 0, prevy: 0, promoteTo: 1, winner: 3,
             possibleMoves: [], prevMoves: [], promotionVisible: false, ownuser: "", otheruser: "", clock: new Clock({
                 ...fischer,
                 updateInterval,
                 callback,
             }),
-            whitepoints: 0, blackpoints: 0})
+            whitepoints: 0, blackpoints: 0
+        })
         this.setState({
-                clock: new Clock({
-                    ...fischer,
-                    updateInterval,
-                    callback: async (state) => {
-                        if (state.status === "done") {
-                            if (this.state.turnOf && this.state.isWhite) {
-                                console.log("black wins")
-                                await gameConnection.invoke('LoseGame');
-                            }
-                            else if (!this.state.turnOf && !this.state.isWhite) {
-                                console.log("white wins")
-                                await gameConnection.invoke('LoseGame');
-                            }
+            clock: new Clock({
+                ...fischer,
+                updateInterval,
+                callback: async (state) => {
+                    if (state.status === "done") {
+                        if (this.state.turnOf && this.state.isWhite) {
+                            console.log("black wins")
+                            await gameConnection.invoke('LoseGame');
+                        }
+                        else if (!this.state.turnOf && !this.state.isWhite) {
+                            console.log("white wins")
+                            await gameConnection.invoke('LoseGame');
                         }
                     }
-                })
+                }
             })
+        })
         this.forceUpdate();
     }
 }

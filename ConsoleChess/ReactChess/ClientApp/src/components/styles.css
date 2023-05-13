@@ -1,22 +1,87 @@
-.table tbody tr td{
+.table tbody tr td {
     padding: 0px 0px 0px 0px;
     width: fit-content;
     height: fit-content;
     box-sizing: border-box;
+    border-bottom: 0;
 }
-.table{
+
+.table {
     border-color: black;
-    border-width: 1px;
+    border-width: 0px;
     border-style: solid;
     line-height: 0;
+    margin-bottom: 5px;
 }
-.chess{
-    font-family:monospace;
+
+.chess {
+    font-family: monospace;
 }
-.container.moveContainer{
+
+.container.moveContainer {
     columns: 2 auto;
 }
-.flexing{
+
+.flexing {
     display: flex;
     flex-direction: row;
+}
+
+.moves {
+    margin-left: 4rem;
+}
+
+.moves-table {
+    background-color: darkslategray;
+    color: white;
+}
+
+.moves-table thead th {
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.moves-table tbody  :nth-child(odd) {
+    background-color: gray;
+}
+
+.moves-table tbody  :nth-child(even) {
+    background-color: slategray;
+}
+
+.chess-page {
+    background-color: lightslategray;
+}
+
+.resign-button {
+    justify-content: end;
+    flex-grow: 1;
+}
+
+.info-bar {
+    width: 800px;
+}
+
+.info-bar strong {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.resign-button button {
+    width: fit-content;
+}
+
+.end-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+    font-size: x-large;
+    border-radius: 50px;
+    flex-direction: column;
 }
