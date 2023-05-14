@@ -12,6 +12,7 @@
     border-style: solid;
     line-height: 0;
     margin-bottom: 5px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .chess {
@@ -29,11 +30,14 @@
 
 .moves {
     margin-left: 4rem;
+    height: 600px;
+    overflow: auto;
 }
 
 .moves-table {
     background-color: darkslategray;
     color: white;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
 .moves-table thead th {
@@ -43,13 +47,19 @@
     padding-bottom: 5px;
 }
 
-.moves-table tbody  :nth-child(odd) {
-    background-color: gray;
+.moves-table tbody > :nth-child(odd) {
+    background-color: #6c757d;
+    align-content: center;
+}
+.moves-table tbody > :nth-child(even) {
+    background-color: slategray;
+    align-content: center;
+}
+.moves-table tbody tr td{
+    text-align: center;
+    
 }
 
-.moves-table tbody  :nth-child(even) {
-    background-color: slategray;
-}
 
 .chess-page {
     background-color: lightslategray;
@@ -62,6 +72,8 @@
 
 .info-bar {
     width: 800px;
+    align-items: center;
+    margin-bottom: 5px;
 }
 
 .info-bar strong {
@@ -69,6 +81,8 @@
     margin-right: 20px;
     margin-top: 5px;
     margin-bottom: 5px;
+    font-size: large;
+    
 }
 
 .resign-button button {
@@ -84,4 +98,24 @@
     font-size: x-large;
     border-radius: 50px;
     flex-direction: column;
+}
+
+.cover-image{
+    height: 700px;
+    margin-bottom: 2rem;
+}
+
+.promote{
+    margin-left: 4rem;
+}
+
+.clock-container{
+    background-color: #6c757d;
+    color: white;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
 }

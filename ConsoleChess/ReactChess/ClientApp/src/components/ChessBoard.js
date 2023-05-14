@@ -140,11 +140,11 @@ export class ChessBoard extends Component {
     }
 
     renderJoin(players) {
-        if(!this.state.joined)
-        return (
-            <div className='end-screen'>
-                <button className='btn btn-secondary btn-lg' onClick={this.onJoinGame}>Join game</button>
-            </div>)
+        if (!this.state.joined)
+            return (
+                <div className='end-screen'>
+                    <button className='btn btn-secondary btn-lg' onClick={this.onJoinGame}>Join game</button>
+                </div>)
         else return (
             <div className='end-screen'>
                 <p>Searching for opponent...</p>
@@ -271,7 +271,9 @@ export class ChessBoard extends Component {
         return (
             <div>
                 <div className='flexing info-bar'>
-                    <strong>{whiteminutes}:{whiteseconds}</strong>
+                    <div className='clock-container'>
+                        <strong>{whiteminutes}:{whiteseconds}</strong>
+                    </div>
                     <strong>{this.state.otheruser}</strong>
                     <strong>{this.state.whitepoints > this.state.blackpoints ? ("+") + (this.state.whitepoints - this.state.blackpoints) : ""}</strong>
                 </div>
@@ -281,7 +283,9 @@ export class ChessBoard extends Component {
                     </tbody>
                 </table>
                 <div className='flexing info-bar'>
-                    <strong>{blackminutes}:{blackseconds}</strong>
+                    <div className='clock-container'>
+                        <strong>{blackminutes}:{blackseconds}</strong>
+                    </div>
                     <strong>{this.state.ownuser}</strong>
                     <strong>{this.state.whitepoints < this.state.blackpoints ? ("+") + (this.state.blackpoints - this.state.whitepoints) : ""}</strong>
                     <div className='flexing resign-button'><button className='btn btn-secondary' onClick={() => this.onResign()}>Resign</button></div>
@@ -319,7 +323,9 @@ export class ChessBoard extends Component {
         return (
             <div>
                 <div className='flexing info-bar'>
-                    <strong>{blackminutes}:{blackseconds}</strong>
+                    <div className='clock-container'>
+                        <strong>{blackminutes}:{blackseconds}</strong>
+                    </div>
                     <strong>{this.state.otheruser}</strong>
                     <strong>{this.state.whitepoints < this.state.blackpoints ? ("+") + (this.state.blackpoints - this.state.whitepoints) : ""}</strong>
                 </div>
@@ -329,7 +335,9 @@ export class ChessBoard extends Component {
                     </tbody>
                 </table>
                 <div className='flexing info-bar'>
-                    <strong>{whiteminutes}:{whiteseconds}</strong>
+                    <div className='clock-container'>
+                        <strong>{whiteminutes}:{whiteseconds}</strong>
+                    </div>
                     <strong>{this.state.ownuser}</strong>
                     <strong>{this.state.whitepoints > this.state.blackpoints ? ("+") + (this.state.whitepoints - this.state.blackpoints) : ""}</strong>
                     <div className='flexing resign-button'><button className='btn btn-secondary' onClick={() => this.onResign()}>Resign</button></div>
@@ -341,12 +349,28 @@ export class ChessBoard extends Component {
 
     renderPromoteSelection() {
 
-        return (
-            <div onChange={this.handleChange}>
+        /*return (
+            <div className='promote' onChange={this.handleChange}>
                 <input type="radio" value="Queen" name="promote" /> Queen
                 <input type="radio" value="Knight" name="promote" /> Knight
                 <input type="radio" value="Bishop" name="promote" /> Bishop
                 <input type="radio" value="Rook" name="promote" /> Rook
+            </div>
+            
+        );*/
+        return (
+            <div className="btn-group btn-group-toggle promote" role="group" aria-label="Basic radio toggle button group" onChange={this.handleChange} >
+                <input type="radio" className="btn-check" value="Queen" name="promote" id="btnradio1" autoComplete='off' />
+                <label className="btn btn-outline-dark" htmlFor="btnradio1">Queen</label>
+
+                <input type="radio" className="btn-check" value="Knight" name="promote" id="btnradio2" autoComplete='off' />
+                <label className="btn btn-outline-dark" htmlFor="btnradio2">Knight</label>
+
+                <input type="radio" className="btn-check" value="Bishop" name="promote" id="btnradio3" autoComplete='off' />
+                <label className="btn btn-outline-dark" htmlFor="btnradio3">Bishop</label>
+
+                <input type="radio" className="btn-check" value="Rook" name="promote" id="btnradio4" autoComplete='off' />
+                <label className="btn btn-outline-dark" htmlFor="btnradio4">Rook</label>
             </div>
         );
     }
@@ -459,8 +483,10 @@ export class ChessBoard extends Component {
         let all = !this.state.started ? <div>{join}</div> :
             <div className='flexing'>
                 {content}
-                {moves}
-                {promote}
+                <div>
+                    {moves}
+                    {promote}
+                </div>
             </div>
         if (this.state.winner <= 2) all = win
 
