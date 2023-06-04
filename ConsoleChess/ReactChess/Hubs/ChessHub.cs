@@ -38,6 +38,7 @@ namespace ReactChess.Hubs
                     await Clients.Group(gameID.ToString()).RefreshBoard(boardToList(game.Board), true);
                     await Clients.Group(gameID.ToString()).PreviousMoves(game.Board.boardState.moves);
                     await Clients.Group(gameID.ToString()).RefreshPoints(game.Board.GetSumValue(Color.WHITE), game.Board.GetSumValue(Color.BLACK));
+                  
                 }
                 else await Clients.Group(gameID.ToString()).RefreshBoard(boardToList(game.Board), false);
 
