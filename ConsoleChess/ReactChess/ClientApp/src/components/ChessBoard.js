@@ -469,7 +469,7 @@ export class ChessBoard extends Component {
                 </div>
                 break;
             case 2:
-                <div className='end-screen'>
+                win=<div className='end-screen'>
                     <p>Draw!</p>
                     <button className='btn btn-secondary' onClick={this.restart}>OK</button>
                 </div>

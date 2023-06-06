@@ -86,6 +86,7 @@ namespace ReactChess.Hubs
             var username = user.UserName;
             int gameID = _gameController.IdByName(username);
             Game game = _gameController.GameById(gameID);
+            if (game == null) return;
             game.LoseGame(username);
             await Clients.Group(gameID.ToString()).GameEnds((int)game.Result);
             _gameController.DeleteGame(game);
