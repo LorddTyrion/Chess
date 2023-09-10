@@ -1,4 +1,5 @@
 ﻿using ConsoleChess.Pieces;
+using FrameworkBackend;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleChess
 {
-    public class Move
+    public class ChessMove : Move
     {
         public int InitialX { get; set; }
         public int InitialY { get; set; }
@@ -17,7 +18,7 @@ namespace ConsoleChess
         public PieceName PromoteTo { get; set; }
         public bool isCheck { get; set; }
         public bool isCapture { get; set; }
-        public Move()
+        public ChessMove()
         {
             InitialX = 0;
             InitialY = 0;
@@ -28,7 +29,7 @@ namespace ConsoleChess
             Piece = PieceName.PAWN;
             PromoteTo = PieceName.PAWN;
         }
-        public Move(Move old)
+        public ChessMove(ChessMove old)
         {
             InitialX = old.InitialX;                
             InitialY = old.InitialY;

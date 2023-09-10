@@ -1674,11 +1674,24 @@
       "ConsoleChess/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "FrameworkBackend": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/ConsoleChess.dll": {}
         },
         "runtime": {
           "bin/placeholder/ConsoleChess.dll": {}
+        }
+      },
+      "FrameworkBackend/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/FrameworkBackend.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/FrameworkBackend.dll": {}
         }
       }
     }
@@ -5977,6 +5990,11 @@
       "type": "project",
       "path": "../ConsoleChess/ConsoleChess.csproj",
       "msbuildProject": "../ConsoleChess/ConsoleChess.csproj"
+    },
+    "FrameworkBackend/1.0.0": {
+      "type": "project",
+      "path": "../FrameworkBackend/FrameworkBackend.csproj",
+      "msbuildProject": "../FrameworkBackend/FrameworkBackend.csproj"
     }
   },
   "projectFileDependencyGroups": {

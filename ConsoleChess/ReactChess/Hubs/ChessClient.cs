@@ -9,8 +9,8 @@ namespace ReactChess.Hubs
         Task GameEnds(int result);
         Task AddToGame(List<string> players);
         Task SetColor(bool isWhite, string player);
-        Task GetPossibleMoves(List<Move> moves);
-        Task PreviousMoves(List<Move> moves);
+        Task GetPossibleMoves(List<ChessMove> moves);
+        Task PreviousMoves(List<ChessMove> moves);
         Task RefreshPoints(int white, int black);
     }
 }

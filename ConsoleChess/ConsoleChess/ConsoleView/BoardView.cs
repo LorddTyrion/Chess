@@ -8,8 +8,8 @@ namespace ConsoleChess
 {
     public class BoardView
     {
-        public Board board;
-        public BoardView(Board board)
+        public ChessBoard board;
+        public BoardView(ChessBoard board)
         {
             this.board = board;
         }
@@ -59,9 +59,9 @@ namespace ConsoleChess
         }
         public void ListPossibleMoves(int x, int y)
         {
-            List<Move> list=board.getPossibleMoves(x, y);
+            List<ChessMove> list=board.getPossibleMoves(x, y) as List<ChessMove>;
             Console.Write("PM: ");
-            foreach (Move move in list)
+            foreach (ChessMove move in list)
             {
                 Console.Write(move.ToString()+" ");
                 

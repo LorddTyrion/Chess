@@ -25,13 +25,19 @@ namespace ReactChess.Hubs
         
         public async Task MakeMove(int initialX, int initialY, int targetX, int targetY, int promoteTo)
         {
+            ChessMove move = new ChessMove();
+            move.InitialX = initialX;
+            move.InitialY = initialY;
+            move.TargetX = targetX;
+            move.TargetY = targetY;
+            move.PromoteTo=(PieceName)promoteTo;
             var user = _context.Users.Where(au => au.Id == CurrentUserId).FirstOrDefault();
             var username = user.UserName;
             int gameID=_gameController.IdByName(username);
             Game game=_gameController.GameById(gameID);
             if (_gameController.IsValid(username, gameID))
             {
-                bool result = game.Board.Move(initialX, initialY, targetX, targetY, (PieceName)promoteTo);
+                bool result = game.Board.Move(move);
                 Color end = game.Board.CheckEndGame();
                 if (result)
                 {
@@ -77,7 +83,7 @@ namespace ReactChess.Hubs
             var username = user.UserName;
             int gameID = _gameController.IdByName(username);
             Game game = _gameController.GameById(gameID);
-            List<Move> possibleMoves = game.Board.getPossibleMoves(x, y);
+            List<ChessMove> possibleMoves = game.Board.getPossibleMoves(x, y) as List<ChessMove>;
             await Clients.Group(gameID.ToString()).GetPossibleMoves(possibleMoves);
         }
         public async Task LoseGame()
@@ -92,7 +98,7 @@ namespace ReactChess.Hubs
             _gameController.DeleteGame(game);
         }
 
-        private List<Square> boardToList(Board board)
+        private List<Square> boardToList(ChessBoard board)
         {
             List<Square> b = new List<Square>();
             for (int i = 0; i < 8; i++)

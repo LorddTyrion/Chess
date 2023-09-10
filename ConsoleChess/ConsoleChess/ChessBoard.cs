@@ -1,4 +1,5 @@
 ﻿using ConsoleChess.Pieces;
+using FrameworkBackend;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +12,16 @@ namespace ConsoleChess
     {
         WHITE=0, BLACK=1, DRAW=2, NONE=3
     }
-    public class BoardState
+    public class ChessBoardState : BoardState
     {
         public List<Piece> WhitePieces = new List<Piece>();
         public List<Piece> BlackPieces = new List<Piece>();
-        public King WhiteKing, BlackKing;
+        public King? WhiteKing, BlackKing;
         public Square[,] squares = new Square[8, 8];
-        public List<Move> moves = new List<Move>();
+        public List<ChessMove> moves = new List<ChessMove>();
         public Color turnOf;
         public int FiftyMoveRule = 0;
-        public BoardState(BoardState old)
+        public ChessBoardState(ChessBoardState old)
         {
             turnOf = old.turnOf;
             WhitePieces = new List<Piece>();
@@ -36,7 +37,7 @@ namespace ConsoleChess
                 }
             }
 
-            moves = new List<Move>();
+            moves = new List<ChessMove>();
             for (int i = 0; i < old.moves.Count; i++)
             {
                 moves.Add(old.moves[i]);
@@ -63,30 +64,32 @@ namespace ConsoleChess
                 }
             }
         }
-        public BoardState() 
+        public ChessBoardState() 
         {
             WhitePieces = new List<Piece>();
             BlackPieces = new List<Piece>();
             
             squares = new Square[8, 8];
-            moves = new List<Move>();
+            moves = new List<ChessMove>();
         }
-        public bool PositionEquals(BoardState other)
+        public override bool PositionEquals(BoardState other)
         {
+            if (other is not ChessBoardState) return false;
+            if (other == null) return false;
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    if (squares[i, j].Piece == null && other.squares[i, j].Piece != null) return false;
-                    if (squares[i, j].Piece != null && other.squares[i, j].Piece == null) return false;
-                    if(squares[i, j].Piece != null && other.squares[i,j].Piece!=null && squares[i, j].Piece.PieceName!=other.squares[i, j].Piece.PieceName) return false;
+                    if (squares[i, j].Piece == null && ((ChessBoardState)other).squares[i, j].Piece != null) return false;
+                    if (squares[i, j].Piece != null && ((ChessBoardState)other).squares[i, j].Piece == null) return false;
+                    if(squares[i, j].Piece != null && ((ChessBoardState)other).squares[i,j].Piece!=null && squares[i, j].Piece.PieceName!= ((ChessBoardState)other).squares[i, j].Piece.PieceName) return false;
                 }
             }
             return true;
         }
        
     }
-    public class Board
+    public class ChessBoard : Board
     {
         //public List<Piece> WhitePieces = new List<Piece>();
         //public List<Piece> BlackPieces = new List<Piece>();
@@ -94,9 +97,9 @@ namespace ConsoleChess
         //public Square[,] squares = new Square[8, 8];
         //public List<string> moves = new List<string>();
         //public Color turnOf;
-        public BoardState boardState=new BoardState();
-        public List<BoardState> States=new List<BoardState>();
-        public Board()
+        public ChessBoardState boardState=new ChessBoardState();
+        public List<ChessBoardState> States=new List<ChessBoardState>();
+        public ChessBoard()
         {
             boardState.turnOf=Color.WHITE;
             for (int i = 0; i < 8; i++)
@@ -151,7 +154,7 @@ namespace ConsoleChess
             
         }
        
-        public bool IsAttacked(int x, int y, bool isWhite, BoardState boardState)
+        public bool IsAttacked(int x, int y, bool isWhite, ChessBoardState boardState)
         {
             if (isWhite)
             {
@@ -176,11 +179,11 @@ namespace ConsoleChess
             
             return false;
         }
-        public List<Move> getPossibleMoves(int x, int y)
+        public override IEnumerable<Move> getPossibleMoves(int x, int y)
         {
-            List<Move> possibleMoves = new List<Move>();
+            List<ChessMove> possibleMoves = new List<ChessMove>();
             
-            BoardState newState = new BoardState(boardState);
+            ChessBoardState newState = new ChessBoardState(boardState);
             if (newState.squares[x, y].Piece.IsWhite && boardState.turnOf == Color.BLACK) return possibleMoves;
             if (!newState.squares[x, y].Piece.IsWhite && boardState.turnOf == Color.WHITE) return possibleMoves;
             for (int i = 0; i < 8; i++)
@@ -193,10 +196,10 @@ namespace ConsoleChess
                     bool valid=TryMove(newState.squares[x, y], newState.squares[i, j], newState, PieceName.QUEEN);
                     if (!valid) 
                     {
-                        newState = new BoardState(boardState);
+                        newState = new ChessBoardState(boardState);
                         continue; 
                     }
-                    Move possibleMove = new Move();
+                    ChessMove possibleMove = new ChessMove();
                     possibleMove.isCheck = isCheck(newState);
                     possibleMove.isCapture = !isEmpty;
                     possibleMove.InitialX = x;
@@ -207,30 +210,32 @@ namespace ConsoleChess
                     possibleMove.PromoteTo = PieceName.PAWN;
                     if(canPromote(boardState.squares[x,y].Piece, boardState.squares[i, j], boardState))
                     {
-                        Move bishopMove=new Move(possibleMove); bishopMove.PromoteTo = PieceName.BISHOP; possibleMoves.Add(bishopMove);
-                        Move queenMove = new Move(possibleMove); bishopMove.PromoteTo = PieceName.QUEEN; possibleMoves.Add(queenMove);
-                        Move knightMove = new Move(possibleMove); bishopMove.PromoteTo = PieceName.KNIGHT; possibleMoves.Add(knightMove);
-                        Move rookMove = new Move(possibleMove); bishopMove.PromoteTo = PieceName.ROOK; possibleMoves.Add(rookMove);
+                        ChessMove bishopMove=new ChessMove(possibleMove); bishopMove.PromoteTo = PieceName.BISHOP; possibleMoves.Add(bishopMove);
+                        ChessMove queenMove = new ChessMove(possibleMove); bishopMove.PromoteTo = PieceName.QUEEN; possibleMoves.Add(queenMove);
+                        ChessMove knightMove = new ChessMove(possibleMove); bishopMove.PromoteTo = PieceName.KNIGHT; possibleMoves.Add(knightMove);
+                        ChessMove rookMove = new ChessMove(possibleMove); bishopMove.PromoteTo = PieceName.ROOK; possibleMoves.Add(rookMove);
 
                     }
                     else { possibleMoves.Add(possibleMove); }
-                    newState = new BoardState(boardState);
+                    newState = new ChessBoardState(boardState);
                     
                 }
             }
             return possibleMoves;
         }
-        public bool Move(int initialX, int initialY, int targetX, int targetY, PieceName promoteTo=PieceName.QUEEN)
+        public override bool Move(Move move)
         {
-            Square initialSquare = boardState.squares[initialX, initialY];
-            Square targetSquare=boardState.squares[targetX, targetY];
-            if (boardState.squares[initialX, initialY].Piece != null)
+            if (move == null || move is not ChessMove) return false;
+            ChessMove chessMove = (ChessMove)move;
+            Square initialSquare = boardState.squares[chessMove.InitialX, chessMove.InitialY];
+            Square targetSquare=boardState.squares[chessMove.TargetX, chessMove.TargetY];
+            if (boardState.squares[chessMove.InitialX, chessMove.InitialY].Piece != null)
             {
-                if (boardState.squares[initialX, initialY].Piece.IsWhite && boardState.turnOf == Color.BLACK) return false;
-                if (!boardState.squares[initialX, initialY].Piece.IsWhite && boardState.turnOf == Color.WHITE) return false;
+                if (boardState.squares[chessMove.InitialX, chessMove.InitialY].Piece.IsWhite && boardState.turnOf == Color.BLACK) return false;
+                if (!boardState.squares[chessMove.InitialX, chessMove.InitialY].Piece.IsWhite && boardState.turnOf == Color.WHITE) return false;
             }
-            BoardState newState=new BoardState(boardState);
-            if(TryMove(initialSquare, targetSquare, newState, promoteTo))
+            ChessBoardState newState=new ChessBoardState(boardState);
+            if(TryMove(initialSquare, targetSquare, newState, chessMove.PromoteTo))
             {
                 boardState=newState;
                 States.Add(boardState);
@@ -245,7 +250,12 @@ namespace ConsoleChess
             {
                 foreach (Piece piece in boardState.WhitePieces)
                 {
-                    int moves = getPossibleMoves(piece.X, piece.Y).Count;
+                    var m = getPossibleMoves(piece.X, piece.Y);
+                    int moves = 0;
+                    if (m != null)
+                    {
+                        moves = ((List<ChessMove>)m).Count;
+                    }
                     sum += moves;
                     if (moves != 0) break;
                 }
@@ -256,7 +266,12 @@ namespace ConsoleChess
             {
                 foreach (Piece piece in boardState.BlackPieces)
                 {
-                    int moves = getPossibleMoves(piece.X, piece.Y).Count;
+                    var m = getPossibleMoves(piece.X, piece.Y);
+                    int moves = 0;
+                    if (m != null)
+                    {
+                        moves = ((List<ChessMove>)m).Count;
+                    }
                     sum += moves;
                     if (moves != 0) break;
                 }
@@ -273,7 +288,7 @@ namespace ConsoleChess
             if(boardState.FiftyMoveRule>=50) return Color.DRAW;
             return Color.NONE;
         }
-        private bool canPromote (Piece piece, Square target, BoardState boardState)
+        private bool canPromote (Piece piece, Square target, ChessBoardState boardState)
         {
             if (piece.getPieceName()!=PieceName.PAWN) return false;
             if (piece.IsWhite && piece.X != 6) return false;
@@ -283,7 +298,7 @@ namespace ConsoleChess
             return false;
 
         }
-        private bool isBoardValid(BoardState boardState)
+        private bool isBoardValid(ChessBoardState boardState)
         {
             if (boardState.turnOf == Color.WHITE)
             {
@@ -295,7 +310,7 @@ namespace ConsoleChess
             }
             return true;
         }
-        private bool isCheck(BoardState boardState)
+        private bool isCheck(ChessBoardState boardState)
         {
             if (boardState.turnOf == Color.BLACK)
             {
@@ -307,12 +322,12 @@ namespace ConsoleChess
             }
             return false;
         }
-        private void changeTurn(BoardState boardState)
+        private void changeTurn(ChessBoardState boardState)
         {
             if(boardState.turnOf == Color.BLACK) boardState.turnOf = Color.WHITE;
             else boardState.turnOf = Color.BLACK;
         }
-        public bool Promote(Square initialSquare, Square targetSquare, PieceName piece, BoardState boardState) 
+        public bool Promote(Square initialSquare, Square targetSquare, PieceName piece, ChessBoardState boardState) 
         {
             if (!canPromote(initialSquare.Piece, boardState.squares[targetSquare.X, targetSquare.Y], boardState)) { return false; }
             Piece temp = initialSquare.Piece;
@@ -349,7 +364,7 @@ namespace ConsoleChess
             bool isChecked=isCheck(boardState);
             if (isBoardValid(boardState))
             {
-                Move possibleMove = new Move();
+                ChessMove possibleMove = new ChessMove();
                 possibleMove.isCheck = isChecked;
                 possibleMove.isCapture = isCapture;
                 possibleMove.InitialX = initialSquare.X;
@@ -386,7 +401,7 @@ namespace ConsoleChess
             list[list.Count - 1].X = square.X;
             list[list.Count - 1].Y = square.Y;
         }
-        public bool  Castle(Square initialSquare, Square targetSquare, BoardState boardState) 
+        public bool  Castle(Square initialSquare, Square targetSquare, ChessBoardState boardState) 
         {
             if (initialSquare.Piece.getPieceName() != PieceName.KING) { return false; }
             if (!((King)initialSquare.Piece).canCastle(targetSquare.X, targetSquare.Y, this)) { return false; }
@@ -407,7 +422,7 @@ namespace ConsoleChess
                 boardState.squares[targetSquare.X, 7].Piece = null;
             }
             bool isChecked = isCheck(boardState);
-            Move possibleMove = new Move();
+            ChessMove possibleMove = new ChessMove();
             possibleMove.isCheck = isChecked;
             possibleMove.isCapture = false;
             possibleMove.InitialX = initialSquare.X;
@@ -419,7 +434,7 @@ namespace ConsoleChess
             boardState.moves.Add(possibleMove);
             return true;
         }
-        public bool TryMove(Square initialSquare, Square targetSquare, BoardState boardState, PieceName promoteTo)
+        public bool TryMove(Square initialSquare, Square targetSquare, ChessBoardState boardState, PieceName promoteTo)
         {
             if (initialSquare.Piece == null) return false;
             bool hasMoved = initialSquare.Piece.HasMoved;
@@ -513,7 +528,7 @@ namespace ConsoleChess
                 bool isChecked = isCheck(boardState);
                 if (isBoardValid(boardState))
                 {
-                    Move possibleMove = new Move();
+                    ChessMove possibleMove = new ChessMove();
                     possibleMove.isCheck = isChecked;
                     possibleMove.isCapture = isCapture || wasEP;
                     possibleMove.InitialX = initialSquare.X;

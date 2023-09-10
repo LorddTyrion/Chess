@@ -8,7 +8,7 @@ namespace ReactChess.Services
     }
     public class Game
     {
-        public Board Board { get; set; }
+        public ChessBoard Board { get; set; }
         public string WhitePlayer { get; set; }
         public string BlackPlayer { get; set; }
         public int GameID { get; set; }
@@ -18,7 +18,7 @@ namespace ReactChess.Services
         {
             Random random = new Random();
             GameID=random.Next(1,int.MaxValue);
-            Board = new Board();
+            Board = new ChessBoard();
             Result = Color.NONE;
         }
         public void LoseGame(string user)

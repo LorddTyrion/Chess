@@ -13,3 +13,9 @@ E:\Egyetem\Temalabor\Chess\ConsoleChess\ConsoleChess\obj\Debug\net6.0\refint\Con
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ConsoleChess\obj\Debug\net6.0\ConsoleChess.pdb
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ConsoleChess\obj\Debug\net6.0\ConsoleChess.genruntimeconfig.cache
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ConsoleChess\obj\Debug\net6.0\ref\ConsoleChess.dll
+E:\Egyetem\Temalabor\Chess\ConsoleChess\ConsoleChess\bin\Debug\net6.0\FrameworkBackend.deps.json
+E:\Egyetem\Temalabor\Chess\ConsoleChess\ConsoleChess\bin\Debug\net6.0\FrameworkBackend.runtimeconfig.json
+E:\Egyetem\Temalabor\Chess\ConsoleChess\ConsoleChess\bin\Debug\net6.0\FrameworkBackend.exe
+E:\Egyetem\Temalabor\Chess\ConsoleChess\ConsoleChess\bin\Debug\net6.0\FrameworkBackend.dll
+E:\Egyetem\Temalabor\Chess\ConsoleChess\ConsoleChess\bin\Debug\net6.0\FrameworkBackend.pdb
+E:\Egyetem\Temalabor\Chess\ConsoleChess\ConsoleChess\obj\Debug\net6.0\ConsoleChess.csproj.CopyComplete

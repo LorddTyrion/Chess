@@ -7,14 +7,27 @@
   "targets": {
     ".NETCoreApp,Version=v6.0": {
       "ConsoleChess/1.0.0": {
+        "dependencies": {
+          "FrameworkBackend": "1.0.0"
+        },
         "runtime": {
           "ConsoleChess.dll": {}
+        }
+      },
+      "FrameworkBackend/1.0.0": {
+        "runtime": {
+          "FrameworkBackend.dll": {}
         }
       }
     }
   },
   "libraries": {
     "ConsoleChess/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "FrameworkBackend/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -38,7 +38,7 @@ namespace ConsoleChess.Pieces
 			
 			return false;
 		}
-		public bool canCastle(int xNew, int yNew, Board board)
+		public bool canCastle(int xNew, int yNew, ChessBoard board)
         {
 			if (board == null) return false;
 			// Castleing

@@ -1,0 +1,15 @@
+E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\bin\Debug\net6.0\FrameworkBackend.exe
+E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\bin\Debug\net6.0\FrameworkBackend.deps.json
+E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\bin\Debug\net6.0\FrameworkBackend.runtimeconfig.json
+E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\bin\Debug\net6.0\FrameworkBackend.dll
+E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\bin\Debug\net6.0\FrameworkBackend.pdb
+E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\obj\Debug\net6.0\FrameworkBackend.csproj.AssemblyReference.cache
+E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\obj\Debug\net6.0\FrameworkBackend.GeneratedMSBuildEditorConfig.editorconfig
+E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\obj\Debug\net6.0\FrameworkBackend.AssemblyInfoInputs.cache
+E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\obj\Debug\net6.0\FrameworkBackend.AssemblyInfo.cs
+E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\obj\Debug\net6.0\FrameworkBackend.csproj.CoreCompileInputs.cache
+E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\obj\Debug\net6.0\FrameworkBackend.dll
+E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\obj\Debug\net6.0\refint\FrameworkBackend.dll
+E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\obj\Debug\net6.0\FrameworkBackend.pdb
+E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\obj\Debug\net6.0\FrameworkBackend.genruntimeconfig.cache
+E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\obj\Debug\net6.0\ref\FrameworkBackend.dll

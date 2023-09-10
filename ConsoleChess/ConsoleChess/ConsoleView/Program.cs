@@ -5,7 +5,7 @@ using ConsoleChess.Pieces;
 
 Console.WriteLine("SAKK");
 Console.WriteLine();
-Board board = new Board();
+ChessBoard board = new ChessBoard();
 BoardView bw=new BoardView(board);
 
 string moveString = "";
@@ -26,6 +26,12 @@ while (running)
     int newX= moveChars[3] - '1';
     int newY= moveChars[2] - 'a';
     PieceName promoteTo = PieceName.QUEEN;
+    ChessMove move = new ChessMove();
+    move.InitialX= oldX;
+    move.InitialY= oldY;
+    move.TargetX= newX;
+    move.TargetY= newY;
+    move.PromoteTo= promoteTo;
     if (moveChars.Length == 5)
     {
         switch (moveChars[4])
@@ -47,7 +53,7 @@ while (running)
         }
     }
 
-    while (!board.Move(oldX, oldY, newX, newY, promoteTo))
+    while (!board.Move(move))
     {
         Console.WriteLine("Hibás lépés, add meg újra!");
         moveChars = Console.ReadLine().ToLower().ToCharArray();

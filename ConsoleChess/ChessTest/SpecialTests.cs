@@ -11,7 +11,7 @@ namespace ChessTest
         [Fact]
         public void ThereAre16WhitePieces()
         {
-            Board board = new Board();
+            ChessBoard board = new ChessBoard();
             int sum = board.boardState.WhitePieces.Count;
             Assert.Equal(16, sum);
 
@@ -19,14 +19,14 @@ namespace ChessTest
         [Fact]
         public void PawnCanMoveTwoFirst()
         {
-            Board board = new Board();
+            ChessBoard board = new ChessBoard();
             bool result=board.Move(1,3,3,3);
             Assert.True(result);
         }
         [Fact]
         public void PawnCannotMoveTwoLater()
         {
-            Board board = new Board();
+            ChessBoard board = new ChessBoard();
             bool result = board.Move(1, 3, 2, 3);
             result=board.Move(2, 3, 4, 3);
             Assert.False(result);
@@ -34,7 +34,7 @@ namespace ChessTest
         [Fact]
         public void CanAnPassant()
         {
-            Board board = new Board();
+            ChessBoard board = new ChessBoard();
             bool result = board.Move(1, 3, 3, 3);
             result = board.Move(6, 1, 4, 1);
             result = board.Move(3, 3, 4, 3);
@@ -45,7 +45,7 @@ namespace ChessTest
         [Fact]
         public void CannotAnPassantLater()
         {
-            Board board = new Board();
+            ChessBoard board = new ChessBoard();
             bool result = board.Move(1, 3, 3, 3);
             result = board.Move(6, 1, 4, 1);
             result = board.Move(3, 3, 4, 3);
@@ -58,7 +58,7 @@ namespace ChessTest
         [Fact]
         public void Castles()
         {
-            Board board=new Board();
+            ChessBoard board=new ChessBoard();
             clearBoard(board);
             Bishop b=new Bishop();
             b.IsWhite = false; b.X = 5; b.Y = 0;
@@ -91,7 +91,7 @@ namespace ChessTest
         [Fact]
         public void LongCastles()
         {
-            Board board = new Board();
+            ChessBoard board = new ChessBoard();
             clearBoard(board);
             King k1 = new King();
             k1.IsWhite = false; k1.X = 7; k1.Y = 4;
@@ -114,7 +114,7 @@ namespace ChessTest
         [Fact]
         public void CannotCastleInCheck()
         {
-            Board board = new Board();
+            ChessBoard board = new ChessBoard();
             clearBoard(board);
             Bishop b = new Bishop();
             b.IsWhite = false; b.X = 4; b.Y = 0;
@@ -147,7 +147,7 @@ namespace ChessTest
         [Fact]
         public void CannotCastleThroughPiece()
         {
-            Board board = new Board();
+            ChessBoard board = new ChessBoard();
             clearBoard(board);
             Bishop b = new Bishop();
             b.IsWhite = false; b.X = 5; b.Y = 0;
@@ -186,7 +186,7 @@ namespace ChessTest
         [Fact]
         public void CannotCastleThroughCheck()
         {
-            Board board = new Board();
+            ChessBoard board = new ChessBoard();
             clearBoard(board);
             Bishop b = new Bishop();
             b.IsWhite = false; b.X = 5; b.Y = 0;
@@ -214,7 +214,7 @@ namespace ChessTest
         [Fact]
         public void CannotCastleIfRookMoved()
         {
-            Board board = new Board();
+            ChessBoard board = new ChessBoard();
             clearBoard(board);
             King k1 = new King();
             k1.IsWhite = false; k1.X = 7; k1.Y = 4;
@@ -240,7 +240,7 @@ namespace ChessTest
         [Fact]
         public void CannotCastleIfKingMoved()
         {
-            Board board = new Board();
+            ChessBoard board = new ChessBoard();
             clearBoard(board);
             King k1 = new King();
             k1.IsWhite = false; k1.X = 7; k1.Y = 4;
@@ -266,7 +266,7 @@ namespace ChessTest
         [Fact]
         public void CannotCastleRookNotInPlace()
         {
-            Board board = new Board();
+            ChessBoard board = new ChessBoard();
             clearBoard(board);
             King k1 = new King();
             k1.IsWhite = false; k1.X = 7; k1.Y = 4;
@@ -291,7 +291,7 @@ namespace ChessTest
         [Fact]
         public void Promote()
         {
-            Board board = new Board();
+            ChessBoard board = new ChessBoard();
             clearBoard(board);
             King k1 = new King();
             k1.IsWhite = false; k1.X = 7; k1.Y = 4;
@@ -314,7 +314,7 @@ namespace ChessTest
         [Fact]
         public void Checkmate()
         {
-            Board board = new Board();
+            ChessBoard board = new ChessBoard();
             clearBoard(board);
             King k1 = new King();
             k1.IsWhite = false; k1.X = 7; k1.Y = 4;
@@ -339,7 +339,7 @@ namespace ChessTest
         [Fact]
         public void Stalemate()
         {
-            Board board = new Board();
+            ChessBoard board = new ChessBoard();
             clearBoard(board);
             King k1 = new King();
             k1.IsWhite = false; k1.X = 7; k1.Y = 4;
@@ -364,7 +364,7 @@ namespace ChessTest
         [Fact]
         public void InsufficientMaterial()
         {
-            Board board = new Board();
+            ChessBoard board = new ChessBoard();
             clearBoard(board);
             King k1 = new King();
             k1.IsWhite = false; k1.X = 7; k1.Y = 4;
@@ -389,7 +389,7 @@ namespace ChessTest
         [Fact]
         public void PinnedPiece()
         {
-            Board board = new Board();
+            ChessBoard board = new ChessBoard();
             clearBoard(board);
             Bishop b = new Bishop();
             b.IsWhite = false; b.X = 5; b.Y = 0;
@@ -423,7 +423,7 @@ namespace ChessTest
 
 
 
-        private void clearBoard(Board board)
+        private void clearBoard(ChessBoard board)
         {
             for (int i = 0; i < 8; i++)
             {
