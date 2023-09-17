@@ -103,3 +103,8 @@ E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\obj\Debug\net6.0\refint\ChessT
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\obj\Debug\net6.0\ChessTest.pdb
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\obj\Debug\net6.0\ChessTest.genruntimeconfig.cache
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\obj\Debug\net6.0\ref\ChessTest.dll
+E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\FrameworkBackend.deps.json
+E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\FrameworkBackend.runtimeconfig.json
+E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\FrameworkBackend.exe
+E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\FrameworkBackend.dll
+E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\FrameworkBackend.pdb

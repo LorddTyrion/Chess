@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace FrameworkBackend
 {
-    public abstract class Board
+    public abstract class Board<TMove> where TMove:Move
     {
-        public abstract bool Move(Move move);
+        public abstract bool Move(TMove move);
         public abstract IEnumerable<Move> getPossibleMoves(int x, int y);
     }
 }

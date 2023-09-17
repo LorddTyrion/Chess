@@ -13,3 +13,5 @@ E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\obj\Debug\net6.0\refint
 E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\obj\Debug\net6.0\FrameworkBackend.pdb
 E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\obj\Debug\net6.0\FrameworkBackend.genruntimeconfig.cache
 E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\obj\Debug\net6.0\ref\FrameworkBackend.dll
+E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\bin\Debug\net6.0\Newtonsoft.Json.dll
+E:\Egyetem\Temalabor\Chess\ConsoleChess\FrameworkBackend\obj\Debug\net6.0\FrameworkBackend.csproj.CopyComplete

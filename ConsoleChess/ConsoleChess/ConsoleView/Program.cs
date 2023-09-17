@@ -88,6 +88,9 @@ while (running)
             }
         }
     }
+    board.boardState.SerializeBoard(@"c:\Save\movie.json");
+    ChessBoardState cb = (ChessBoardState)board.boardState.DeserializeBoard(@"c:\Save\movie.json");
+    Console.WriteLine("ggggggggggggggggg     "+cb.turnOf);
     bw.Draw();
     Console.WriteLine(board.boardState.moves[board.boardState.moves.Count-1]);
     bw.ListPossibleMoves(0, 4);
@@ -110,58 +113,3 @@ while (running)
     }
     
 }
-
-
-
-
-
-
-
-//for (int i = 0; i < 8; i++)
-//{
-//    for (int j = 0; j < 8; j++)
-//    {
-//        board.boardState.squares[i, j].Piece = null;
-//    }
-//}
-//board.boardState.WhitePieces.Clear();
-//board.boardState.BlackPieces.Clear();
-
-//King k1 = new King();
-//k1.IsWhite = false; k1.X = 7; k1.Y = 4;
-//board.boardState.squares[7, 4].Piece = k1;
-//board.boardState.BlackPieces.Add(k1); board.boardState.BlackKing = k1;
-
-//King k2 = new King();
-//k2.IsWhite = true; k2.X = 5; k2.Y = 4;
-//board.boardState.squares[5, 4].Piece = k2;
-//board.boardState.WhitePieces.Add(k2); board.boardState.WhiteKing = k2;
-
-//Queen q = new Queen();
-//q.IsWhite = true; q.X = 6; q.Y = 4;
-//board.boardState.squares[6, 4].Piece = q;
-//board.boardState.WhitePieces.Add(q);
-//board.boardState.turnOf = Color.BLACK;
-//bw.Draw();
-//bw.ListPossibleMoves(7, 4);
-//bool res = board.Move(7, 4, 6, 3);
-//bw.Draw();
-
-//King k1 = new King();
-//k1.IsWhite = false; k1.X = 7; k1.Y = 4;
-//board.boardState.squares[7, 4].Piece = k1;
-//board.boardState.BlackPieces.Add(k1); board.boardState.BlackKing = k1;
-
-//King k2 = new King();
-//k2.IsWhite = true; k2.X = 0; k2.Y = 4;
-//board.boardState.squares[0, 4].Piece = k2;
-//board.boardState.WhitePieces.Add(k2); board.boardState.WhiteKing = k2;
-
-//Pawn p = new Pawn();
-//p.IsWhite = true; p.X = 6; p.Y = 2;
-//board.boardState.squares[6, 2].Piece = p;
-//board.boardState.WhitePieces.Add(p);
-//bw.Draw();
-//bw.ListPossibleMoves(6, 2);
-//bool result = board.Move(6, 2, 7, 2);
-//bw.Draw();

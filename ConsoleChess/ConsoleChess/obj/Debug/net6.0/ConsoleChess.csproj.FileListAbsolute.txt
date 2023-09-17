@@ -19,3 +19,4 @@ E:\Egyetem\Temalabor\Chess\ConsoleChess\ConsoleChess\bin\Debug\net6.0\FrameworkB
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ConsoleChess\bin\Debug\net6.0\FrameworkBackend.dll
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ConsoleChess\bin\Debug\net6.0\FrameworkBackend.pdb
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ConsoleChess\obj\Debug\net6.0\ConsoleChess.csproj.CopyComplete
+E:\Egyetem\Temalabor\Chess\ConsoleChess\ConsoleChess\bin\Debug\net6.0\Newtonsoft.Json.dll

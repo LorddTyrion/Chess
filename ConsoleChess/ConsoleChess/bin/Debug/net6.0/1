@@ -1,0 +1,886 @@
+{
+  "WhitePieces": [
+    {
+      "X": 0,
+      "Y": 0,
+      "IsWhite": true,
+      "HasMoved": false,
+      "Value": 5,
+      "PieceName": 4
+    },
+    {
+      "X": 0,
+      "Y": 1,
+      "IsWhite": true,
+      "HasMoved": false,
+      "Value": 3,
+      "PieceName": 2
+    },
+    {
+      "X": 0,
+      "Y": 2,
+      "IsWhite": true,
+      "HasMoved": false,
+      "Value": 3,
+      "PieceName": 3
+    },
+    {
+      "X": 0,
+      "Y": 3,
+      "IsWhite": true,
+      "HasMoved": false,
+      "Value": 9,
+      "PieceName": 1
+    },
+    {
+      "X": 0,
+      "Y": 4,
+      "IsWhite": true,
+      "HasMoved": false,
+      "Value": 0,
+      "PieceName": 0
+    },
+    {
+      "X": 0,
+      "Y": 5,
+      "IsWhite": true,
+      "HasMoved": false,
+      "Value": 3,
+      "PieceName": 3
+    },
+    {
+      "X": 0,
+      "Y": 6,
+      "IsWhite": true,
+      "HasMoved": false,
+      "Value": 3,
+      "PieceName": 2
+    },
+    {
+      "X": 0,
+      "Y": 7,
+      "IsWhite": true,
+      "HasMoved": false,
+      "Value": 5,
+      "PieceName": 4
+    },
+    {
+      "EnPassantable": false,
+      "X": 1,
+      "Y": 0,
+      "IsWhite": true,
+      "HasMoved": false,
+      "Value": 1,
+      "PieceName": 5
+    },
+    {
+      "EnPassantable": false,
+      "X": 1,
+      "Y": 1,
+      "IsWhite": true,
+      "HasMoved": false,
+      "Value": 1,
+      "PieceName": 5
+    },
+    {
+      "EnPassantable": false,
+      "X": 1,
+      "Y": 2,
+      "IsWhite": true,
+      "HasMoved": false,
+      "Value": 1,
+      "PieceName": 5
+    },
+    {
+      "EnPassantable": false,
+      "X": 1,
+      "Y": 3,
+      "IsWhite": true,
+      "HasMoved": false,
+      "Value": 1,
+      "PieceName": 5
+    },
+    {
+      "EnPassantable": true,
+      "X": 3,
+      "Y": 4,
+      "IsWhite": true,
+      "HasMoved": true,
+      "Value": 1,
+      "PieceName": 5
+    },
+    {
+      "EnPassantable": false,
+      "X": 1,
+      "Y": 5,
+      "IsWhite": true,
+      "HasMoved": false,
+      "Value": 1,
+      "PieceName": 5
+    },
+    {
+      "EnPassantable": false,
+      "X": 1,
+      "Y": 6,
+      "IsWhite": true,
+      "HasMoved": false,
+      "Value": 1,
+      "PieceName": 5
+    },
+    {
+      "EnPassantable": false,
+      "X": 1,
+      "Y": 7,
+      "IsWhite": true,
+      "HasMoved": false,
+      "Value": 1,
+      "PieceName": 5
+    }
+  ],
+  "BlackPieces": [
+    {
+      "EnPassantable": false,
+      "X": 6,
+      "Y": 0,
+      "IsWhite": false,
+      "HasMoved": false,
+      "Value": 1,
+      "PieceName": 5
+    },
+    {
+      "EnPassantable": false,
+      "X": 6,
+      "Y": 1,
+      "IsWhite": false,
+      "HasMoved": false,
+      "Value": 1,
+      "PieceName": 5
+    },
+    {
+      "EnPassantable": false,
+      "X": 6,
+      "Y": 2,
+      "IsWhite": false,
+      "HasMoved": false,
+      "Value": 1,
+      "PieceName": 5
+    },
+    {
+      "EnPassantable": false,
+      "X": 6,
+      "Y": 3,
+      "IsWhite": false,
+      "HasMoved": false,
+      "Value": 1,
+      "PieceName": 5
+    },
+    {
+      "EnPassantable": false,
+      "X": 6,
+      "Y": 4,
+      "IsWhite": false,
+      "HasMoved": false,
+      "Value": 1,
+      "PieceName": 5
+    },
+    {
+      "EnPassantable": false,
+      "X": 6,
+      "Y": 5,
+      "IsWhite": false,
+      "HasMoved": false,
+      "Value": 1,
+      "PieceName": 5
+    },
+    {
+      "EnPassantable": false,
+      "X": 6,
+      "Y": 6,
+      "IsWhite": false,
+      "HasMoved": false,
+      "Value": 1,
+      "PieceName": 5
+    },
+    {
+      "EnPassantable": false,
+      "X": 6,
+      "Y": 7,
+      "IsWhite": false,
+      "HasMoved": false,
+      "Value": 1,
+      "PieceName": 5
+    },
+    {
+      "X": 7,
+      "Y": 0,
+      "IsWhite": false,
+      "HasMoved": false,
+      "Value": 5,
+      "PieceName": 4
+    },
+    {
+      "X": 7,
+      "Y": 1,
+      "IsWhite": false,
+      "HasMoved": false,
+      "Value": 3,
+      "PieceName": 2
+    },
+    {
+      "X": 7,
+      "Y": 2,
+      "IsWhite": false,
+      "HasMoved": false,
+      "Value": 3,
+      "PieceName": 3
+    },
+    {
+      "X": 7,
+      "Y": 3,
+      "IsWhite": false,
+      "HasMoved": false,
+      "Value": 9,
+      "PieceName": 1
+    },
+    {
+      "X": 7,
+      "Y": 4,
+      "IsWhite": false,
+      "HasMoved": false,
+      "Value": 0,
+      "PieceName": 0
+    },
+    {
+      "X": 7,
+      "Y": 5,
+      "IsWhite": false,
+      "HasMoved": false,
+      "Value": 3,
+      "PieceName": 3
+    },
+    {
+      "X": 7,
+      "Y": 6,
+      "IsWhite": false,
+      "HasMoved": false,
+      "Value": 3,
+      "PieceName": 2
+    },
+    {
+      "X": 7,
+      "Y": 7,
+      "IsWhite": false,
+      "HasMoved": false,
+      "Value": 5,
+      "PieceName": 4
+    }
+  ],
+  "WhiteKing": {
+    "X": 0,
+    "Y": 4,
+    "IsWhite": true,
+    "HasMoved": false,
+    "Value": 0,
+    "PieceName": 0
+  },
+  "BlackKing": {
+    "X": 7,
+    "Y": 4,
+    "IsWhite": false,
+    "HasMoved": false,
+    "Value": 0,
+    "PieceName": 0
+  },
+  "squares": [
+    [
+      {
+        "X": 0,
+        "Y": 0,
+        "Piece": {
+          "X": 0,
+          "Y": 0,
+          "IsWhite": true,
+          "HasMoved": false,
+          "Value": 5,
+          "PieceName": 4
+        }
+      },
+      {
+        "X": 0,
+        "Y": 1,
+        "Piece": {
+          "X": 0,
+          "Y": 1,
+          "IsWhite": true,
+          "HasMoved": false,
+          "Value": 3,
+          "PieceName": 2
+        }
+      },
+      {
+        "X": 0,
+        "Y": 2,
+        "Piece": {
+          "X": 0,
+          "Y": 2,
+          "IsWhite": true,
+          "HasMoved": false,
+          "Value": 3,
+          "PieceName": 3
+        }
+      },
+      {
+        "X": 0,
+        "Y": 3,
+        "Piece": {
+          "X": 0,
+          "Y": 3,
+          "IsWhite": true,
+          "HasMoved": false,
+          "Value": 9,
+          "PieceName": 1
+        }
+      },
+      {
+        "X": 0,
+        "Y": 4,
+        "Piece": {
+          "X": 0,
+          "Y": 4,
+          "IsWhite": true,
+          "HasMoved": false,
+          "Value": 0,
+          "PieceName": 0
+        }
+      },
+      {
+        "X": 0,
+        "Y": 5,
+        "Piece": {
+          "X": 0,
+          "Y": 5,
+          "IsWhite": true,
+          "HasMoved": false,
+          "Value": 3,
+          "PieceName": 3
+        }
+      },
+      {
+        "X": 0,
+        "Y": 6,
+        "Piece": {
+          "X": 0,
+          "Y": 6,
+          "IsWhite": true,
+          "HasMoved": false,
+          "Value": 3,
+          "PieceName": 2
+        }
+      },
+      {
+        "X": 0,
+        "Y": 7,
+        "Piece": {
+          "X": 0,
+          "Y": 7,
+          "IsWhite": true,
+          "HasMoved": false,
+          "Value": 5,
+          "PieceName": 4
+        }
+      }
+    ],
+    [
+      {
+        "X": 1,
+        "Y": 0,
+        "Piece": {
+          "EnPassantable": false,
+          "X": 1,
+          "Y": 0,
+          "IsWhite": true,
+          "HasMoved": false,
+          "Value": 1,
+          "PieceName": 5
+        }
+      },
+      {
+        "X": 1,
+        "Y": 1,
+        "Piece": {
+          "EnPassantable": false,
+          "X": 1,
+          "Y": 1,
+          "IsWhite": true,
+          "HasMoved": false,
+          "Value": 1,
+          "PieceName": 5
+        }
+      },
+      {
+        "X": 1,
+        "Y": 2,
+        "Piece": {
+          "EnPassantable": false,
+          "X": 1,
+          "Y": 2,
+          "IsWhite": true,
+          "HasMoved": false,
+          "Value": 1,
+          "PieceName": 5
+        }
+      },
+      {
+        "X": 1,
+        "Y": 3,
+        "Piece": {
+          "EnPassantable": false,
+          "X": 1,
+          "Y": 3,
+          "IsWhite": true,
+          "HasMoved": false,
+          "Value": 1,
+          "PieceName": 5
+        }
+      },
+      {
+        "X": 1,
+        "Y": 4,
+        "Piece": null
+      },
+      {
+        "X": 1,
+        "Y": 5,
+        "Piece": {
+          "EnPassantable": false,
+          "X": 1,
+          "Y": 5,
+          "IsWhite": true,
+          "HasMoved": false,
+          "Value": 1,
+          "PieceName": 5
+        }
+      },
+      {
+        "X": 1,
+        "Y": 6,
+        "Piece": {
+          "EnPassantable": false,
+          "X": 1,
+          "Y": 6,
+          "IsWhite": true,
+          "HasMoved": false,
+          "Value": 1,
+          "PieceName": 5
+        }
+      },
+      {
+        "X": 1,
+        "Y": 7,
+        "Piece": {
+          "EnPassantable": false,
+          "X": 1,
+          "Y": 7,
+          "IsWhite": true,
+          "HasMoved": false,
+          "Value": 1,
+          "PieceName": 5
+        }
+      }
+    ],
+    [
+      {
+        "X": 2,
+        "Y": 0,
+        "Piece": null
+      },
+      {
+        "X": 2,
+        "Y": 1,
+        "Piece": null
+      },
+      {
+        "X": 2,
+        "Y": 2,
+        "Piece": null
+      },
+      {
+        "X": 2,
+        "Y": 3,
+        "Piece": null
+      },
+      {
+        "X": 2,
+        "Y": 4,
+        "Piece": null
+      },
+      {
+        "X": 2,
+        "Y": 5,
+        "Piece": null
+      },
+      {
+        "X": 2,
+        "Y": 6,
+        "Piece": null
+      },
+      {
+        "X": 2,
+        "Y": 7,
+        "Piece": null
+      }
+    ],
+    [
+      {
+        "X": 3,
+        "Y": 0,
+        "Piece": null
+      },
+      {
+        "X": 3,
+        "Y": 1,
+        "Piece": null
+      },
+      {
+        "X": 3,
+        "Y": 2,
+        "Piece": null
+      },
+      {
+        "X": 3,
+        "Y": 3,
+        "Piece": null
+      },
+      {
+        "X": 3,
+        "Y": 4,
+        "Piece": {
+          "EnPassantable": true,
+          "X": 3,
+          "Y": 4,
+          "IsWhite": true,
+          "HasMoved": true,
+          "Value": 1,
+          "PieceName": 5
+        }
+      },
+      {
+        "X": 3,
+        "Y": 5,
+        "Piece": null
+      },
+      {
+        "X": 3,
+        "Y": 6,
+        "Piece": null
+      },
+      {
+        "X": 3,
+        "Y": 7,
+        "Piece": null
+      }
+    ],
+    [
+      {
+        "X": 4,
+        "Y": 0,
+        "Piece": null
+      },
+      {
+        "X": 4,
+        "Y": 1,
+        "Piece": null
+      },
+      {
+        "X": 4,
+        "Y": 2,
+        "Piece": null
+      },
+      {
+        "X": 4,
+        "Y": 3,
+        "Piece": null
+      },
+      {
+        "X": 4,
+        "Y": 4,
+        "Piece": null
+      },
+      {
+        "X": 4,
+        "Y": 5,
+        "Piece": null
+      },
+      {
+        "X": 4,
+        "Y": 6,
+        "Piece": null
+      },
+      {
+        "X": 4,
+        "Y": 7,
+        "Piece": null
+      }
+    ],
+    [
+      {
+        "X": 5,
+        "Y": 0,
+        "Piece": null
+      },
+      {
+        "X": 5,
+        "Y": 1,
+        "Piece": null
+      },
+      {
+        "X": 5,
+        "Y": 2,
+        "Piece": null
+      },
+      {
+        "X": 5,
+        "Y": 3,
+        "Piece": null
+      },
+      {
+        "X": 5,
+        "Y": 4,
+        "Piece": null
+      },
+      {
+        "X": 5,
+        "Y": 5,
+        "Piece": null
+      },
+      {
+        "X": 5,
+        "Y": 6,
+        "Piece": null
+      },
+      {
+        "X": 5,
+        "Y": 7,
+        "Piece": null
+      }
+    ],
+    [
+      {
+        "X": 6,
+        "Y": 0,
+        "Piece": {
+          "EnPassantable": false,
+          "X": 6,
+          "Y": 0,
+          "IsWhite": false,
+          "HasMoved": false,
+          "Value": 1,
+          "PieceName": 5
+        }
+      },
+      {
+        "X": 6,
+        "Y": 1,
+        "Piece": {
+          "EnPassantable": false,
+          "X": 6,
+          "Y": 1,
+          "IsWhite": false,
+          "HasMoved": false,
+          "Value": 1,
+          "PieceName": 5
+        }
+      },
+      {
+        "X": 6,
+        "Y": 2,
+        "Piece": {
+          "EnPassantable": false,
+          "X": 6,
+          "Y": 2,
+          "IsWhite": false,
+          "HasMoved": false,
+          "Value": 1,
+          "PieceName": 5
+        }
+      },
+      {
+        "X": 6,
+        "Y": 3,
+        "Piece": {
+          "EnPassantable": false,
+          "X": 6,
+          "Y": 3,
+          "IsWhite": false,
+          "HasMoved": false,
+          "Value": 1,
+          "PieceName": 5
+        }
+      },
+      {
+        "X": 6,
+        "Y": 4,
+        "Piece": {
+          "EnPassantable": false,
+          "X": 6,
+          "Y": 4,
+          "IsWhite": false,
+          "HasMoved": false,
+          "Value": 1,
+          "PieceName": 5
+        }
+      },
+      {
+        "X": 6,
+        "Y": 5,
+        "Piece": {
+          "EnPassantable": false,
+          "X": 6,
+          "Y": 5,
+          "IsWhite": false,
+          "HasMoved": false,
+          "Value": 1,
+          "PieceName": 5
+        }
+      },
+      {
+        "X": 6,
+        "Y": 6,
+        "Piece": {
+          "EnPassantable": false,
+          "X": 6,
+          "Y": 6,
+          "IsWhite": false,
+          "HasMoved": false,
+          "Value": 1,
+          "PieceName": 5
+        }
+      },
+      {
+        "X": 6,
+        "Y": 7,
+        "Piece": {
+          "EnPassantable": false,
+          "X": 6,
+          "Y": 7,
+          "IsWhite": false,
+          "HasMoved": false,
+          "Value": 1,
+          "PieceName": 5
+        }
+      }
+    ],
+    [
+      {
+        "X": 7,
+        "Y": 0,
+        "Piece": {
+          "X": 7,
+          "Y": 0,
+          "IsWhite": false,
+          "HasMoved": false,
+          "Value": 5,
+          "PieceName": 4
+        }
+      },
+      {
+        "X": 7,
+        "Y": 1,
+        "Piece": {
+          "X": 7,
+          "Y": 1,
+          "IsWhite": false,
+          "HasMoved": false,
+          "Value": 3,
+          "PieceName": 2
+        }
+      },
+      {
+        "X": 7,
+        "Y": 2,
+        "Piece": {
+          "X": 7,
+          "Y": 2,
+          "IsWhite": false,
+          "HasMoved": false,
+          "Value": 3,
+          "PieceName": 3
+        }
+      },
+      {
+        "X": 7,
+        "Y": 3,
+        "Piece": {
+          "X": 7,
+          "Y": 3,
+          "IsWhite": false,
+          "HasMoved": false,
+          "Value": 9,
+          "PieceName": 1
+        }
+      },
+      {
+        "X": 7,
+        "Y": 4,
+        "Piece": {
+          "X": 7,
+          "Y": 4,
+          "IsWhite": false,
+          "HasMoved": false,
+          "Value": 0,
+          "PieceName": 0
+        }
+      },
+      {
+        "X": 7,
+        "Y": 5,
+        "Piece": {
+          "X": 7,
+          "Y": 5,
+          "IsWhite": false,
+          "HasMoved": false,
+          "Value": 3,
+          "PieceName": 3
+        }
+      },
+      {
+        "X": 7,
+        "Y": 6,
+        "Piece": {
+          "X": 7,
+          "Y": 6,
+          "IsWhite": false,
+          "HasMoved": false,
+          "Value": 3,
+          "PieceName": 2
+        }
+      },
+      {
+        "X": 7,
+        "Y": 7,
+        "Piece": {
+          "X": 7,
+          "Y": 7,
+          "IsWhite": false,
+          "HasMoved": false,
+          "Value": 5,
+          "PieceName": 4
+        }
+      }
+    ]
+  ],
+  "moves": [
+    {
+      "InitialX": 1,
+      "InitialY": 4,
+      "TargetX": 3,
+      "TargetY": 4,
+      "Piece": 5,
+      "PromoteTo": 5,
+      "isCheck": false,
+      "isCapture": false
+    }
+  ],
+  "turnOf": 1,
+  "FiftyMoveRule": 0
+}

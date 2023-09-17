@@ -16,8 +16,8 @@ namespace ConsoleChess.Pieces
         public int Y { get; set; } 
         public bool IsWhite { get; set; }   
         public bool HasMoved { get; set; }          
-        public  int Value { get; protected set; }
-        public PieceName PieceName { get; protected set; }
+        public  int Value { get; set; }
+        public PieceName PieceName { get; set; }
         public abstract PieceName getPieceName();
         public Piece(Piece old)
         {

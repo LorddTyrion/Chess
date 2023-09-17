@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FrameworkBackend
 {
-    public abstract class Move
+    public interface Move
     {
 
     }

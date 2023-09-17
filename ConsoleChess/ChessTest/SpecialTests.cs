@@ -20,39 +20,39 @@ namespace ChessTest
         public void PawnCanMoveTwoFirst()
         {
             ChessBoard board = new ChessBoard();
-            bool result=board.Move(1,3,3,3);
+            bool result=board.Move(generateMove(1,3,3,3));
             Assert.True(result);
         }
         [Fact]
         public void PawnCannotMoveTwoLater()
         {
             ChessBoard board = new ChessBoard();
-            bool result = board.Move(1, 3, 2, 3);
-            result=board.Move(2, 3, 4, 3);
+            bool result = board.Move(generateMove(1, 3, 2, 3));
+            result=board.Move(generateMove(2, 3, 4, 3));
             Assert.False(result);
         }
         [Fact]
         public void CanAnPassant()
         {
             ChessBoard board = new ChessBoard();
-            bool result = board.Move(1, 3, 3, 3);
-            result = board.Move(6, 1, 4, 1);
-            result = board.Move(3, 3, 4, 3);
-            result = board.Move(6, 4, 4, 4);
-            result = board.Move(4, 3, 5, 4);
+            bool result = board.Move(generateMove(1, 3, 3, 3));
+            result = board.Move(generateMove(6, 1, 4, 1));
+            result = board.Move(generateMove(3, 3, 4, 3));
+            result = board.Move(generateMove(6, 4, 4, 4));
+            result = board.Move(generateMove(4, 3, 5, 4));
             Assert.True(result);
         }
         [Fact]
         public void CannotAnPassantLater()
         {
             ChessBoard board = new ChessBoard();
-            bool result = board.Move(1, 3, 3, 3);
-            result = board.Move(6, 1, 4, 1);
-            result = board.Move(3, 3, 4, 3);
-            result = board.Move(6, 4, 4, 4);
-            result = board.Move(1, 2, 2, 2);
-            result = board.Move(6, 0, 5, 0);
-            result = board.Move(4, 3, 5, 4);
+            bool result = board.Move(generateMove(1, 3, 3, 3));
+            result = board.Move(generateMove(6, 1, 4, 1));
+            result = board.Move(generateMove(3, 3, 4, 3));
+            result = board.Move(generateMove(6, 4, 4, 4));
+            result = board.Move(generateMove(1, 2, 2, 2));
+            result = board.Move(generateMove(6, 0, 5, 0));
+            result = board.Move(generateMove(4, 3, 5, 4));
             Assert.False(result);
         }
         [Fact]
@@ -85,7 +85,7 @@ namespace ChessTest
             board.boardState.squares[0, 7].Piece = r;
             board.boardState.WhitePieces.Add(r);
 
-            bool result = board.Move(0, 4, 0, 6);
+            bool result = board.Move(generateMove(0, 4, 0, 6));
             Assert.True(result);
         }
         [Fact]
@@ -108,7 +108,7 @@ namespace ChessTest
             board.boardState.squares[0, 0].Piece = r;
             board.boardState.WhitePieces.Add(r);
 
-            bool result = board.Move(0, 4, 0, 2);
+            bool result = board.Move(generateMove(0, 4, 0, 2));
             Assert.True(result);
         }
         [Fact]
@@ -141,7 +141,7 @@ namespace ChessTest
             board.boardState.squares[0, 7].Piece = r;
             board.boardState.WhitePieces.Add(r);
 
-            bool result = board.Move(0, 4, 0, 6);
+            bool result = board.Move(generateMove(0, 4, 0, 6));
             Assert.False(result);
         }
         [Fact]
@@ -179,7 +179,7 @@ namespace ChessTest
             board.boardState.squares[0, 5].Piece = k;
             board.boardState.WhitePieces.Add(k);
 
-            bool result = board.Move(0, 4, 0, 6);
+            bool result = board.Move(generateMove(0, 4, 0, 6));
             Assert.False(result);
         }
 
@@ -208,7 +208,7 @@ namespace ChessTest
             board.boardState.squares[0, 7].Piece = r;
             board.boardState.WhitePieces.Add(r);
 
-            bool result = board.Move(0, 4, 0, 6);
+            bool result = board.Move(generateMove(0, 4, 0, 6));
             Assert.False(result);
         }
         [Fact]
@@ -230,11 +230,11 @@ namespace ChessTest
             r.IsWhite = true; r.X = 0; r.Y = 0;
             board.boardState.squares[0, 0].Piece = r;
             board.boardState.WhitePieces.Add(r);
-            board.Move(0, 0, 0, 1);
-            board.Move(7, 4, 7, 3);
-            board.Move(0, 1, 0, 0);
-            board.Move(7, 3, 7, 4);
-            bool result = board.Move(0, 4, 0, 2);
+            board.Move(generateMove(0, 0, 0, 1));
+            board.Move(generateMove(7, 4, 7, 3));
+            board.Move(generateMove(0, 1, 0, 0));
+            board.Move(generateMove(7, 3, 7, 4));
+            bool result = board.Move(generateMove(0, 4, 0, 2));
             Assert.False(result);
         }
         [Fact]
@@ -256,11 +256,11 @@ namespace ChessTest
             r.IsWhite = true; r.X = 0; r.Y = 0;
             board.boardState.squares[0, 0].Piece = r;
             board.boardState.WhitePieces.Add(r);
-            board.Move(0, 4, 0, 3);
-            board.Move(7, 4, 7, 3);
-            board.Move(0, 3, 0, 4);
-            board.Move(7, 3, 7, 4);
-            bool result = board.Move(0, 4, 0, 2);
+            board.Move(generateMove(0, 4, 0, 3));
+            board.Move(generateMove(7, 4, 7, 3));
+            board.Move(generateMove(0, 3, 0, 4));
+            board.Move(generateMove(7, 3, 7, 4));
+            bool result = board.Move(generateMove(0, 4, 0, 2));
             Assert.False(result);
         }
         [Fact]
@@ -282,9 +282,9 @@ namespace ChessTest
             r.IsWhite = true; r.X = 0; r.Y = 0;
             board.boardState.squares[0, 0].Piece = r;
             board.boardState.WhitePieces.Add(r);
-            board.Move(0, 0, 0, 1);
-            board.Move(7, 4, 7, 3);
-            bool result = board.Move(0, 4, 0, 2);
+            board.Move(generateMove(0, 0, 0, 1));
+            board.Move(generateMove(7, 4, 7, 3));
+            bool result = board.Move(generateMove(0, 4, 0, 2));
             Assert.False(result);
         }
 
@@ -307,8 +307,10 @@ namespace ChessTest
             p.IsWhite = true; p.X = 6; p.Y = 2;
             board.boardState.squares[6, 2].Piece = p;
             board.boardState.WhitePieces.Add(p);
+            ChessMove move = generateMove(6, 2, 7, 2);
+            move.PromoteTo = PieceName.QUEEN;
 
-            bool result = board.Move(6, 2, 7, 2);
+            bool result = board.Move(move);
             Assert.True(result);
         }
         [Fact]
@@ -416,7 +418,7 @@ namespace ChessTest
             board.boardState.squares[0, 7].Piece = r;
             board.boardState.WhitePieces.Add(r);
 
-            bool result = board.Move(1, 4, 2, 4);
+            bool result = board.Move(generateMove(1, 4, 2, 4));
             Assert.False(result);
         }
 
@@ -434,6 +436,16 @@ namespace ChessTest
             }
             board.boardState.WhitePieces.Clear();
             board.boardState.BlackPieces.Clear();
+        }
+
+        private ChessMove generateMove(int initialX, int initialY, int targetX, int targetY)
+        {
+            ChessMove move = new ChessMove();
+            move.InitialX = initialX;
+            move.InitialY = initialY;
+            move.TargetX = targetX;
+            move.TargetY = targetY;
+            return move;
         }
     }
 }

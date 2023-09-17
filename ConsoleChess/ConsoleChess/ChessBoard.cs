@@ -12,84 +12,8 @@ namespace ConsoleChess
     {
         WHITE=0, BLACK=1, DRAW=2, NONE=3
     }
-    public class ChessBoardState : BoardState
-    {
-        public List<Piece> WhitePieces = new List<Piece>();
-        public List<Piece> BlackPieces = new List<Piece>();
-        public King? WhiteKing, BlackKing;
-        public Square[,] squares = new Square[8, 8];
-        public List<ChessMove> moves = new List<ChessMove>();
-        public Color turnOf;
-        public int FiftyMoveRule = 0;
-        public ChessBoardState(ChessBoardState old)
-        {
-            turnOf = old.turnOf;
-            WhitePieces = new List<Piece>();
-            BlackPieces = new List<Piece>();
-            for (int i = 0; i < 8; i++)
-            {
-
-                for (int j = 0; j < 8; j++)
-                {
-                    squares[i, j] = new Square();
-                    squares[i, j].X = i;
-                    squares[i, j].Y = j;
-                }
-            }
-
-            moves = new List<ChessMove>();
-            for (int i = 0; i < old.moves.Count; i++)
-            {
-                moves.Add(old.moves[i]);
-            }
-            for (int i = 0; i < 8; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    Square s= new Square(old.squares[i, j]);
-                    squares[i, j] = s;
-                    if (s.Piece != null)
-                    {
-                        if (old.squares[i, j].Piece.IsWhite)
-                        {
-                            WhitePieces.Add(squares[i, j].Piece);
-                            if (squares[i, j].Piece.getPieceName() == PieceName.KING) WhiteKing = (King)squares[i, j].Piece;
-                        }
-                        else
-                        {
-                            BlackPieces.Add(squares[i, j].Piece);
-                            if (squares[i, j].Piece.getPieceName() == PieceName.KING) BlackKing = (King)squares[i, j].Piece;
-                        }
-                    }
-                }
-            }
-        }
-        public ChessBoardState() 
-        {
-            WhitePieces = new List<Piece>();
-            BlackPieces = new List<Piece>();
-            
-            squares = new Square[8, 8];
-            moves = new List<ChessMove>();
-        }
-        public override bool PositionEquals(BoardState other)
-        {
-            if (other is not ChessBoardState) return false;
-            if (other == null) return false;
-            for (int i = 0; i < 8; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    if (squares[i, j].Piece == null && ((ChessBoardState)other).squares[i, j].Piece != null) return false;
-                    if (squares[i, j].Piece != null && ((ChessBoardState)other).squares[i, j].Piece == null) return false;
-                    if(squares[i, j].Piece != null && ((ChessBoardState)other).squares[i,j].Piece!=null && squares[i, j].Piece.PieceName!= ((ChessBoardState)other).squares[i, j].Piece.PieceName) return false;
-                }
-            }
-            return true;
-        }
-       
-    }
-    public class ChessBoard : Board
+    
+    public class ChessBoard : Board<ChessMove>
     {
         //public List<Piece> WhitePieces = new List<Piece>();
         //public List<Piece> BlackPieces = new List<Piece>();
@@ -223,7 +147,7 @@ namespace ConsoleChess
             }
             return possibleMoves;
         }
-        public override bool Move(Move move)
+        public override bool Move(ChessMove move)
         {
             if (move == null || move is not ChessMove) return false;
             ChessMove chessMove = (ChessMove)move;
