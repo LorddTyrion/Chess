@@ -12,6 +12,7 @@ namespace ReactChess.Services
         public string WhitePlayer { get; set; }
         public string BlackPlayer { get; set; }
         public int GameID { get; set; }
+        public int DbID { get; set; }
         public GameState State { get; set; }
         public Color Result { get; set; }
         public Game()

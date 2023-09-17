@@ -3,8 +3,10 @@ using ConsoleChess;
 using ConsoleChess.Pieces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using ReactChess.Data;
 using ReactChess.Services;
+using ReactChess.Models;
 
 namespace ReactChess.Hubs
 {
@@ -52,6 +54,28 @@ namespace ReactChess.Hubs
                 {
                     game.State = GameState.FINISHED;
                     game.Result = end;
+                    var match=_context.PlayedMatchSet.Where(m=>m.UserID==CurrentUserId && m.MatchId==game.DbID).Include(m=>m.User).Include(m=>m.Match).FirstOrDefault();
+                    var match2= _context.PlayedMatchSet.Where(m => m.UserID != CurrentUserId && m.MatchId == game.DbID).Include(m => m.User).FirstOrDefault(); 
+                    match.Match.Result = (int)end;
+                    match.User.Games++;
+                    match2.User.Games++;
+                    if (match.Index == (int)end)
+                    {
+                        match.User.Wins++;
+                        match2.User.Losses++;
+                    }
+                    else if ((int)end == 2)
+                    {
+                        match.User.Draws++;
+                        match2.User.Draws++;
+                    }
+                    else
+                    {
+                        match.User.Losses++;
+                        match2.User.Wins++;
+                    }
+                    _context.SaveChanges();
+                    
                     await Clients.Group(gameID.ToString()).GameEnds((int)end);
                     _gameController.DeleteGame(game);
                 }
@@ -63,15 +87,46 @@ namespace ReactChess.Hubs
         {
             var user = _context.Users.Where(au => au.Id == CurrentUserId).FirstOrDefault();
             var username = user.UserName;
+
+
+
             bool result=_gameController.AddPlayer(username);
             int gameID = _gameController.IdByName(username);
             Game game = _gameController.GameById(gameID);
+
             await Groups.AddToGroupAsync(Context.ConnectionId, gameID.ToString());
             await Clients.Group(gameID.ToString()).AddToGame(_gameController.PlayersById(gameID));
+
             if(_gameController.GameById(gameID).WhitePlayer==username) await Clients.Caller.SetColor(true, username);
             else if(_gameController.GameById(gameID).BlackPlayer == username) await Clients.Caller.SetColor(false, username);
+
+
             if (result)
             {
+                Match m = new Match(); m.Type = 0;
+;               _context.MatchSet.Add(m);
+                _context.SaveChanges();
+
+                List<string> players = _gameController.PlayersById(gameID);
+                PlayedMatch pm1=new PlayedMatch(); 
+                PlayedMatch pm2 = new PlayedMatch();
+                pm1.UserID = _context.Users.Where(p => p.UserName == players[0]).FirstOrDefault()!.Id;
+                pm2.UserID = _context.Users.Where(p => p.UserName == players[1]).FirstOrDefault()!.Id;
+                pm1.MatchId = m.Id;
+                pm2.MatchId = m.Id;
+                if (_gameController.GameById(gameID).WhitePlayer == players[0])
+                {
+                    pm1.Index = 0; pm2.Index = 1;
+                } 
+                else if (_gameController.GameById(gameID).BlackPlayer == username)
+                {
+                    pm1.Index = 1; pm2.Index = 0;
+                }
+                _context.PlayedMatchSet.Add(pm1);
+                _context.PlayedMatchSet.Add(pm2);
+                _context.SaveChanges();
+                game.DbID=m.Id;
+
                 List<Square> b = boardToList(_gameController.GameById(gameID).Board);
                 await Clients.Group(gameID.ToString()).GameCreated(b);
                 await Clients.Group(gameID.ToString()).RefreshPoints(game.Board.GetSumValue(Color.WHITE), game.Board.GetSumValue(Color.BLACK));
@@ -94,6 +149,14 @@ namespace ReactChess.Hubs
             Game game = _gameController.GameById(gameID);
             if (game == null) return;
             game.LoseGame(username);
+            var match = _context.PlayedMatchSet.Where(m => m.UserID == CurrentUserId && m.MatchId == game.DbID).Include(m => m.User).Include(m => m.Match).FirstOrDefault();
+            var match2 = _context.PlayedMatchSet.Where(m => m.UserID != CurrentUserId && m.MatchId == game.DbID).Include(m => m.User).FirstOrDefault();
+            match.Match.Result = game.WhitePlayer==match.User.UserName ? 1:0;
+            match.User.Games++;
+            match2.User.Games++;
+            match.User.Losses++;
+            match2.User.Wins++;
+            _context.SaveChanges();
             await Clients.Group(gameID.ToString()).GameEnds((int)game.Result);
             _gameController.DeleteGame(game);
         }
