@@ -6,9 +6,16 @@ using System.Threading.Tasks;
 
 namespace FrameworkBackend
 {
-    public abstract class Board<TMove> where TMove:Move
+    public enum Color
     {
+        WHITE = 0, BLACK = 1, DRAW = 2, NONE = 3
+    }
+    public abstract class Board<TMove, TBoardState> where TMove:Move where TBoardState : BoardState
+    {
+        public TBoardState boardState;
         public abstract bool Move(TMove move);
-        public abstract IEnumerable<Move> getPossibleMoves(int x, int y);
+        public abstract List<TMove> getPossibleMoves(int x, int y);
+
+        public abstract Color CheckEndGame();
     }
 }

@@ -8,12 +8,9 @@ using System.Threading.Tasks;
 
 namespace ConsoleChess
 {
-    public enum Color
-    {
-        WHITE=0, BLACK=1, DRAW=2, NONE=3
-    }
     
-    public class ChessBoard : Board<ChessMove>
+    
+    public class ChessBoard : Board<ChessMove, ChessBoardState>
     {
         //public List<Piece> WhitePieces = new List<Piece>();
         //public List<Piece> BlackPieces = new List<Piece>();
@@ -21,10 +18,10 @@ namespace ConsoleChess
         //public Square[,] squares = new Square[8, 8];
         //public List<string> moves = new List<string>();
         //public Color turnOf;
-        public ChessBoardState boardState=new ChessBoardState();
         public List<ChessBoardState> States=new List<ChessBoardState>();
         public ChessBoard()
         {
+            boardState=new ChessBoardState();
             boardState.turnOf=Color.WHITE;
             for (int i = 0; i < 8; i++)
             {
@@ -103,7 +100,7 @@ namespace ConsoleChess
             
             return false;
         }
-        public override IEnumerable<Move> getPossibleMoves(int x, int y)
+        public override List<ChessMove> getPossibleMoves(int x, int y)
         {
             List<ChessMove> possibleMoves = new List<ChessMove>();
             
@@ -167,7 +164,7 @@ namespace ConsoleChess
             }
             return false;
         }
-        public Color CheckEndGame()
+        public override Color CheckEndGame()
         {
             int sum = 0;
             if (boardState.turnOf == Color.WHITE)

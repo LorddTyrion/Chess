@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ConsoleChess
 {
-    public class ChessBoardState : BoardState
+    public class ChessBoardState : BoardState<ChessBoardState>
     {
         
         public List<Piece> WhitePieces = new List<Piece>();        
@@ -21,7 +21,6 @@ namespace ConsoleChess
         [JsonIgnore]
         public Square[,] squares = new Square[8, 8];
         public List<ChessMove> moves = new List<ChessMove>();
-        public Color turnOf;
         public int FiftyMoveRule = 0;
         public ChessBoardState(ChessBoardState old)
         {
@@ -74,7 +73,7 @@ namespace ConsoleChess
             squares = new Square[8, 8];
             moves = new List<ChessMove>();
         }
-        public override bool PositionEquals(BoardState other)
+        public override bool PositionEquals(ChessBoardState other)
         {
             if (other is not ChessBoardState) return false;
             if (other == null) return false;
@@ -82,9 +81,9 @@ namespace ConsoleChess
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    if (squares[i, j].Piece == null && ((ChessBoardState)other).squares[i, j].Piece != null) return false;
-                    if (squares[i, j].Piece != null && ((ChessBoardState)other).squares[i, j].Piece == null) return false;
-                    if (squares[i, j].Piece != null && ((ChessBoardState)other).squares[i, j].Piece != null && squares[i, j].Piece.PieceName != ((ChessBoardState)other).squares[i, j].Piece.PieceName) return false;
+                    if (squares[i, j].Piece == null && other.squares[i, j].Piece != null) return false;
+                    if (squares[i, j].Piece != null && other.squares[i, j].Piece == null) return false;
+                    if (squares[i, j].Piece != null && other.squares[i, j].Piece != null && squares[i, j].Piece.PieceName != other.squares[i, j].Piece.PieceName) return false;
                 }
             }
             return true;
@@ -95,7 +94,7 @@ namespace ConsoleChess
             File.WriteAllText(fileName, jsonString);
             Console.WriteLine(jsonString);
         }*/
-        public override BoardState DeserializeBoard(string fileName)
+        public override ChessBoardState DeserializeBoard(string fileName)
         {
             ChessBoardState boardState = new ChessBoardState();
             for (int i = 0; i < 8; i++)

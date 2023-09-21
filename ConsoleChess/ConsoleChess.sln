@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChessTest", "ChessTest\Ches
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReactChess", "ReactChess\ReactChess.csproj", "{9EB5F36E-E034-4D58-9B1B-63B0C123D51C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrameworkBackend", "FrameworkBackend\FrameworkBackend.csproj", "{81B80405-6A1A-47A8-9444-60C880E4A171}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrameworkBackend", "FrameworkBackend\FrameworkBackend.csproj", "{81B80405-6A1A-47A8-9444-60C880E4A171}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe", "TicTacToe\TicTacToe.csproj", "{20131A1A-20A8-4C86-9C6D-826435674121}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{81B80405-6A1A-47A8-9444-60C880E4A171}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81B80405-6A1A-47A8-9444-60C880E4A171}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81B80405-6A1A-47A8-9444-60C880E4A171}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20131A1A-20A8-4C86-9C6D-826435674121}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20131A1A-20A8-4C86-9C6D-826435674121}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20131A1A-20A8-4C86-9C6D-826435674121}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20131A1A-20A8-4C86-9C6D-826435674121}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
