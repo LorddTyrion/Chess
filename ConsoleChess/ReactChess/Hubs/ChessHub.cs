@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using ReactChess.Data;
 using ReactChess.Services;
 using ReactChess.Models;
+using FrameworkBackend;
 
 namespace ReactChess.Hubs
 {
@@ -16,13 +17,15 @@ namespace ReactChess.Hubs
       
         public ApplicationDbContext _context;
         public GameController _gameController;
+        public DatabaseService _databaseService;
         private string? CurrentUserId => Context.UserIdentifier;
 
        
-        public ChessHub(ApplicationDbContext context, GameController gameController)
+        public ChessHub(ApplicationDbContext context, GameController gameController, DatabaseService databaseService)
         {
             _context = context;
             _gameController = gameController;
+            _databaseService = databaseService;
         }
         
         public async Task MakeMove(int initialX, int initialY, int targetX, int targetY, int promoteTo)
@@ -54,28 +57,7 @@ namespace ReactChess.Hubs
                 {
                     game.State = GameState.FINISHED;
                     game.Result = end;
-                    var match=_context.PlayedMatchSet.Where(m=>m.UserID==CurrentUserId && m.MatchId==game.DbID).Include(m=>m.User).Include(m=>m.Match).FirstOrDefault();
-                    var match2= _context.PlayedMatchSet.Where(m => m.UserID != CurrentUserId && m.MatchId == game.DbID).Include(m => m.User).FirstOrDefault(); 
-                    match.Match.Result = (int)end;
-                    match.User.Games++;
-                    match2.User.Games++;
-                    if (match.Index == (int)end)
-                    {
-                        match.User.Wins++;
-                        match2.User.Losses++;
-                    }
-                    else if ((int)end == 2)
-                    {
-                        match.User.Draws++;
-                        match2.User.Draws++;
-                    }
-                    else
-                    {
-                        match.User.Losses++;
-                        match2.User.Wins++;
-                    }
-                    _context.SaveChanges();
-                    
+                    _databaseService.GameEndedNaturally(_context, _gameController, game.DbID, CurrentUserId, end);                    
                     await Clients.Group(gameID.ToString()).GameEnds((int)end);
                     _gameController.DeleteGame(game);
                 }
@@ -102,31 +84,8 @@ namespace ReactChess.Hubs
 
 
             if (result)
-            {
-                Match m = new Match(); m.Type = 0;
-;               _context.MatchSet.Add(m);
-                _context.SaveChanges();
-
-                List<string> players = _gameController.PlayersById(gameID);
-                PlayedMatch pm1=new PlayedMatch(); 
-                PlayedMatch pm2 = new PlayedMatch();
-                pm1.UserID = _context.Users.Where(p => p.UserName == players[0]).FirstOrDefault()!.Id;
-                pm2.UserID = _context.Users.Where(p => p.UserName == players[1]).FirstOrDefault()!.Id;
-                pm1.MatchId = m.Id;
-                pm2.MatchId = m.Id;
-                if (_gameController.GameById(gameID).WhitePlayer == players[0])
-                {
-                    pm1.Index = 0; pm2.Index = 1;
-                } 
-                else if (_gameController.GameById(gameID).BlackPlayer == username)
-                {
-                    pm1.Index = 1; pm2.Index = 0;
-                }
-                _context.PlayedMatchSet.Add(pm1);
-                _context.PlayedMatchSet.Add(pm2);
-                _context.SaveChanges();
-                game.DbID=m.Id;
-
+            {               
+                game.DbID=_databaseService.GameSetup(_context, _gameController, gameID);
                 List<Square> b = boardToList(_gameController.GameById(gameID).Board);
                 await Clients.Group(gameID.ToString()).GameCreated(b);
                 await Clients.Group(gameID.ToString()).RefreshPoints(game.Board.GetSumValue(Color.WHITE), game.Board.GetSumValue(Color.BLACK));
@@ -138,7 +97,7 @@ namespace ReactChess.Hubs
             var username = user.UserName;
             int gameID = _gameController.IdByName(username);
             Game game = _gameController.GameById(gameID);
-            List<ChessMove> possibleMoves = game.Board.getPossibleMoves(x, y) as List<ChessMove>;
+            List<ChessMove> possibleMoves = game.Board.getPossibleMoves(x, y);
             await Clients.Group(gameID.ToString()).GetPossibleMoves(possibleMoves);
         }
         public async Task LoseGame()
@@ -149,14 +108,7 @@ namespace ReactChess.Hubs
             Game game = _gameController.GameById(gameID);
             if (game == null) return;
             game.LoseGame(username);
-            var match = _context.PlayedMatchSet.Where(m => m.UserID == CurrentUserId && m.MatchId == game.DbID).Include(m => m.User).Include(m => m.Match).FirstOrDefault();
-            var match2 = _context.PlayedMatchSet.Where(m => m.UserID != CurrentUserId && m.MatchId == game.DbID).Include(m => m.User).FirstOrDefault();
-            match.Match.Result = game.WhitePlayer==match.User.UserName ? 1:0;
-            match.User.Games++;
-            match2.User.Games++;
-            match.User.Losses++;
-            match2.User.Wins++;
-            _context.SaveChanges();
+            _databaseService.GameEndedByResignation(_context, CurrentUserId, game);
             await Clients.Group(gameID.ToString()).GameEnds((int)game.Result);
             _gameController.DeleteGame(game);
         }

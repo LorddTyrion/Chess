@@ -10,7 +10,7 @@ namespace FrameworkBackend
     {
         WHITE = 0, BLACK = 1, DRAW = 2, NONE = 3
     }
-    public abstract class Board<TMove, TBoardState> where TMove:Move where TBoardState : BoardState
+    public abstract class Board<TMove, TBoardState> where TMove:Move where TBoardState : BoardState<TBoardState>
     {
         public TBoardState boardState;
         public abstract bool Move(TMove move);

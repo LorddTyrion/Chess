@@ -1,5 +1,6 @@
 using ConsoleChess;
 using ConsoleChess.Pieces;
+using FrameworkBackend;
 using System;
 using System.IO;
 using Xunit;

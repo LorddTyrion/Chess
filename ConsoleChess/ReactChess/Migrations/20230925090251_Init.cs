@@ -90,20 +90,6 @@ namespace ReactChess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MatchSet",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<int>(type: "int", nullable: false),
-                    Result = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MatchSet", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PersistedGrants",
                 columns: table => new
                 {
@@ -230,28 +216,30 @@ namespace ReactChess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PlayedMatchSet",
+                name: "MatchSet",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    MatchId = table.Column<int>(type: "int", nullable: false),
-                    Index = table.Column<int>(type: "int", nullable: false)
+                    Type = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Player1Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Player2Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Result = table.Column<int>(type: "int", nullable: false),
+                    SerializedBoard = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlayedMatchSet", x => x.Id);
+                    table.PrimaryKey("PK_MatchSet", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PlayedMatchSet_AspNetUsers_UserID",
-                        column: x => x.UserID,
+                        name: "FK_MatchSet_AspNetUsers_Player1Id",
+                        column: x => x.Player1Id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PlayedMatchSet_MatchSet_MatchId",
-                        column: x => x.MatchId,
-                        principalTable: "MatchSet",
+                        name: "FK_MatchSet_AspNetUsers_Player2Id",
+                        column: x => x.Player2Id,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -312,6 +300,16 @@ namespace ReactChess.Migrations
                 column: "Use");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MatchSet_Player1Id",
+                table: "MatchSet",
+                column: "Player1Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MatchSet_Player2Id",
+                table: "MatchSet",
+                column: "Player2Id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PersistedGrants_ConsumedTime",
                 table: "PersistedGrants",
                 column: "ConsumedTime");
@@ -330,16 +328,6 @@ namespace ReactChess.Migrations
                 name: "IX_PersistedGrants_SubjectId_SessionId_Type",
                 table: "PersistedGrants",
                 columns: new[] { "SubjectId", "SessionId", "Type" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PlayedMatchSet_MatchId",
-                table: "PlayedMatchSet",
-                column: "MatchId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PlayedMatchSet_UserID",
-                table: "PlayedMatchSet",
-                column: "UserID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -366,19 +354,16 @@ namespace ReactChess.Migrations
                 name: "Keys");
 
             migrationBuilder.DropTable(
-                name: "PersistedGrants");
+                name: "MatchSet");
 
             migrationBuilder.DropTable(
-                name: "PlayedMatchSet");
+                name: "PersistedGrants");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "MatchSet");
         }
     }
 }

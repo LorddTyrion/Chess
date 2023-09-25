@@ -308,42 +308,31 @@ namespace ReactChess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("Result")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MatchSet");
-                });
-
-            modelBuilder.Entity("ReactChess.Models.PlayedMatch", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("Index")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MatchId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserID")
+                    b.Property<string>("Player1Id")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Player2Id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Result")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SerializedBoard")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("Type")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("MatchId");
+                    b.HasIndex("Player1Id");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("Player2Id");
 
-                    b.ToTable("PlayedMatchSet");
+                    b.ToTable("MatchSet");
                 });
 
             modelBuilder.Entity("ReactChess.Models.User", b =>
@@ -474,23 +463,23 @@ namespace ReactChess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ReactChess.Models.PlayedMatch", b =>
+            modelBuilder.Entity("ReactChess.Models.Match", b =>
                 {
-                    b.HasOne("ReactChess.Models.Match", "Match")
+                    b.HasOne("ReactChess.Models.User", "Player1")
                         .WithMany()
-                        .HasForeignKey("MatchId")
+                        .HasForeignKey("Player1Id")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ReactChess.Models.User", "User")
+                    b.HasOne("ReactChess.Models.User", "Player2")
                         .WithMany()
-                        .HasForeignKey("UserID")
+                        .HasForeignKey("Player2Id")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Match");
+                    b.Navigation("Player1");
 
-                    b.Navigation("User");
+                    b.Navigation("Player2");
                 });
 #pragma warning restore 612, 618
         }

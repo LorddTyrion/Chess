@@ -42,6 +42,7 @@ builder.Services.AddSignalR(options =>
 builder.Services.AddSingleton<IUserIdProvider, IdBasedUserIdProvider>();
 
 builder.Services.AddSingleton<GameController>();
+builder.Services.AddTransient<DatabaseService>();
 
 builder.Services.AddCors(options =>
 {

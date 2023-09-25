@@ -9,7 +9,6 @@ namespace ReactChess.Data
     public partial class ApplicationDbContext : ApiAuthorizationDbContext<User>
     {
         public DbSet<Match> MatchSet { get; set; } = null!;
-        public DbSet<PlayedMatch> PlayedMatchSet { get; set; } = null!;
         public ApplicationDbContext(DbContextOptions options, IOptions<OperationalStoreOptions> operationalStoreOptions)
             : base(options, operationalStoreOptions)
         {
@@ -26,8 +25,8 @@ namespace ReactChess.Data
         {
             base.OnModelCreating(builder);
             OnModelCreatingPartial(builder);
-            builder.Entity<PlayedMatch>().HasOne(p => p.Match).WithMany().HasForeignKey(p=>p.MatchId).OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<PlayedMatch>().HasOne(p => p.User).WithMany().HasForeignKey(p => p.UserID).OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Match>().HasOne(m => m.Player1).WithMany().HasForeignKey(m=>m.Player1Id).OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Match>().HasOne(m => m.Player2).WithMany().HasForeignKey(m => m.Player2Id).OnDelete(DeleteBehavior.Restrict);
             
         }
         partial void OnModelCreatingPartial(ModelBuilder builder);
