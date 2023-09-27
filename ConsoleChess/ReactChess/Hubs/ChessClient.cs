@@ -1,16 +1,17 @@
 ﻿using ConsoleChess;
+using FrameworkBackend;
 
 namespace ReactChess.Hubs
 {
     public interface ChessClient
     {
-        Task GameCreated(List<Square> board);
-        Task RefreshBoard(List<Square> board, bool success);
+        Task GameCreated(IEnumerable<Field> board);
+        Task RefreshBoard(IEnumerable<Field> board, bool success);
         Task GameEnds(int result);
         Task AddToGame(List<string> players);
-        Task SetColor(bool isWhite, string player);
-        Task GetPossibleMoves(List<ChessMove> moves);
-        Task PreviousMoves(List<ChessMove> moves);
-        Task RefreshPoints(int white, int black);
+        Task SetColor(bool isStarter, string player);
+        Task GetPossibleMoves(IEnumerable<Move> moves);
+        Task PreviousMoves(IEnumerable<Move> moves);
+        Task RefreshPoints(int first, int second);
     }
 }

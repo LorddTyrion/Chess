@@ -1,5 +1,6 @@
 ﻿using ConsoleChess.Pieces;
 using FrameworkBackend;
+using ConsoleChess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace ConsoleChess
 {
     
     
-    public class ChessBoard : Board<ChessMove, ChessBoardState>
+    public class ChessBoard : Board<ChessBoardState, Square>
     {
         //public List<Piece> WhitePieces = new List<Piece>();
         //public List<Piece> BlackPieces = new List<Piece>();
@@ -144,10 +145,10 @@ namespace ConsoleChess
             }
             return possibleMoves;
         }
-        public override bool Move(ChessMove move)
+        public override bool Move<TMove>(TMove move) 
         {
             if (move == null || move is not ChessMove) return false;
-            ChessMove chessMove = (ChessMove)move;
+            ChessMove chessMove = (ChessMove)(object)move;
             Square initialSquare = boardState.squares[chessMove.InitialX, chessMove.InitialY];
             Square targetSquare=boardState.squares[chessMove.TargetX, chessMove.TargetY];
             if (boardState.squares[chessMove.InitialX, chessMove.InitialY].Piece != null)

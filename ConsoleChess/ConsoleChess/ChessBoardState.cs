@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ConsoleChess
 {
-    public class ChessBoardState : BoardState<ChessBoardState>
+    public class ChessBoardState : BoardState<ChessBoardState, Square>
     {
         
         public List<Piece> WhitePieces = new List<Piece>();        
@@ -72,6 +72,19 @@ namespace ConsoleChess
 
             squares = new Square[8, 8];
             moves = new List<ChessMove>();
+        }
+
+        public override List<Square> boardToList()
+        {
+            List<Square> b = new List<Square>();
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    b.Add(squares[i, j]);
+                }
+            }
+            return b;
         }
         public override bool PositionEquals(ChessBoardState other)
         {

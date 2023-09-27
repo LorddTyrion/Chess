@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TicTacToe
 {
-    public class TicTacToeBoard : Board<TicTacToeMove, TicTacToeBoardState>
+    public class TicTacToeBoard : Board< TicTacToeBoardState, TicTacToeField>
     {
         public TicTacToeBoard()
         {
@@ -26,34 +26,34 @@ namespace TicTacToe
             for(int i=0; i<3; i++)
             {
                 for (int j = 0; j < 3; j++) {
-                    if (boardState.TicTacToeField[i, 0] != boardState.TicTacToeField[i, j])
+                    if (boardState.TicTacToeField[i, 0].Type != boardState.TicTacToeField[i, j].Type)
                     {
                         circle[i] = false;
                         cross[i] = false;
                     }
-                    if (boardState.TicTacToeField[i, 0]!=TicTacToeField.CIRCLE) circle[i] = false;
-                    if (boardState.TicTacToeField[i, 0] != TicTacToeField.CROSS) cross[i] = false;
-                    if (boardState.TicTacToeField[0, j] != boardState.TicTacToeField[i, j])
+                    if (boardState.TicTacToeField[i, 0].Type!=TicTacToeType.CIRCLE) circle[i] = false;
+                    if (boardState.TicTacToeField[i, 0].Type != TicTacToeType.CROSS) cross[i] = false;
+                    if (boardState.TicTacToeField[0, j].Type != boardState.TicTacToeField[i, j].Type)
                     {
                         circle[j + 3] = false;
                         cross[j + 3] = false;
                     }
-                    if (boardState.TicTacToeField[0, j] != TicTacToeField.CIRCLE) circle[j+3] = false;
-                    if (boardState.TicTacToeField[0, j] != TicTacToeField.CROSS) cross[j+3] = false;
-                    if (i==j && boardState.TicTacToeField[0, 0] != boardState.TicTacToeField[i, j])
+                    if (boardState.TicTacToeField[0, j].Type != TicTacToeType.CIRCLE) circle[j+3] = false;
+                    if (boardState.TicTacToeField[0, j].Type != TicTacToeType.CROSS) cross[j+3] = false;
+                    if (i==j && boardState.TicTacToeField[0, 0].Type != boardState.TicTacToeField[i, j].Type)
                     {
                         circle[6] = false;
                         cross[6] = false;
                     }
-                    if (boardState.TicTacToeField[0, 0] != TicTacToeField.CIRCLE) circle[6] = false;
-                    if (boardState.TicTacToeField[0, 0] != TicTacToeField.CROSS) cross[6] = false;
-                    if (i+j==2 && boardState.TicTacToeField[0, 2] != boardState.TicTacToeField[i, j])
+                    if (boardState.TicTacToeField[0, 0].Type != TicTacToeType.CIRCLE) circle[6] = false;
+                    if (boardState.TicTacToeField[0, 0].Type != TicTacToeType.CROSS) cross[6] = false;
+                    if (i+j==2 && boardState.TicTacToeField[0, 2].Type != boardState.TicTacToeField[i, j].Type)
                     {
                         circle[7] = false;
                         cross[7] = false;
                     }
-                    if (boardState.TicTacToeField[0, 2] != TicTacToeField.CIRCLE) circle[7] = false;
-                    if (boardState.TicTacToeField[0, 2] != TicTacToeField.CROSS) cross[7] = false;
+                    if (boardState.TicTacToeField[0, 2].Type != TicTacToeType.CIRCLE) circle[7] = false;
+                    if (boardState.TicTacToeField[0, 2].Type != TicTacToeType.CROSS) cross[7] = false;
                 }
             }
             for (int i = 0; i < 8; i++)
@@ -66,7 +66,7 @@ namespace TicTacToe
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    if (boardState.TicTacToeField[i, j] == TicTacToeField.EMPTY) return Color.NONE;
+                    if (boardState.TicTacToeField[i, j].Type == TicTacToeType.EMPTY) return Color.NONE;
                 }
             }
             return Color.DRAW;
@@ -77,7 +77,7 @@ namespace TicTacToe
         {
             List<TicTacToeMove> possibleMoves=new List<TicTacToeMove>();
             if(boardState==null) return possibleMoves;
-            if (boardState.TicTacToeField[x, y] == TicTacToeField.EMPTY)
+            if (boardState.TicTacToeField[x, y].Type == TicTacToeType.EMPTY)
             {
                 TicTacToeMove possibleMove=new TicTacToeMove();
                 possibleMove.X=x;
@@ -88,18 +88,19 @@ namespace TicTacToe
 
         }
 
-        public override bool Move(TicTacToeMove move)
+        public override bool Move<TMove>(TMove move)
         {
             if(boardState==null) return false;
-            int x=move.X;
-            int y = move.Y;
-            if (boardState.TicTacToeField[x, y] == TicTacToeField.EMPTY)
+            TicTacToeMove ticTacToeMove=(TicTacToeMove)(object)move;
+            int x=ticTacToeMove.X;
+            int y = ticTacToeMove.Y;
+            if (boardState.TicTacToeField[x, y].Type == TicTacToeType.EMPTY)
             {
                 if (boardState.turnOf == Color.WHITE)                
-                    boardState.TicTacToeField[x, y] = TicTacToeField.CIRCLE;
+                    boardState.TicTacToeField[x, y].Type = TicTacToeType.CIRCLE;
                 
                 else if (boardState.turnOf == Color.BLACK)
-                    boardState.TicTacToeField[x, y] = TicTacToeField.CROSS;
+                    boardState.TicTacToeField[x, y].Type = TicTacToeType.CROSS;
                 changeStarter();
                 return true;
             }

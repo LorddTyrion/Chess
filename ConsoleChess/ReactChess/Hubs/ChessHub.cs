@@ -40,18 +40,19 @@ namespace ReactChess.Hubs
             var username = user.UserName;
             int gameID=_gameController.IdByName(username);
             Game game=_gameController.GameById(gameID);
-            if (_gameController.IsValid(username, gameID))
+            //Game<ChessBoard, ChessMove, ChessBoardState, Square> gameWithBoard=new Game<ChessBoard, ChessMove, ChessBoardState, Square>(game);
+            if (_gameController.IsValid(username, gameID, game.Board.boardState.turnOf))
             {
                 bool result = game.Board.Move(move);
                 Color end = game.Board.CheckEndGame();
                 if (result)
                 {
-                    await Clients.Group(gameID.ToString()).RefreshBoard(boardToList(game.Board), true);
+                    await Clients.Group(gameID.ToString()).RefreshBoard(game.Board.boardState.boardToList(), true);
                     await Clients.Group(gameID.ToString()).PreviousMoves(game.Board.boardState.moves);
                     await Clients.Group(gameID.ToString()).RefreshPoints(game.Board.GetSumValue(Color.WHITE), game.Board.GetSumValue(Color.BLACK));
                   
                 }
-                else await Clients.Group(gameID.ToString()).RefreshBoard(boardToList(game.Board), false);
+                else await Clients.Group(gameID.ToString()).RefreshBoard(game.Board.boardState.boardToList(), false);
 
                 if (end != Color.NONE)
                 {
@@ -79,14 +80,14 @@ namespace ReactChess.Hubs
             await Groups.AddToGroupAsync(Context.ConnectionId, gameID.ToString());
             await Clients.Group(gameID.ToString()).AddToGame(_gameController.PlayersById(gameID));
 
-            if(_gameController.GameById(gameID).WhitePlayer==username) await Clients.Caller.SetColor(true, username);
-            else if(_gameController.GameById(gameID).BlackPlayer == username) await Clients.Caller.SetColor(false, username);
+            if(_gameController.GameById(gameID).FirstPlayer==username) await Clients.Caller.SetColor(true, username);
+            else if(_gameController.GameById(gameID).SecondPlayer == username) await Clients.Caller.SetColor(false, username);
 
 
             if (result)
             {               
                 game.DbID=_databaseService.GameSetup(_context, _gameController, gameID);
-                List<Square> b = boardToList(_gameController.GameById(gameID).Board);
+                List<Square> b = _gameController.GameById(gameID).Board.boardState.boardToList();
                 await Clients.Group(gameID.ToString()).GameCreated(b);
                 await Clients.Group(gameID.ToString()).RefreshPoints(game.Board.GetSumValue(Color.WHITE), game.Board.GetSumValue(Color.BLACK));
             }
@@ -113,18 +114,7 @@ namespace ReactChess.Hubs
             _gameController.DeleteGame(game);
         }
 
-        private List<Square> boardToList(ChessBoard board)
-        {
-            List<Square> b = new List<Square>();
-            for (int i = 0; i < 8; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    b.Add(board.boardState.squares[i, j]);
-                }
-            }
-            return b;
-        }
+        
         
     }
 }

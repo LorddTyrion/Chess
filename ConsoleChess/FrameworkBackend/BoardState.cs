@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 namespace FrameworkBackend
 {
     [JsonObject(MemberSerialization.Fields)]
-    public abstract class BoardState<TBoardState> where TBoardState:BoardState<TBoardState> { 
+    public abstract class BoardState<TBoardState, TField> where TBoardState:BoardState<TBoardState, TField> where TField:Field{ 
         public Color turnOf;
         public abstract bool PositionEquals (TBoardState other);
+        public abstract List<TField> boardToList();
         public virtual void SerializeBoard(string fileName)
         {
             

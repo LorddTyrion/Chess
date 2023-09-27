@@ -14,12 +14,12 @@ namespace ReactChess.Services
             List<string> players = gameController.PlayersById(gameID);
 
 
-            if (gameController.GameById(gameID).WhitePlayer == players[0])
+            if (gameController.GameById(gameID).FirstPlayer == players[0])
             {
                 m.Player1Id = context.Users.Where(p => p.UserName == players[0]).FirstOrDefault()!.Id;
                 m.Player2Id = context.Users.Where(p => p.UserName == players[1]).FirstOrDefault()!.Id;
             }
-            else if (gameController.GameById(gameID).BlackPlayer == players[0])
+            else if (gameController.GameById(gameID).SecondPlayer == players[0])
             {
                 m.Player2Id = context.Users.Where(p => p.UserName == players[0]).FirstOrDefault()!.Id;
                 m.Player1Id = context.Users.Where(p => p.UserName == players[1]).FirstOrDefault()!.Id;

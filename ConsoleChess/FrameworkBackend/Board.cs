@@ -10,11 +10,11 @@ namespace FrameworkBackend
     {
         WHITE = 0, BLACK = 1, DRAW = 2, NONE = 3
     }
-    public abstract class Board<TMove, TBoardState> where TMove:Move where TBoardState : BoardState<TBoardState>
+    public abstract class Board<TBoardState, TField> where TBoardState : BoardState<TBoardState, TField> where TField : Field
     {
         public TBoardState boardState;
-        public abstract bool Move(TMove move);
-        public abstract List<TMove> getPossibleMoves(int x, int y);
+        public abstract bool Move<TMove>(TMove move) where TMove: Move;
+        public abstract IEnumerable<Move> getPossibleMoves(int x, int y);
 
         public abstract Color CheckEndGame();
     }

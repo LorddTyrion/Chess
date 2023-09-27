@@ -15,20 +15,20 @@ namespace ReactChess.Services
                 Random vel=new Random();
                 if (vel.Next(1, 3) == 1)
                 {
-                    game.WhitePlayer = name;
+                    game.FirstPlayer = name;
                 }
-                else game.BlackPlayer = name;
+                else game.SecondPlayer = name;
                 return false;
             }
             else
             {
-                if(games[games.Count - 1].BlackPlayer == null)
+                if(games[games.Count - 1].SecondPlayer == null)
                 {
-                    games[games.Count - 1].BlackPlayer = name;
+                    games[games.Count - 1].SecondPlayer = name;
                 }
-                else if(games[games.Count - 1].WhitePlayer == null)
+                else if(games[games.Count - 1].FirstPlayer == null)
                 {
-                    games[games.Count - 1].WhitePlayer = name;
+                    games[games.Count - 1].FirstPlayer = name;
                 }
                 games[games.Count - 1].State = GameState.STARTED;
                 return true;
@@ -38,7 +38,7 @@ namespace ReactChess.Services
         {
             foreach(Game game in games)
             {
-                if(game.WhitePlayer == name || game.BlackPlayer == name)
+                if(game.FirstPlayer == name || game.SecondPlayer == name)
                 {
                     return game.GameID;
                 }    
@@ -52,8 +52,8 @@ namespace ReactChess.Services
             {
                 if (game.GameID==id)
                 {
-                    if(game.BlackPlayer!=null) list.Add(game.BlackPlayer);
-                    if(game.WhitePlayer!=null) list.Add(game.WhitePlayer);
+                    if(game.SecondPlayer!=null) list.Add(game.SecondPlayer);
+                    if(game.FirstPlayer!=null) list.Add(game.FirstPlayer);
                 }
             }
             return list;
@@ -66,14 +66,14 @@ namespace ReactChess.Services
             }
             return null;
         }
-        public bool IsValid(string name, int gameid)
+        public bool IsValid(string name, int gameid, Color turnOf) 
         {         
             int id= IdByName(name);
             if(id!=gameid) return false;
             Game game=GameById(id);
             if (game.State != GameState.STARTED) return false;
-            if (game.BlackPlayer == name && game.Board.boardState.turnOf == Color.BLACK) return true;
-            if(game.WhitePlayer==name && game.Board.boardState.turnOf == Color.WHITE) return true;
+            if (game.SecondPlayer == name && turnOf == Color.BLACK) return true;
+            if(game.FirstPlayer==name && turnOf == Color.WHITE) return true;
             return false;
         }
         public void DeleteGame(Game game)
