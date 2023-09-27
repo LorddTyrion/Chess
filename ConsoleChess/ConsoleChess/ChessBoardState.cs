@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ConsoleChess
 {
-    public class ChessBoardState : BoardState<ChessBoardState, Square>
+    public class ChessBoardState : BoardState<ChessBoardState, ChessMove>
     {
         
         public List<Piece> WhitePieces = new List<Piece>();        
@@ -20,7 +20,7 @@ namespace ConsoleChess
         public King? WhiteKing, BlackKing;
         [JsonIgnore]
         public Square[,] squares = new Square[8, 8];
-        public List<ChessMove> moves = new List<ChessMove>();
+        
         public int FiftyMoveRule = 0;
         public ChessBoardState(ChessBoardState old)
         {
@@ -86,10 +86,11 @@ namespace ConsoleChess
             }
             return b;
         }
-        public override bool PositionEquals(ChessBoardState other)
+        public override bool PositionEquals(BoardState otherBoard)
         {
-            if (other is not ChessBoardState) return false;
-            if (other == null) return false;
+            if (otherBoard is not ChessBoardState) return false;
+            if (otherBoard == null) return false;
+            ChessBoardState other = (ChessBoardState)otherBoard;
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
@@ -265,5 +266,9 @@ namespace ConsoleChess
             return piece;           
         }
 
+        public override List<ChessMove> GetMoves()
+        {
+            return moves;
+        }
     }
 }

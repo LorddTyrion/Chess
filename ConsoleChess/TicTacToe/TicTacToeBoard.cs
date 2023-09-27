@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TicTacToe
 {
-    public class TicTacToeBoard : Board< TicTacToeBoardState, TicTacToeField>
+    public class TicTacToeBoard : Board< TicTacToeBoardState, TicTacToeMove>
     {
         public TicTacToeBoard()
         {
@@ -86,6 +86,11 @@ namespace TicTacToe
             }
             return possibleMoves;
 
+        }
+
+        public override int GetSumValue(Color color)
+        {
+            return 0;
         }
 
         public override bool Move<TMove>(TMove move)

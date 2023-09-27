@@ -11,7 +11,7 @@ namespace ConsoleChess
 {
     
     
-    public class ChessBoard : Board<ChessBoardState, Square>
+    public class ChessBoard : Board<ChessBoardState, ChessMove>
     {
         //public List<Piece> WhitePieces = new List<Piece>();
         //public List<Piece> BlackPieces = new List<Piece>();
@@ -518,7 +518,7 @@ namespace ConsoleChess
             }
             return false;
         }
-        public int GetSumValue(Color color)
+        public override int GetSumValue(Color color)
         {
             int sum = 0;
             if(color == Color.BLACK)

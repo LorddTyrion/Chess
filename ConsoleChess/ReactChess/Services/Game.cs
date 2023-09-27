@@ -7,31 +7,29 @@ namespace ReactChess.Services
     {
         PREPARING, STARTED, FINISHED
     }
-   /* public class Game<TBoard, TMove, TBoardState, TField> : Game
-        where TBoard : Board<TMove, TBoardState, TField>, new() 
-        where TMove : Move 
-        where TBoardState : BoardState<TBoardState, TField> 
-        where TField : Field 
-    {
-        public TBoard Board { get; set; }
-        public Game()
+    public abstract class Game<TBoard, TBoardState, TMove> : Game
+        where TBoard : Board<TBoardState, TMove>, new() 
+        where TBoardState : BoardState<TBoardState, TMove>
+        where TMove : Move
+       
+    {      
+        public override Color GetTurnOf()
         {
-            Board = new TBoard();
+            return Board.GetTurnOf();
         }
-        public Game(Game game)
+        public override IEnumerable<Field> BoardToList()
         {
-            Board = new TBoard();
-            FirstPlayer = game.FirstPlayer;
-            SecondPlayer = game.SecondPlayer;
-            GameID = game.GameID;
-            DbID= game.DbID;
-            State = game.State;
-            Result = game.Result;
+            return Board.BoardToList();
         }
-    }*/
-    public class Game
+
+        public override IEnumerable<Move> GetMoves()
+        {
+            return Board.GetMoves();
+        }
+    }
+    public abstract class Game
     {
-        public ChessBoard Board; //to delete
+        public Board Board; 
         public string FirstPlayer { get; set; }
         public string SecondPlayer { get; set; }
         public int GameID { get; set; }
@@ -42,7 +40,7 @@ namespace ReactChess.Services
         {
             Random random = new Random();
             GameID=random.Next(1,int.MaxValue);
-            Board = new ChessBoard();
+            //Board = new ChessBoard();
             Result = Color.NONE;
         }
         public void LoseGame(string user)
@@ -59,5 +57,8 @@ namespace ReactChess.Services
                 State = GameState.FINISHED;
             }
         }
+        public abstract Color GetTurnOf();
+        public abstract IEnumerable<Field> BoardToList();
+        public abstract IEnumerable<Move> GetMoves();
     }
 }

@@ -7,12 +7,23 @@ using System.Threading.Tasks;
 
 namespace FrameworkBackend
 {
-    [JsonObject(MemberSerialization.Fields)]
-    public abstract class BoardState<TBoardState, TField> where TBoardState:BoardState<TBoardState, TField> where TField:Field{ 
+    public abstract class BoardState
+    {
         public Color turnOf;
-        public abstract bool PositionEquals (TBoardState other);
-        public abstract List<TField> boardToList();
-        public virtual void SerializeBoard(string fileName)
+        
+        public abstract bool PositionEquals(BoardState other);
+        public abstract IEnumerable<Field> boardToList();
+        public abstract IEnumerable<Move> GetMoves();
+        public abstract void SerializeBoard(string fileName);
+        public abstract BoardState DeserializeBoard(string fileName);
+    }
+    [JsonObject(MemberSerialization.Fields)]
+    public abstract class BoardState<TBoardState, TMove> : BoardState
+        where TBoardState:BoardState<TBoardState, TMove>
+        where TMove:Move
+        {
+        public List<TMove> moves;
+        public override void SerializeBoard(string fileName)
         {
             
             //string jsonString = JsonConvert.SerializeObject (this, Formatting.Indented);
@@ -23,7 +34,7 @@ namespace FrameworkBackend
             File.WriteAllText(fileName, jsonTypeNameAuto);
             //Console.WriteLine(jsonString);
         }
-        public virtual TBoardState DeserializeBoard(string fileName)
+        public override BoardState DeserializeBoard(string fileName)
         {
             TBoardState boardState = JsonConvert.DeserializeObject<TBoardState>(File.ReadAllText(fileName), new JsonSerializerSettings
             {
@@ -31,6 +42,7 @@ namespace FrameworkBackend
             });
             return boardState;
         }
+        
 
     }
 }

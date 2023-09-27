@@ -40,19 +40,19 @@ namespace ReactChess.Hubs
             var username = user.UserName;
             int gameID=_gameController.IdByName(username);
             Game game=_gameController.GameById(gameID);
-            //Game<ChessBoard, ChessMove, ChessBoardState, Square> gameWithBoard=new Game<ChessBoard, ChessMove, ChessBoardState, Square>(game);
-            if (_gameController.IsValid(username, gameID, game.Board.boardState.turnOf))
+
+            if (_gameController.IsValid(username, gameID, game.GetTurnOf()))
             {
                 bool result = game.Board.Move(move);
                 Color end = game.Board.CheckEndGame();
                 if (result)
                 {
-                    await Clients.Group(gameID.ToString()).RefreshBoard(game.Board.boardState.boardToList(), true);
-                    await Clients.Group(gameID.ToString()).PreviousMoves(game.Board.boardState.moves);
+                    await Clients.Group(gameID.ToString()).RefreshBoard(game.BoardToList(), true);
+                    await Clients.Group(gameID.ToString()).PreviousMoves(game.GetMoves());
                     await Clients.Group(gameID.ToString()).RefreshPoints(game.Board.GetSumValue(Color.WHITE), game.Board.GetSumValue(Color.BLACK));
                   
                 }
-                else await Clients.Group(gameID.ToString()).RefreshBoard(game.Board.boardState.boardToList(), false);
+                else await Clients.Group(gameID.ToString()).RefreshBoard(game.BoardToList(), false);
 
                 if (end != Color.NONE)
                 {
@@ -87,7 +87,7 @@ namespace ReactChess.Hubs
             if (result)
             {               
                 game.DbID=_databaseService.GameSetup(_context, _gameController, gameID);
-                List<Square> b = _gameController.GameById(gameID).Board.boardState.boardToList();
+                IEnumerable<Field> b = _gameController.GameById(gameID).BoardToList();
                 await Clients.Group(gameID.ToString()).GameCreated(b);
                 await Clients.Group(gameID.ToString()).RefreshPoints(game.Board.GetSumValue(Color.WHITE), game.Board.GetSumValue(Color.BLACK));
             }
@@ -98,7 +98,7 @@ namespace ReactChess.Hubs
             var username = user.UserName;
             int gameID = _gameController.IdByName(username);
             Game game = _gameController.GameById(gameID);
-            List<ChessMove> possibleMoves = game.Board.getPossibleMoves(x, y);
+            IEnumerable<Move> possibleMoves = game.Board.getPossibleMoves(x, y);
             await Clients.Group(gameID.ToString()).GetPossibleMoves(possibleMoves);
         }
         public async Task LoseGame()
