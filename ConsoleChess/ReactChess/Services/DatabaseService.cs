@@ -9,7 +9,10 @@ namespace ReactChess.Services
     {
         public int GameSetup(ApplicationDbContext context, GameController gameController, int gameID)
         {
-            Match m = new Match(); //m.Type = 0;;               
+            Match m = new Match(); //m.Type = 0;;
+            Game game=gameController.GameById(gameID);
+            IdAttribute idattr= (IdAttribute)Attribute.GetCustomAttribute(game.GetType(), typeof(IdAttribute));
+            m.Type = Guid.Parse(idattr.Id);
 
             List<string> players = gameController.PlayersById(gameID);
 

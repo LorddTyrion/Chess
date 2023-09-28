@@ -9,7 +9,7 @@ namespace ReactChess.Services
         {
             if (games.Count==0 || games[games.Count - 1].State != GameState.PREPARING)
             {
-                Game game=new ChessGame();
+                Game game = GameFactory.Make(GameType.CHESS);
                 
                 games.Add(game);
                 Random vel=new Random();
