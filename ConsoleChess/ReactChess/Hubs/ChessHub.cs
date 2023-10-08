@@ -8,6 +8,7 @@ using ReactChess.Data;
 using ReactChess.Services;
 using ReactChess.Models;
 using FrameworkBackend;
+using TicTacToe;
 
 namespace ReactChess.Hubs
 {
@@ -28,14 +29,26 @@ namespace ReactChess.Hubs
             _databaseService = databaseService;
         }
         
-        public async Task MakeMove(int initialX, int initialY, int targetX, int targetY, int promoteTo)
+        public async Task MakeMove(int initialX, int initialY, int targetX, int targetY, int promoteTo, int gametype)
         {
-            ChessMove move = new ChessMove();
-            move.InitialX = initialX;
-            move.InitialY = initialY;
-            move.TargetX = targetX;
-            move.TargetY = targetY;
-            move.PromoteTo=(PieceName)promoteTo;
+            Move move=new ChessMove();
+            switch (gametype)
+            {
+                case 0:
+                    move = new ChessMove();
+                    ((ChessMove)move).InitialX = initialX;
+                    ((ChessMove)move).InitialY = initialY;
+                    ((ChessMove)move).TargetX = targetX;
+                    ((ChessMove)move).TargetY = targetY;
+                    ((ChessMove)move).PromoteTo = (PieceName)promoteTo;
+                    break;
+                case 1:
+                    move=new TicTacToeMove();
+                    ((TicTacToeMove)move).X= targetX;
+                    ((TicTacToeMove)move).Y = targetY;
+                    break;
+            }
+            
             var user = _context.Users.Where(au => au.Id == CurrentUserId).FirstOrDefault();
             var username = user.UserName;
             int gameID=_gameController.IdByName(username);
@@ -60,20 +73,20 @@ namespace ReactChess.Hubs
                     game.Result = end;
                     _databaseService.GameEndedNaturally(_context, _gameController, game.DbID, CurrentUserId, end);                    
                     await Clients.Group(gameID.ToString()).GameEnds((int)end);
-                    _gameController.DeleteGame(game);
+                    _gameController.DeleteGame(game, gametype);
                 }
             }
 
           
         }
-        public async Task EnterGame()
+        public async Task EnterGame(int gametype)
         {
             var user = _context.Users.Where(au => au.Id == CurrentUserId).FirstOrDefault();
             var username = user.UserName;
 
 
 
-            bool result=_gameController.AddPlayer(username);
+            bool result=_gameController.AddPlayer(username, gametype);
             int gameID = _gameController.IdByName(username);
             Game game = _gameController.GameById(gameID);
 
@@ -101,7 +114,7 @@ namespace ReactChess.Hubs
             IEnumerable<Move> possibleMoves = game.Board.getPossibleMoves(x, y);
             await Clients.Group(gameID.ToString()).GetPossibleMoves(possibleMoves);
         }
-        public async Task LoseGame()
+        public async Task LoseGame(int gametype)
         {
             var user = _context.Users.Where(au => au.Id == CurrentUserId).FirstOrDefault();
             var username = user.UserName;
@@ -111,7 +124,7 @@ namespace ReactChess.Hubs
             game.LoseGame(username);
             _databaseService.GameEndedByResignation(_context, CurrentUserId, game);
             await Clients.Group(gameID.ToString()).GameEnds((int)game.Result);
-            _gameController.DeleteGame(game);
+            _gameController.DeleteGame(game, gametype);
         }
 
         

@@ -8,6 +8,7 @@ import { ApplicationPaths } from './components/api-authorization/ApiAuthorizatio
 
 import './custom.css'
 import { ChessBoard } from './components/ChessBoard';
+import { TicTacToe } from './components/TicTacToe';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -17,6 +18,7 @@ export default class App extends Component {
       <Layout>
         <Route exact path='/' component={Home} />
         <AuthorizeRoute path='/chessboard' component={ChessBoard} />
+        <AuthorizeRoute path='/tictactoe' component={TicTacToe} />
         <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
       </Layout>
     );

@@ -107,6 +107,7 @@ namespace TicTacToe
                 else if (boardState.turnOf == Color.BLACK)
                     boardState.TicTacToeField[x, y].Type = TicTacToeType.CROSS;
                 changeStarter();
+                boardState.moves.Add(ticTacToeMove);
                 return true;
             }
             return false;

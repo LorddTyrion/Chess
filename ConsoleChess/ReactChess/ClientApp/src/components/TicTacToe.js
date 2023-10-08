@@ -4,20 +4,11 @@ import authService from './api-authorization/AuthorizeService'
 import { HttpTransportType } from '@microsoft/signalr';
 import { LogLevel } from '@microsoft/signalr';
 import { Clock } from 'chess-clock'
-
-
-
 import './styles.css';
 
-const fischer = Clock.getConfig('Fischer Rapid 5|5')
-const updateInterval = 500
-const callback = console.info
-
-/*const clock = new Clock({
-  ...fischer,
-  updateInterval,
-  callback,
-})*/
+    const fischer = Clock.getConfig('Fischer Rapid 5|5')
+    const updateInterval = 500
+    const callback = console.info
 
 var gameConnection = new HubConnectionBuilder()
     .withUrl('https://localhost:7073/chesshub', {
@@ -28,8 +19,12 @@ var gameConnection = new HubConnectionBuilder()
     .configureLogging(LogLevel.Information)
     .build();
 
-export class ChessBoard extends Component {
-    static displayName = ChessBoard.name;
+    
+
+
+export class TicTacToe extends Component {
+    static displayName = TicTacToe.name;
+
 
     constructor(props) {
         super(props);
@@ -104,13 +99,6 @@ export class ChessBoard extends Component {
 
         this.startconnection();
     }
-    clockCallback() {
-        console.log("called")
-        if (this.state.clock.state.status === "done") {
-            console.log("DONE")
-        }
-
-    }
 
     componentDidMount() {
         this.interval = setInterval(() => this.setState({ time: Date.now() }), 1000);
@@ -178,8 +166,8 @@ export class ChessBoard extends Component {
                 <strong>Moves</strong>
                 <table className='moves-table'>
                     <thead>
-                        <th>White moves</th>
-                        <th>Black moves</th>
+                        <th>Circle</th>
+                        <th>Cross</th>
                     </thead>
                     <tbody>
                         {rows}
@@ -188,83 +176,25 @@ export class ChessBoard extends Component {
 
             </div>)
     }
+
     moveToString(move) {
-        if (move.piece === 0 && move.targetY - move.initialY === 2) {
-            if (move.isCheck) return "O-O+"
-            return "O-O";
-        }
-        else if (move.piece === 0 && move.initialY - move.targetY === 2) {
-            if (move.isCheck) return "O-O-O+"
-            return "O-O-O";
-        }
-
-        let initial = "";
-        switch (move.piece) {
-            case 0: initial += "K"; break;
-            case 1: initial += "Q"; break;
-            case 2: initial += "N"; break;
-            case 3: initial += "B"; break;
-            case 4: initial += "R"; break;
-            default: break;
-        }
-        initial += this.colToChar(move.initialY);
-
-        initial += (move.initialX + 1);
-
-        if (move.isCapture) initial += "x";
-
-        initial += this.colToChar(move.targetY)
-
-        initial += (move.targetX + 1);
-
-
-        switch (move.promoteTo) {
-            case 1: initial += "=Q"; break;
-            case 4: initial += "=R"; break;
-            case 3: initial += "=B"; break;
-            case 2: initial += "=N"; break;
-            default: break;
-        }
-        if (move.isCheck) initial += "+";
-        return initial;
+        
+        return move.x+"; "+move.y;
+        
     }
-    colToChar(col) {
-        switch (col) {
-            case 0: return "a";
-            case 1: return "b";
-            case 2: return "c";
-            case 3: return "d";
-            case 4: return "e";
-            case 5: return "f";
-            case 6: return "g";
-            case 7: return "h";
-            default: break;
-        }
-    }
-
     renderBlack() {
         let whiteminutes = Math.floor(this.state.clock.state.remainingTime[0] / 60000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
         let blackminutes = Math.floor(this.state.clock.state.remainingTime[1] / 60000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
         let whiteseconds = Math.floor((this.state.clock.state.remainingTime[0] % 60000) / 1000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
         let blackseconds = Math.floor((this.state.clock.state.remainingTime[1] % 60000) / 1000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
         const rows = [];
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < 3; i++) {
 
             const cols = [];
-            for (let j = 0; j < 8; j++) {
-                var ishighlighted = false;
-
-                for (let p = 0; p < this.state.possibleMoves.length; p++) {
-                    if (this.state.possibleMoves[p].targetX === i && this.state.possibleMoves[p].targetY === j) {
-                        ishighlighted = true;
-                    }
-                }
-                if (ishighlighted && this.state.turnOf === this.state.isWhite && this.state.duringMove) {
-                    cols.push(<td><button className='chess' style={this.returnColor((i + j) % 2 === 0, true)} onClick={() => this.onClick(i, j)}>{this.returnText(i, j)}&#xFE0E;</button></td>);
-                }
-                else {
-                    cols.push(<td><button className='chess' style={this.returnColor((i + j) % 2 === 0, false)} onClick={() => this.onClick(i, j)}>{this.returnText(i, j)}&#xFE0E;</button></td>);
-                }
+            for (let j = 0; j < 3; j++) {
+                
+                cols.push(<td><button className='chess' style={this.returnColor((i + j) % 2 === 0, false)} onClick={() => this.onClick(i, j)}>{this.returnText(i, j)}&#xFE0E;</button></td>);
+                
             }
             rows.push(<tr>{cols}</tr>)
         }
@@ -275,7 +205,6 @@ export class ChessBoard extends Component {
                         <strong>{whiteminutes}:{whiteseconds}</strong>
                     </div>
                     <strong>{this.state.otheruser}</strong>
-                    <strong>{this.state.whitepoints > this.state.blackpoints ? ("+") + (this.state.whitepoints - this.state.blackpoints) : ""}</strong>
                 </div>
                 <table style={this.setBackground()} className='table' aria-labelledby="tabelLabel">
                     <tbody>
@@ -287,94 +216,13 @@ export class ChessBoard extends Component {
                         <strong>{blackminutes}:{blackseconds}</strong>
                     </div>
                     <strong>{this.state.ownuser}</strong>
-                    <strong>{this.state.whitepoints < this.state.blackpoints ? ("+") + (this.state.blackpoints - this.state.whitepoints) : ""}</strong>
                     <div className='flexing resign-button'><button className='btn btn-secondary' onClick={() => this.onResign()}>Resign</button></div>
+                    <div> <strong>{this.state.turnOf === this.state.isWhite ?"Your turn!":"Opponent's turn!"}</strong></div>
                 </div>
             </div>)
 
 
     }
-    renderWhite() {
-        let whiteminutes = Math.floor(this.state.clock.state.remainingTime[0] / 60000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
-        let blackminutes = Math.floor(this.state.clock.state.remainingTime[1] / 60000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
-        let whiteseconds = Math.floor((this.state.clock.state.remainingTime[0] % 60000) / 1000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
-        let blackseconds = Math.floor((this.state.clock.state.remainingTime[1] % 60000) / 1000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
-        const rows = [];
-        for (let i = 7; i >= 0; i--) {
-
-            const cols = [];
-            for (let j = 0; j < 8; j++) {
-                var ishighlighted = false;
-
-                for (let p = 0; p < this.state.possibleMoves.length; p++) {
-                    if (this.state.possibleMoves[p].targetX === i && this.state.possibleMoves[p].targetY === j) {
-                        ishighlighted = true;
-                    }
-                }
-                if (ishighlighted && this.state.turnOf === this.state.isWhite && this.state.duringMove) {
-                    cols.push(<td><button className='chess' style={this.returnColor((i + j) % 2 === 0, true)} onClick={() => this.onClick(i, j)}>{this.returnText(i, j)}&#xFE0E;</button></td>);
-                }
-                else {
-                    cols.push(<td><button className='chess' style={this.returnColor((i + j) % 2 === 0, false)} onClick={() => this.onClick(i, j)}>{this.returnText(i, j)}&#xFE0E;</button></td>);
-                }
-            }
-            rows.push(<tr>{cols}</tr>)
-        }
-        return (
-            <div>
-                <div className='flexing info-bar'>
-                    <div className='clock-container'>
-                        <strong>{blackminutes}:{blackseconds}</strong>
-                    </div>
-                    <strong>{this.state.otheruser}</strong>
-                    <strong>{this.state.whitepoints < this.state.blackpoints ? ("+") + (this.state.blackpoints - this.state.whitepoints) : ""}</strong>
-                </div>
-                <table style={this.setBackground()} className='table' aria-labelledby="tabelLabel">
-                    <tbody>
-                        {rows}
-                    </tbody>
-                </table>
-                <div className='flexing info-bar'>
-                    <div className='clock-container'>
-                        <strong>{whiteminutes}:{whiteseconds}</strong>
-                    </div>
-                    <strong>{this.state.ownuser}</strong>
-                    <strong>{this.state.whitepoints > this.state.blackpoints ? ("+") + (this.state.whitepoints - this.state.blackpoints) : ""}</strong>
-                    <div className='flexing resign-button'><button className='btn btn-secondary' onClick={() => this.onResign()}>Resign</button></div>
-                </div>
-            </div>)
-
-
-    }
-
-    renderPromoteSelection() {
-
-        /*return (
-            <div className='promote' onChange={this.handleChange}>
-                <input type="radio" value="Queen" name="promote" /> Queen
-                <input type="radio" value="Knight" name="promote" /> Knight
-                <input type="radio" value="Bishop" name="promote" /> Bishop
-                <input type="radio" value="Rook" name="promote" /> Rook
-            </div>
-            
-        );*/
-        return (
-            <div className="btn-group btn-group-toggle promote" role="group" aria-label="Basic radio toggle button group" onChange={this.handleChange} >
-                <input type="radio" className="btn-check" value="Queen" name="promote" id="btnradio1" autoComplete='off' />
-                <label className="btn btn-outline-dark" htmlFor="btnradio1">Queen</label>
-
-                <input type="radio" className="btn-check" value="Knight" name="promote" id="btnradio2" autoComplete='off' />
-                <label className="btn btn-outline-dark" htmlFor="btnradio2">Knight</label>
-
-                <input type="radio" className="btn-check" value="Bishop" name="promote" id="btnradio3" autoComplete='off' />
-                <label className="btn btn-outline-dark" htmlFor="btnradio3">Bishop</label>
-
-                <input type="radio" className="btn-check" value="Rook" name="promote" id="btnradio4" autoComplete='off' />
-                <label className="btn btn-outline-dark" htmlFor="btnradio4">Rook</label>
-            </div>
-        );
-    }
-
     returnColor(white, highlighted) {
         if (!highlighted) {
             if (white === true) {
@@ -390,27 +238,6 @@ export class ChessBoard extends Component {
         }
     }
 
-    handleChange = (e) => {
-        switch (e.target.value) {
-            case "Queen":
-                this.setState({ promoteTo: 1 })
-                break;
-            case "Knight":
-                this.setState({ promoteTo: 2 })
-                break;
-            case "Bishop":
-                this.setState({ promoteTo: 3 })
-                break;
-            case "Rook":
-                this.setState({ promoteTo: 4 })
-                break;
-            default:
-                break;
-        }
-
-    }
-
-
     setBackground() {
         return ({
             height: 'fit-content',
@@ -423,48 +250,32 @@ export class ChessBoard extends Component {
     }
 
     returnText(x, y) {
-        if (this.state.board[8 * x + y].piece == null) return ""
-        switch (this.state.board[8 * x + y].piece.pieceName) {
-            case 0:
-                return this.state.board[8 * x + y].piece.isWhite ? "♔" : "♚"
-            case 1:
-                return this.state.board[8 * x + y].piece.isWhite ? "♕" : "♛"
-            case 2:
-                return this.state.board[8 * x + y].piece.isWhite ? "♘" : "♞"
-            case 3:
-                return this.state.board[8 * x + y].piece.isWhite ? "♗" : "♝"
-            case 4:
-                return this.state.board[8 * x + y].piece.isWhite ? "♖" : "♜"
-            case 5:
-                return this.state.board[8 * x + y].piece.isWhite ? "♙" : "♟"
-            default:
-                break;
-        }
+        //console.log(this.state.board[3 * x + y])
+        if (this.state.board[3 * x + y].type === 2) return ""
+        else if(this.state.board[3 * x + y].type === 0) return "O"
+        else return "X"
     }
 
     render() {
 
         let join = this.state.started ? <div></div> : this.renderJoin(this.state.players)
         let content = <div></div>
-        if (this.state.isWhite) {
-            content = this.state.loading ? <div></div> : this.renderWhite()
-        }
-        else {
-            content = this.state.loading ? <div></div> : this.renderBlack()
-        }
-        let promote = !this.state.promotionVisible ? <div></div> : this.renderPromoteSelection()
+       
+        
+        content = this.state.loading ? <div></div> : this.renderBlack()
+    
         let win = <div></div>
 
         switch (this.state.winner) {
             case 0:
                 win = <div className='end-screen'>
-                    <p>White wins!</p>
+                    <p>Circle wins!</p>
                     <button className='btn btn-secondary' onClick={this.restart}>OK</button>
                 </div>
                 break;
             case 1:
                 win = <div className='end-screen'>
-                    <p>Black wins!</p>
+                    <p>Cross wins!</p>
                     <button className='btn btn-secondary' onClick={this.restart}>OK</button>
                 </div>
                 break;
@@ -485,7 +296,6 @@ export class ChessBoard extends Component {
                 {content}
                 <div>
                     {moves}
-                    {promote}
                 </div>
             </div>
         if (this.state.winner <= 2) all = win
@@ -499,6 +309,8 @@ export class ChessBoard extends Component {
         );
     }
 
+
+
     async startconnection() {
 
         try {
@@ -511,49 +323,26 @@ export class ChessBoard extends Component {
             setTimeout(this.start, 50000);
         }
     }
+
     onClick = async (x, y) => {
         console.log(x + " " + y + " meg lett nyomva")
-        if (this.state.board[8 * x + y].piece == null && !this.state.duringMove) return
-        if (this.state.turnOf !== this.state.isWhite) return
-        if (!this.state.duringMove) {
-            this.setState({ duringMove: true, prevx: x, prevy: y })
-            if (this.state.isWhite && x === 6 && this.state.board[8 * x + y].piece.pieceName === 5 && this.state.board[8 * x + y].piece.isWhite) this.setState({ promotionVisible: true })
-            else if (!this.state.isWhite && x === 1 && this.state.board[8 * x + y].piece.pieceName === 5 && !this.state.board[8 * x + y].piece.isWhite) this.setState({ promotionVisible: true })
-            await gameConnection.invoke('PossibleMoves', x, y);
-        }
-        else {
-            this.setState({ duringMove: false, possibleMoves: [], promotionVisible: false });
-            await gameConnection.invoke('MakeMove', this.state.prevx, this.state.prevy, x, y, this.state.promoteTo, 0);
-        }
+        if (this.state.board[3 * x + y].type !== 2 ) return
+        if (this.state.turnOf !== this.state.isWhite) return       
+        await gameConnection.invoke('MakeMove', 0,0, x, y, 0, 1);
+        
     }
     onResign = async () => {
-        await gameConnection.invoke('LoseGame', 0);
+        await gameConnection.invoke('LoseGame', 1);
     }
     onJoinGame = async (e) => {
         e.preventDefault()
         if (!this.state.joined) {
             this.setState({ joined: false })
-            await gameConnection.invoke('EnterGame', 0)
+            await gameConnection.invoke('EnterGame', 1)
         }
 
     }
-    onStartGame = async (e) => {
-        e.preventDefault();
-        try {
-            if (this.state.players.length === 2) {
-                this.setState({ started: true })
-
-                await gameConnection.invoke('GameStarted');
-
-            }
-            else {
-                alert("Not enough players")
-            }
-        } catch (err) {
-            console.error(err)
-        }
-
-    }
+    
     restart = () => {
         this.setState({
             board: [], players: [], loading: true, started: false, joined: false, isWhite: true, turnOf: true, duringMove: false, prevx: 0, prevy: 0, promoteTo: 1, winner: 3,
@@ -584,4 +373,5 @@ export class ChessBoard extends Component {
         })
         this.forceUpdate();
     }
+  
 }
