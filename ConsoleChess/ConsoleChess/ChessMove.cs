@@ -1,5 +1,6 @@
 ﻿using ConsoleChess.Pieces;
 using FrameworkBackend;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,6 +79,18 @@ namespace ConsoleChess
             }
             if (isCheck) initial += "+";
             return initial;
+        }
+
+        public Move Generate(string stringifiedMove)
+        {
+            ChessMove move=new ChessMove();
+            var jObj = JObject.Parse(stringifiedMove);
+            move.InitialX = (int)jObj["initialX"];
+            move.InitialY = (int)jObj["initialY"];
+            move.TargetX = (int)jObj["targetX"];
+            move.TargetY = (int)jObj["targetY"];
+            move.PromoteTo = (PieceName)(int)jObj["promoteTo"];
+            return move;
         }
     }
 }

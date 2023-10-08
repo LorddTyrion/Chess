@@ -328,7 +328,7 @@ export class TicTacToe extends Component {
         console.log(x + " " + y + " meg lett nyomva")
         if (this.state.board[3 * x + y].type !== 2 ) return
         if (this.state.turnOf !== this.state.isWhite) return       
-        await gameConnection.invoke('MakeMove', 0,0, x, y, 0, 1);
+        await gameConnection.invoke('MakeMove', JSON.stringify({X: x, Y: y}), 1);
         
     }
     onResign = async () => {

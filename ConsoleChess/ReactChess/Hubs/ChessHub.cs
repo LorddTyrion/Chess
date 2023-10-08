@@ -29,23 +29,18 @@ namespace ReactChess.Hubs
             _databaseService = databaseService;
         }
         
-        public async Task MakeMove(int initialX, int initialY, int targetX, int targetY, int promoteTo, int gametype)
+        public async Task MakeMove(string stringifiedMove, int gametype)
         {
             Move move=new ChessMove();
             switch (gametype)
             {
                 case 0:
-                    move = new ChessMove();
-                    ((ChessMove)move).InitialX = initialX;
-                    ((ChessMove)move).InitialY = initialY;
-                    ((ChessMove)move).TargetX = targetX;
-                    ((ChessMove)move).TargetY = targetY;
-                    ((ChessMove)move).PromoteTo = (PieceName)promoteTo;
+                    move = new ChessMove().Generate(stringifiedMove);
                     break;
                 case 1:
-                    move=new TicTacToeMove();
-                    ((TicTacToeMove)move).X= targetX;
-                    ((TicTacToeMove)move).Y = targetY;
+                    move=new TicTacToeMove().Generate(stringifiedMove);
+                    break;
+                default:
                     break;
             }
             

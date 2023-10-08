@@ -523,7 +523,11 @@ export class ChessBoard extends Component {
         }
         else {
             this.setState({ duringMove: false, possibleMoves: [], promotionVisible: false });
-            await gameConnection.invoke('MakeMove', this.state.prevx, this.state.prevy, x, y, this.state.promoteTo, 0);
+            await gameConnection.invoke('MakeMove', JSON.stringify({initialX: this.state.prevx, 
+                                                                    initialY: this.state.prevy,
+                                                                    targetX: x,
+                                                                    targetY: y,
+                                                                    promoteTo: this.state.promoteTo}), 0);
         }
     }
     onResign = async () => {
