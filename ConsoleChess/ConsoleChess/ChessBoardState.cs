@@ -16,9 +16,7 @@ namespace ConsoleChess
         
         public List<Piece> WhitePieces = new List<Piece>();        
         public List<Piece> BlackPieces = new List<Piece>();
-        [JsonIgnore]
-        public King? WhiteKing, BlackKing;
-        [JsonIgnore]
+        public King? WhiteKing, BlackKing;        
         public Square[,] squares = new Square[8, 8];
         
         public int FiftyMoveRule = 0;
@@ -108,7 +106,7 @@ namespace ConsoleChess
             File.WriteAllText(fileName, jsonString);
             Console.WriteLine(jsonString);
         }*/
-        public override ChessBoardState DeserializeBoard(string fileName)
+        /*public override ChessBoardState DeserializeBoard(string fileName)
         {
             ChessBoardState boardState = new ChessBoardState();
             for (int i = 0; i < 8; i++)
@@ -264,7 +262,7 @@ namespace ConsoleChess
             piece.Value=pawn.Value;           
             piece.HasMoved=pawn.HasMoved;
             return piece;           
-        }
+        }*/
 
         public override List<ChessMove> GetMoves()
         {

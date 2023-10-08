@@ -28,6 +28,14 @@ namespace FrameworkBackend
         {
             return boardState.GetMoves();
         }
+        public override string SerializeBoard()
+        {
+            return boardState.SerializeBoard();
+        }
+        public override BoardState DeserializeBoard(string serializedBoard)
+        {
+            return boardState.DeserializeBoard(serializedBoard);
+        }
     }
     public abstract class Board
     {
@@ -38,5 +46,7 @@ namespace FrameworkBackend
         public abstract Color GetTurnOf();
         public abstract IEnumerable<Field> BoardToList();
         public abstract IEnumerable<Move> GetMoves();
+        public abstract string SerializeBoard();
+        public abstract BoardState DeserializeBoard(string serializedBoard);
     }
 }

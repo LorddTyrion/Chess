@@ -89,9 +89,9 @@ while (running)
             }
         }
     }
-    board.boardState.SerializeBoard(@"c:\Save\movie.json");
-    ChessBoardState cb = (ChessBoardState)board.boardState.DeserializeBoard(@"c:\Save\movie.json");
-    Console.WriteLine("ggggggggggggggggg     "+cb.turnOf);
+    //board.boardState.SerializeBoard(@"c:\Save\movie.json");
+    //ChessBoardState cb = (ChessBoardState)board.boardState.DeserializeBoard(@"c:\Save\movie.json");
+    //Console.WriteLine("ggggggggggggggggg     "+cb.turnOf);
     bw.Draw();
     Console.WriteLine(board.boardState.moves[board.boardState.moves.Count-1]);
     bw.ListPossibleMoves(0, 4);

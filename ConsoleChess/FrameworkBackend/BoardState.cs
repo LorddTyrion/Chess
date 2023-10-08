@@ -14,7 +14,7 @@ namespace FrameworkBackend
         public abstract bool PositionEquals(BoardState other);
         public abstract IEnumerable<Field> boardToList();
         public abstract IEnumerable<Move> GetMoves();
-        public abstract void SerializeBoard(string fileName);
+        public abstract string SerializeBoard();
         public abstract BoardState DeserializeBoard(string fileName);
     }
     [JsonObject(MemberSerialization.Fields)]
@@ -23,7 +23,7 @@ namespace FrameworkBackend
         where TMove:Move
         {
         public List<TMove> moves;
-        public override void SerializeBoard(string fileName)
+        public override string SerializeBoard()
         {
             
             //string jsonString = JsonConvert.SerializeObject (this, Formatting.Indented);
@@ -31,12 +31,12 @@ namespace FrameworkBackend
             {
                 TypeNameHandling = TypeNameHandling.Auto
             });
-            File.WriteAllText(fileName, jsonTypeNameAuto);
-            //Console.WriteLine(jsonString);
+            return jsonTypeNameAuto;
+            
         }
-        public override BoardState DeserializeBoard(string fileName)
+        public override BoardState DeserializeBoard(string serializedBoard)
         {
-            TBoardState boardState = JsonConvert.DeserializeObject<TBoardState>(File.ReadAllText(fileName), new JsonSerializerSettings
+            TBoardState boardState = JsonConvert.DeserializeObject<TBoardState>(serializedBoard, new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Auto
             });

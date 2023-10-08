@@ -26,6 +26,14 @@ namespace ReactChess.Services
         {
             return Board.GetMoves();
         }
+        public override string SerializeBoard()
+        {
+            return Board.SerializeBoard();
+        }
+        public override BoardState DeserializeBoard(string serializedBoard)
+        {
+            return Board.DeserializeBoard(serializedBoard);
+        }
     }
     public abstract class Game
     {
@@ -60,5 +68,7 @@ namespace ReactChess.Services
         public abstract Color GetTurnOf();
         public abstract IEnumerable<Field> BoardToList();
         public abstract IEnumerable<Move> GetMoves();
+        public abstract string SerializeBoard();
+        public abstract BoardState DeserializeBoard(string serializedBoard);
     }
 }

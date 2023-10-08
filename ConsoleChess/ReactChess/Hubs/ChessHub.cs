@@ -55,6 +55,7 @@ namespace ReactChess.Hubs
                 Color end = game.Board.CheckEndGame();
                 if (result)
                 {
+                    _databaseService.SerializeBoard(_context, CurrentUserId, game);
                     await Clients.Group(gameID.ToString()).RefreshBoard(game.BoardToList(), true);
                     await Clients.Group(gameID.ToString()).PreviousMoves(game.GetMoves());
                     await Clients.Group(gameID.ToString()).RefreshPoints(game.Board.GetSumValue(Color.WHITE), game.Board.GetSumValue(Color.BLACK));

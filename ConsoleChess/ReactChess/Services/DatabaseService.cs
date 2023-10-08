@@ -77,5 +77,12 @@ namespace ReactChess.Services
 
             context.SaveChanges();
         }
+
+        public void SerializeBoard(ApplicationDbContext context, string CurrentUserId, Game game)
+        {
+            var match = context.MatchSet.Where(m => (m.Player1Id == CurrentUserId || m.Player2Id == CurrentUserId) && m.Id == game.DbID).Include(m => m.Player1).Include(m => m.Player2).FirstOrDefault();
+            match.SerializedBoard = game.SerializeBoard();
+            context.SaveChanges();
+        }
     }
 }
