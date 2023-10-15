@@ -17,6 +17,7 @@ namespace ReactChess.Services
     {
         public ChessGame()
         {
+            Type = GameType.CHESS;
             Board=new ChessBoard();
         }
         public ChessGame(ChessGame game)

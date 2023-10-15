@@ -7,6 +7,7 @@ namespace ReactChess.Services
     {
         public TicTacToeGame()
         {
+            Type = GameType.TICTACTOE;
             Board = new TicTacToeBoard();
         }
         public TicTacToeGame(TicTacToeGame game)

@@ -44,6 +44,7 @@ namespace ReactChess.Services
         public int DbID { get; set; }
         public GameState State { get; set; }
         public Color Result { get; set; }
+        public GameType Type { get; set; }
         public Game()
         {
             Random random = new Random();

@@ -28,7 +28,21 @@ namespace ReactChess.Hubs
             _gameController = gameController;
             _databaseService = databaseService;
         }
-        
+
+        public override async Task OnDisconnectedAsync(Exception exception)
+        {
+            var user = _context.Users.Where(au => au.Id == CurrentUserId).FirstOrDefault();
+            var username = user.UserName;
+            int gameID = _gameController.IdByName(username);
+            Game game = _gameController.GameById(gameID);
+            if (game == null) return;
+            game.LoseGame(username);
+            _databaseService.GameEndedByResignation(_context, CurrentUserId, game);
+            await Clients.Group(gameID.ToString()).GameEnds((int)game.Result);
+            _gameController.DeleteGame(game, (int)game.Type);
+            await base.OnDisconnectedAsync(exception);
+        }
+
         public async Task MakeMove(string stringifiedMove, int gametype)
         {
             Move move=new ChessMove();
@@ -110,7 +124,7 @@ namespace ReactChess.Hubs
             IEnumerable<Move> possibleMoves = game.Board.getPossibleMoves(x, y);
             await Clients.Group(gameID.ToString()).GetPossibleMoves(possibleMoves);
         }
-        public async Task LoseGame(int gametype)
+        public async Task LoseGame()
         {
             var user = _context.Users.Where(au => au.Id == CurrentUserId).FirstOrDefault();
             var username = user.UserName;
@@ -120,7 +134,7 @@ namespace ReactChess.Hubs
             game.LoseGame(username);
             _databaseService.GameEndedByResignation(_context, CurrentUserId, game);
             await Clients.Group(gameID.ToString()).GameEnds((int)game.Result);
-            _gameController.DeleteGame(game, gametype);
+            _gameController.DeleteGame(game, (int)game.Type);
         }
 
         

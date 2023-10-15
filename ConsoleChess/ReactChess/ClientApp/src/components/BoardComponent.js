@@ -8,6 +8,7 @@ import { Clock } from 'chess-clock'
 
 
 import './styles.css';
+import { ProgressContext } from '../context/progress';
 
 const fischer = Clock.getConfig('Fischer Rapid 5|5')
 const updateInterval = 500
@@ -16,7 +17,7 @@ const callback = console.info
 
 export class BoardComponent extends Component {
     static displayName = BoardComponent.name;
-
+    static contextType=ProgressContext
     constructor(props) {
         super(props);
         this.state = {
@@ -52,6 +53,7 @@ export class BoardComponent extends Component {
         })
 
         this.state.gameConnection.on('GameCreated', (board) => {
+            
             this.setState({
                 board: board, loading: false, started: true
             })
@@ -63,6 +65,7 @@ export class BoardComponent extends Component {
 
             }
             console.log("Game started")
+            this.context.setProgress(true)
             this.forceUpdate()
 
         })
@@ -91,6 +94,7 @@ export class BoardComponent extends Component {
         })
 
         this.state.gameConnection.on('GameEnds', (result) => {
+            this.context.setProgress(false)
             this.setState({ winner: result })
             this.forceUpdate()
         })
@@ -129,11 +133,11 @@ export class BoardComponent extends Component {
                     if (state.status === "done") {
                         if (this.state.turnOf && this.state.isWhite) {
                             console.log("black wins")
-                            await this.state.gameConnection.invoke('LoseGame', this.state.gameType);
+                            await this.state.gameConnection.invoke('LoseGame');
                         }
                         else if (!this.state.turnOf && !this.state.isWhite) {
                             console.log("white wins")
-                            await this.state.gameConnection.invoke('LoseGame', this.state.gameType);
+                            await this.state.gameConnection.invoke('LoseGame');
                         }
                     }
                 }
@@ -160,11 +164,11 @@ export class BoardComponent extends Component {
                     if (state.status === "done") {
                         if (this.state.turnOf && this.state.isWhite) {
                             console.log("black wins")
-                            await this.state.gameConnection.invoke('LoseGame', this.state.gameType);
+                            await this.state.gameConnection.invoke('LoseGame');
                         }
                         else if (!this.state.turnOf && !this.state.isWhite) {
                             console.log("white wins")
-                            await this.state.gameConnection.invoke('LoseGame', this.state.gameType);
+                            await this.state.gameConnection.invoke('LoseGame');
                         }
                     }
                 }
@@ -196,6 +200,6 @@ export class BoardComponent extends Component {
 
     }
     onResign = async () => {
-        await this.state.gameConnection.invoke('LoseGame', this.state.gameType);
+        await this.state.gameConnection.invoke('LoseGame');
     }
 }

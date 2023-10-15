@@ -10,10 +10,14 @@ import './custom.css'
 import { ChessBoard } from './components/ChessBoard';
 import { TicTacToe } from './components/TicTacToe';
 
+
 export default class App extends Component {
   static displayName = App.name;
+  
+  
 
   render () {
+
     return (
       <Layout>
         <Route exact path='/' component={Home} />
@@ -22,5 +26,6 @@ export default class App extends Component {
         <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
       </Layout>
     );
+  
   }
 }
