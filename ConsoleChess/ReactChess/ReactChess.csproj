@@ -33,6 +33,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ConsoleChess\ConsoleChess.csproj" />
+    <ProjectReference Include="..\TicTacToe\TicTacToe.csproj" />
   </ItemGroup>
 
   <ItemGroup>

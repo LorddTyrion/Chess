@@ -9,7 +9,10 @@ namespace ReactChess.Services
     {
         public int GameSetup(ApplicationDbContext context, GameController gameController, int gameID)
         {
-            Match m = new Match(); //m.Type = 0;;               
+            Match m = new Match(); //m.Type = 0;;
+            Game game=gameController.GameById(gameID);
+            IdAttribute idattr= (IdAttribute)Attribute.GetCustomAttribute(game.GetType(), typeof(IdAttribute));
+            m.Type = Guid.Parse(idattr.Id);
 
             List<string> players = gameController.PlayersById(gameID);
 
@@ -72,6 +75,13 @@ namespace ReactChess.Services
                 match.Player1.Wins++;
             }
 
+            context.SaveChanges();
+        }
+
+        public void SerializeBoard(ApplicationDbContext context, string CurrentUserId, Game game)
+        {
+            var match = context.MatchSet.Where(m => (m.Player1Id == CurrentUserId || m.Player2Id == CurrentUserId) && m.Id == game.DbID).Include(m => m.Player1).Include(m => m.Player2).FirstOrDefault();
+            match.SerializedBoard = game.SerializeBoard();
             context.SaveChanges();
         }
     }

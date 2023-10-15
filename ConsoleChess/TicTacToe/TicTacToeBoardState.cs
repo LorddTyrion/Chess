@@ -13,11 +13,12 @@ namespace TicTacToe
         CROSS,
         EMPTY
     }
-    public class TicTacToeBoardState : BoardState<TicTacToeBoardState, TicTacToeField>
+    public class TicTacToeBoardState : BoardState<TicTacToeBoardState, TicTacToeMove>
     {
         public TicTacToeField[,] TicTacToeField = new TicTacToeField[3, 3];
         public TicTacToeBoardState()
         {
+            moves = new List<TicTacToeMove>();
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
@@ -42,8 +43,14 @@ namespace TicTacToe
             return list;
         }
 
-        public override bool PositionEquals(TicTacToeBoardState other)
+        public override List<TicTacToeMove> GetMoves()
         {
+            return moves;
+        }
+
+        public override bool PositionEquals(BoardState otherBoard)
+        {
+            TicTacToeBoardState other= (TicTacToeBoardState)otherBoard;
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)

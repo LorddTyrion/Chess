@@ -2,6 +2,9 @@ E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\CoverletSourc
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\testhost.dll
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\ConsoleChess.deps.json
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\ConsoleChess.runtimeconfig.json
+E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\FrameworkBackend.deps.json
+E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\FrameworkBackend.runtimeconfig.json
+E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\FrameworkBackend.exe
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\ConsoleChess.exe
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\testhost.exe
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\Microsoft.TestPlatform.PlatformAbstractions.dll
@@ -91,7 +94,9 @@ E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\zh-Hant\Micro
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\zh-Hant\Microsoft.TestPlatform.CrossPlatEngine.resources.dll
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\zh-Hant\Microsoft.VisualStudio.TestPlatform.Common.resources.dll
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\ConsoleChess.dll
+E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\FrameworkBackend.dll
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\ConsoleChess.pdb
+E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\FrameworkBackend.pdb
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\obj\Debug\net6.0\ChessTest.csproj.AssemblyReference.cache
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\obj\Debug\net6.0\ChessTest.GeneratedMSBuildEditorConfig.editorconfig
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\obj\Debug\net6.0\ChessTest.AssemblyInfoInputs.cache
@@ -103,8 +108,3 @@ E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\obj\Debug\net6.0\refint\ChessT
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\obj\Debug\net6.0\ChessTest.pdb
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\obj\Debug\net6.0\ChessTest.genruntimeconfig.cache
 E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\obj\Debug\net6.0\ref\ChessTest.dll
-E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\FrameworkBackend.deps.json
-E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\FrameworkBackend.runtimeconfig.json
-E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\FrameworkBackend.exe
-E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\FrameworkBackend.dll
-E:\Egyetem\Temalabor\Chess\ConsoleChess\ChessTest\bin\Debug\net6.0\FrameworkBackend.pdb

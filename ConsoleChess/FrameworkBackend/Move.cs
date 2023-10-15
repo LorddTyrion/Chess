@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace FrameworkBackend
 {
     public interface Move
     {
-
+        public abstract Move Generate(string stringifiedMove);
     }
 }

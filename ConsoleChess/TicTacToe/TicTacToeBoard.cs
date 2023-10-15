@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TicTacToe
 {
-    public class TicTacToeBoard : Board< TicTacToeBoardState, TicTacToeField>
+    public class TicTacToeBoard : Board< TicTacToeBoardState, TicTacToeMove>
     {
         public TicTacToeBoard()
         {
@@ -88,6 +88,11 @@ namespace TicTacToe
 
         }
 
+        public override int GetSumValue(Color color)
+        {
+            return 0;
+        }
+
         public override bool Move<TMove>(TMove move)
         {
             if(boardState==null) return false;
@@ -102,6 +107,7 @@ namespace TicTacToe
                 else if (boardState.turnOf == Color.BLACK)
                     boardState.TicTacToeField[x, y].Type = TicTacToeType.CROSS;
                 changeStarter();
+                boardState.moves.Add(ticTacToeMove);
                 return true;
             }
             return false;
