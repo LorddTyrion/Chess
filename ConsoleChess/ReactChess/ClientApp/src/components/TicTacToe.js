@@ -5,99 +5,23 @@ import { HttpTransportType } from '@microsoft/signalr';
 import { LogLevel } from '@microsoft/signalr';
 import { Clock } from 'chess-clock'
 import './styles.css';
+import {BoardComponent} from './BoardComponent';
 
     const fischer = Clock.getConfig('Fischer Rapid 5|5')
     const updateInterval = 500
     const callback = console.info
 
-var gameConnection = new HubConnectionBuilder()
-    .withUrl('https://localhost:7073/chesshub', {
-        accessTokenFactory: () => {
-            return authService.getAccessToken();
-        }, transport: HttpTransportType.WebSockets, skipNegotiation: true
-    })
-    .configureLogging(LogLevel.Information)
-    .build();
-
-    
+   
 
 
-export class TicTacToe extends Component {
+export class TicTacToe extends BoardComponent {
     static displayName = TicTacToe.name;
 
 
     constructor(props) {
         super(props);
-        this.state = {
-            board: [], players: [], loading: true, started: false, joined: false, isWhite: true, turnOf: true, duringMove: false, prevx: 0, prevy: 0, promoteTo: 1, winner: 3,
-            possibleMoves: [], prevMoves: [], promotionVisible: false, ownuser: "", otheruser: "", clock: new Clock({
-                ...fischer,
-                updateInterval,
-                callback,
-            }),
-            whitepoints: 0, blackpoints: 0
-        };
-
-        gameConnection.on('AddToGame', (playerlist) => {
-            this.setState({ players: playerlist })
-
-            this.forceUpdate()
-        })
-
-        gameConnection.on('SetColor', (isWhite, username) => {
-            this.setState({ isWhite: isWhite, ownuser: username, joined: true })
-            this.forceUpdate()
-        })
-
-        gameConnection.on('GameCreated', (board) => {
-            this.setState({
-                board: board, loading: false, started: true
-            })
-            for (let i = 0; i < this.state.players.length; i++) {
-                if (this.state.players[i] !== this.state.ownuser) {
-                    this.setState({ otheruser: this.state.players[i] })
-                    break;
-                }
-
-            }
-            console.log("Game started")
-            this.forceUpdate()
-
-        })
-        gameConnection.on('RefreshBoard', (board, success) => {
-            this.setState({ board: board })
-
-            if (!success) console.log("Rossz lépés")
-            else {
-                if (this.state.turnOf) this.state.clock.push(0);
-                else this.state.clock.push(1);
-                this.setState({ turnOf: !this.state.turnOf })
-            }
-            this.forceUpdate()
-        })
-        gameConnection.on('GetPossibleMoves', (moves) => {
-            this.setState({ possibleMoves: moves })
-            this.forceUpdate()
-        })
-        gameConnection.on('PreviousMoves', (moves) => {
-            this.setState({ prevMoves: moves })
-            this.forceUpdate()
-        })
-        gameConnection.on('RefreshPoints', (white, black) => {
-            this.setState({ whitepoints: white, blackpoints: black })
-            this.forceUpdate()
-        })
-
-        gameConnection.on('GameEnds', (result) => {
-            this.setState({ winner: result })
-            this.forceUpdate()
-        })
-
-        gameConnection.onclose(async () => {
-            await this.startconnection();
-        })
-
-        this.startconnection();
+        console.log("I am also derived")
+        
     }
 
     componentDidMount() {
@@ -112,11 +36,11 @@ export class TicTacToe extends Component {
                     if (state.status === "done") {
                         if (this.state.turnOf && this.state.isWhite) {
                             console.log("black wins")
-                            await gameConnection.invoke('LoseGame');
+                            await this.state.gameConnection.invoke('LoseGame');
                         }
                         else if (!this.state.turnOf && !this.state.isWhite) {
                             console.log("white wins")
-                            await gameConnection.invoke('LoseGame');
+                            await this.state.gameConnection.invoke('LoseGame');
                         }
                     }
                 }
@@ -314,7 +238,7 @@ export class TicTacToe extends Component {
     async startconnection() {
 
         try {
-            await gameConnection.start();
+            await this.state.gameConnection.start();
             console.log("SignalR (game) Connected.");
             //await gameConnection.invoke('GameStarted');
 
@@ -328,17 +252,17 @@ export class TicTacToe extends Component {
         console.log(x + " " + y + " meg lett nyomva")
         if (this.state.board[3 * x + y].type !== 2 ) return
         if (this.state.turnOf !== this.state.isWhite) return       
-        await gameConnection.invoke('MakeMove', JSON.stringify({X: x, Y: y}), 1);
+        await this.state.gameConnection.invoke('MakeMove', JSON.stringify({X: x, Y: y}), 1);
         
     }
     onResign = async () => {
-        await gameConnection.invoke('LoseGame', 1);
+        await this.state.gameConnection.invoke('LoseGame', 1);
     }
     onJoinGame = async (e) => {
         e.preventDefault()
         if (!this.state.joined) {
             this.setState({ joined: false })
-            await gameConnection.invoke('EnterGame', 1)
+            await this.state.gameConnection.invoke('EnterGame', 1)
         }
 
     }
@@ -361,11 +285,11 @@ export class TicTacToe extends Component {
                     if (state.status === "done") {
                         if (this.state.turnOf && this.state.isWhite) {
                             console.log("black wins")
-                            await gameConnection.invoke('LoseGame');
+                            await this.state.gameConnection.invoke('LoseGame');
                         }
                         else if (!this.state.turnOf && !this.state.isWhite) {
                             console.log("white wins")
-                            await gameConnection.invoke('LoseGame');
+                            await this.state.gameConnection.invoke('LoseGame');
                         }
                     }
                 }

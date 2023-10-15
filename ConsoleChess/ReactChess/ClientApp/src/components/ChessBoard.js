@@ -4,6 +4,7 @@ import authService from './api-authorization/AuthorizeService'
 import { HttpTransportType } from '@microsoft/signalr';
 import { LogLevel } from '@microsoft/signalr';
 import { Clock } from 'chess-clock'
+import {BoardComponent} from './BoardComponent';
 
 
 
@@ -13,96 +14,14 @@ const fischer = Clock.getConfig('Fischer Rapid 5|5')
 const updateInterval = 500
 const callback = console.info
 
-/*const clock = new Clock({
-  ...fischer,
-  updateInterval,
-  callback,
-})*/
 
-var gameConnection = new HubConnectionBuilder()
-    .withUrl('https://localhost:7073/chesshub', {
-        accessTokenFactory: () => {
-            return authService.getAccessToken();
-        }, transport: HttpTransportType.WebSockets, skipNegotiation: true
-    })
-    .configureLogging(LogLevel.Information)
-    .build();
 
-export class ChessBoard extends Component {
+export class ChessBoard extends BoardComponent {
     static displayName = ChessBoard.name;
 
     constructor(props) {
         super(props);
-        this.state = {
-            board: [], players: [], loading: true, started: false, joined: false, isWhite: true, turnOf: true, duringMove: false, prevx: 0, prevy: 0, promoteTo: 1, winner: 3,
-            possibleMoves: [], prevMoves: [], promotionVisible: false, ownuser: "", otheruser: "", clock: new Clock({
-                ...fischer,
-                updateInterval,
-                callback,
-            }),
-            whitepoints: 0, blackpoints: 0
-        };
-
-        gameConnection.on('AddToGame', (playerlist) => {
-            this.setState({ players: playerlist })
-
-            this.forceUpdate()
-        })
-
-        gameConnection.on('SetColor', (isWhite, username) => {
-            this.setState({ isWhite: isWhite, ownuser: username, joined: true })
-            this.forceUpdate()
-        })
-
-        gameConnection.on('GameCreated', (board) => {
-            this.setState({
-                board: board, loading: false, started: true
-            })
-            for (let i = 0; i < this.state.players.length; i++) {
-                if (this.state.players[i] !== this.state.ownuser) {
-                    this.setState({ otheruser: this.state.players[i] })
-                    break;
-                }
-
-            }
-            console.log("Game started")
-            this.forceUpdate()
-
-        })
-        gameConnection.on('RefreshBoard', (board, success) => {
-            this.setState({ board: board })
-
-            if (!success) console.log("Rossz lépés")
-            else {
-                if (this.state.turnOf) this.state.clock.push(0);
-                else this.state.clock.push(1);
-                this.setState({ turnOf: !this.state.turnOf })
-            }
-            this.forceUpdate()
-        })
-        gameConnection.on('GetPossibleMoves', (moves) => {
-            this.setState({ possibleMoves: moves })
-            this.forceUpdate()
-        })
-        gameConnection.on('PreviousMoves', (moves) => {
-            this.setState({ prevMoves: moves })
-            this.forceUpdate()
-        })
-        gameConnection.on('RefreshPoints', (white, black) => {
-            this.setState({ whitepoints: white, blackpoints: black })
-            this.forceUpdate()
-        })
-
-        gameConnection.on('GameEnds', (result) => {
-            this.setState({ winner: result })
-            this.forceUpdate()
-        })
-
-        gameConnection.onclose(async () => {
-            await this.startconnection();
-        })
-
-        this.startconnection();
+        console.log("I'm not a useless constructor, I am just a derived class!")       
     }
     clockCallback() {
         console.log("called")
@@ -124,11 +43,11 @@ export class ChessBoard extends Component {
                     if (state.status === "done") {
                         if (this.state.turnOf && this.state.isWhite) {
                             console.log("black wins")
-                            await gameConnection.invoke('LoseGame');
+                            await this.state.gameConnection.invoke('LoseGame');
                         }
                         else if (!this.state.turnOf && !this.state.isWhite) {
                             console.log("white wins")
-                            await gameConnection.invoke('LoseGame');
+                            await this.state.gameConnection.invoke('LoseGame');
                         }
                     }
                 }
@@ -502,7 +421,7 @@ export class ChessBoard extends Component {
     async startconnection() {
 
         try {
-            await gameConnection.start();
+            await this.state.gameConnection.start();
             console.log("SignalR (game) Connected.");
             //await gameConnection.invoke('GameStarted');
 
@@ -519,11 +438,11 @@ export class ChessBoard extends Component {
             this.setState({ duringMove: true, prevx: x, prevy: y })
             if (this.state.isWhite && x === 6 && this.state.board[8 * x + y].piece.pieceName === 5 && this.state.board[8 * x + y].piece.isWhite) this.setState({ promotionVisible: true })
             else if (!this.state.isWhite && x === 1 && this.state.board[8 * x + y].piece.pieceName === 5 && !this.state.board[8 * x + y].piece.isWhite) this.setState({ promotionVisible: true })
-            await gameConnection.invoke('PossibleMoves', x, y);
+            await this.state.gameConnection.invoke('PossibleMoves', x, y);
         }
         else {
             this.setState({ duringMove: false, possibleMoves: [], promotionVisible: false });
-            await gameConnection.invoke('MakeMove', JSON.stringify({initialX: this.state.prevx, 
+            await this.state.gameConnection.invoke('MakeMove', JSON.stringify({initialX: this.state.prevx, 
                                                                     initialY: this.state.prevy,
                                                                     targetX: x,
                                                                     targetY: y,
@@ -531,13 +450,13 @@ export class ChessBoard extends Component {
         }
     }
     onResign = async () => {
-        await gameConnection.invoke('LoseGame', 0);
+        await this.state.gameConnection.invoke('LoseGame', 0);
     }
     onJoinGame = async (e) => {
         e.preventDefault()
         if (!this.state.joined) {
             this.setState({ joined: false })
-            await gameConnection.invoke('EnterGame', 0)
+            await this.state.gameConnection.invoke('EnterGame', 0)
         }
 
     }
@@ -547,7 +466,7 @@ export class ChessBoard extends Component {
             if (this.state.players.length === 2) {
                 this.setState({ started: true })
 
-                await gameConnection.invoke('GameStarted');
+                await this.state.gameConnection.invoke('GameStarted');
 
             }
             else {
@@ -576,11 +495,11 @@ export class ChessBoard extends Component {
                     if (state.status === "done") {
                         if (this.state.turnOf && this.state.isWhite) {
                             console.log("black wins")
-                            await gameConnection.invoke('LoseGame');
+                            await this.state.gameConnection.invoke('LoseGame');
                         }
                         else if (!this.state.turnOf && !this.state.isWhite) {
                             console.log("white wins")
-                            await gameConnection.invoke('LoseGame');
+                            await this.state.gameConnection.invoke('LoseGame');
                         }
                     }
                 }
