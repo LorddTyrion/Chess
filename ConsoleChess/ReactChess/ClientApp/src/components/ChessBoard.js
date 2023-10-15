@@ -1,19 +1,7 @@
-import React, { Component } from 'react';
-import { HubConnectionBuilder } from '@microsoft/signalr';
-import authService from './api-authorization/AuthorizeService'
-import { HttpTransportType } from '@microsoft/signalr';
-import { LogLevel } from '@microsoft/signalr';
-import { Clock } from 'chess-clock'
+import React from 'react';
 import {BoardComponent} from './BoardComponent';
 
-
-
 import './styles.css';
-
-const fischer = Clock.getConfig('Fischer Rapid 5|5')
-const updateInterval = 500
-const callback = console.info
-
 
 
 export class ChessBoard extends BoardComponent {
@@ -21,56 +9,21 @@ export class ChessBoard extends BoardComponent {
 
     constructor(props) {
         super(props);
-        console.log("I'm not a useless constructor, I am just a derived class!")       
+        console.log("I'm not a useless constructor, I am just a derived class!")
+             
     }
-    clockCallback() {
-        console.log("called")
-        if (this.state.clock.state.status === "done") {
-            console.log("DONE")
-        }
-
-    }
+    
 
     componentDidMount() {
-        this.interval = setInterval(() => this.setState({ time: Date.now() }), 1000);
-
-
-        this.setState({
-            clock: new Clock({
-                ...fischer,
-                updateInterval,
-                callback: async (state) => {
-                    if (state.status === "done") {
-                        if (this.state.turnOf && this.state.isWhite) {
-                            console.log("black wins")
-                            await this.state.gameConnection.invoke('LoseGame');
-                        }
-                        else if (!this.state.turnOf && !this.state.isWhite) {
-                            console.log("white wins")
-                            await this.state.gameConnection.invoke('LoseGame');
-                        }
-                    }
-                }
-            })
-        })
+        this.setState({gameType: 0})  
+        super.componentDidMount()
+        
+        
     }
     componentWillUnmount() {
         clearInterval(this.interval);
     }
 
-    renderJoin(players) {
-        if (!this.state.joined)
-            return (
-                <div className='end-screen'>
-                    <button className='btn btn-secondary btn-lg' onClick={this.onJoinGame}>Join game</button>
-                </div>)
-        else return (
-            <div className='end-screen'>
-                <p>Searching for opponent...</p>
-            </div>
-        )
-
-    }
     renderMoves() {
         const moves = [];
         for (let i = 0; i < this.state.prevMoves.length; i++) {
@@ -268,15 +221,6 @@ export class ChessBoard extends BoardComponent {
 
     renderPromoteSelection() {
 
-        /*return (
-            <div className='promote' onChange={this.handleChange}>
-                <input type="radio" value="Queen" name="promote" /> Queen
-                <input type="radio" value="Knight" name="promote" /> Knight
-                <input type="radio" value="Bishop" name="promote" /> Bishop
-                <input type="radio" value="Rook" name="promote" /> Rook
-            </div>
-            
-        );*/
         return (
             <div className="btn-group btn-group-toggle promote" role="group" aria-label="Basic radio toggle button group" onChange={this.handleChange} >
                 <input type="radio" className="btn-check" value="Queen" name="promote" id="btnradio1" autoComplete='off' />
@@ -363,7 +307,7 @@ export class ChessBoard extends BoardComponent {
 
     render() {
 
-        let join = this.state.started ? <div></div> : this.renderJoin(this.state.players)
+        let join = this.state.started ? <div></div> : this.renderJoin()
         let content = <div></div>
         if (this.state.isWhite) {
             content = this.state.loading ? <div></div> : this.renderWhite()
@@ -418,18 +362,6 @@ export class ChessBoard extends BoardComponent {
         );
     }
 
-    async startconnection() {
-
-        try {
-            await this.state.gameConnection.start();
-            console.log("SignalR (game) Connected.");
-            //await gameConnection.invoke('GameStarted');
-
-        } catch (err) {
-            console.log("Start hiba:" + err);
-            setTimeout(this.start, 50000);
-        }
-    }
     onClick = async (x, y) => {
         console.log(x + " " + y + " meg lett nyomva")
         if (this.state.board[8 * x + y].piece == null && !this.state.duringMove) return
@@ -449,62 +381,7 @@ export class ChessBoard extends BoardComponent {
                                                                     promoteTo: this.state.promoteTo}), 0);
         }
     }
-    onResign = async () => {
-        await this.state.gameConnection.invoke('LoseGame', 0);
-    }
-    onJoinGame = async (e) => {
-        e.preventDefault()
-        if (!this.state.joined) {
-            this.setState({ joined: false })
-            await this.state.gameConnection.invoke('EnterGame', 0)
-        }
-
-    }
-    onStartGame = async (e) => {
-        e.preventDefault();
-        try {
-            if (this.state.players.length === 2) {
-                this.setState({ started: true })
-
-                await this.state.gameConnection.invoke('GameStarted');
-
-            }
-            else {
-                alert("Not enough players")
-            }
-        } catch (err) {
-            console.error(err)
-        }
-
-    }
-    restart = () => {
-        this.setState({
-            board: [], players: [], loading: true, started: false, joined: false, isWhite: true, turnOf: true, duringMove: false, prevx: 0, prevy: 0, promoteTo: 1, winner: 3,
-            possibleMoves: [], prevMoves: [], promotionVisible: false, ownuser: "", otheruser: "", clock: new Clock({
-                ...fischer,
-                updateInterval,
-                callback,
-            }),
-            whitepoints: 0, blackpoints: 0
-        })
-        this.setState({
-            clock: new Clock({
-                ...fischer,
-                updateInterval,
-                callback: async (state) => {
-                    if (state.status === "done") {
-                        if (this.state.turnOf && this.state.isWhite) {
-                            console.log("black wins")
-                            await this.state.gameConnection.invoke('LoseGame');
-                        }
-                        else if (!this.state.turnOf && !this.state.isWhite) {
-                            console.log("white wins")
-                            await this.state.gameConnection.invoke('LoseGame');
-                        }
-                    }
-                }
-            })
-        })
-        this.forceUpdate();
-    }
+  
+   
+    
 }

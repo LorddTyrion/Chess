@@ -1,15 +1,9 @@
-import React, { Component } from 'react';
-import { HubConnectionBuilder } from '@microsoft/signalr';
-import authService from './api-authorization/AuthorizeService'
-import { HttpTransportType } from '@microsoft/signalr';
-import { LogLevel } from '@microsoft/signalr';
-import { Clock } from 'chess-clock'
+import React from 'react';
+//import { Clock } from 'chess-clock'
 import './styles.css';
 import {BoardComponent} from './BoardComponent';
 
-    const fischer = Clock.getConfig('Fischer Rapid 5|5')
-    const updateInterval = 500
-    const callback = console.info
+
 
    
 
@@ -21,49 +15,20 @@ export class TicTacToe extends BoardComponent {
     constructor(props) {
         super(props);
         console.log("I am also derived")
+        //this.setState({gameType: 1})
         
     }
 
     componentDidMount() {
-        this.interval = setInterval(() => this.setState({ time: Date.now() }), 1000);
-
-
-        this.setState({
-            clock: new Clock({
-                ...fischer,
-                updateInterval,
-                callback: async (state) => {
-                    if (state.status === "done") {
-                        if (this.state.turnOf && this.state.isWhite) {
-                            console.log("black wins")
-                            await this.state.gameConnection.invoke('LoseGame');
-                        }
-                        else if (!this.state.turnOf && !this.state.isWhite) {
-                            console.log("white wins")
-                            await this.state.gameConnection.invoke('LoseGame');
-                        }
-                    }
-                }
-            })
-        })
+        this.setState({gameType: 1})
+        super.componentDidMount();
+        
+        
     }
     componentWillUnmount() {
         clearInterval(this.interval);
     }
 
-    renderJoin(players) {
-        if (!this.state.joined)
-            return (
-                <div className='end-screen'>
-                    <button className='btn btn-secondary btn-lg' onClick={this.onJoinGame}>Join game</button>
-                </div>)
-        else return (
-            <div className='end-screen'>
-                <p>Searching for opponent...</p>
-            </div>
-        )
-
-    }
     renderMoves() {
         const moves = [];
         for (let i = 0; i < this.state.prevMoves.length; i++) {
@@ -126,7 +91,7 @@ export class TicTacToe extends BoardComponent {
             <div>
                 <div className='flexing info-bar'>
                     <div className='clock-container'>
-                        <strong>{whiteminutes}:{whiteseconds}</strong>
+                        <strong>{!this.state.isWhite ? whiteminutes:blackminutes}:{!this.state.isWhite ?whiteseconds: blackseconds}</strong>
                     </div>
                     <strong>{this.state.otheruser}</strong>
                 </div>
@@ -137,7 +102,7 @@ export class TicTacToe extends BoardComponent {
                 </table>
                 <div className='flexing info-bar'>
                     <div className='clock-container'>
-                        <strong>{blackminutes}:{blackseconds}</strong>
+                    <strong>{this.state.isWhite ? whiteminutes:blackminutes}:{this.state.isWhite ?whiteseconds: blackseconds}</strong>
                     </div>
                     <strong>{this.state.ownuser}</strong>
                     <div className='flexing resign-button'><button className='btn btn-secondary' onClick={() => this.onResign()}>Resign</button></div>
@@ -174,7 +139,6 @@ export class TicTacToe extends BoardComponent {
     }
 
     returnText(x, y) {
-        //console.log(this.state.board[3 * x + y])
         if (this.state.board[3 * x + y].type === 2) return ""
         else if(this.state.board[3 * x + y].type === 0) return "O"
         else return "X"
@@ -235,18 +199,7 @@ export class TicTacToe extends BoardComponent {
 
 
 
-    async startconnection() {
-
-        try {
-            await this.state.gameConnection.start();
-            console.log("SignalR (game) Connected.");
-            //await gameConnection.invoke('GameStarted');
-
-        } catch (err) {
-            console.log("Start hiba:" + err);
-            setTimeout(this.start, 50000);
-        }
-    }
+    
 
     onClick = async (x, y) => {
         console.log(x + " " + y + " meg lett nyomva")
@@ -255,47 +208,9 @@ export class TicTacToe extends BoardComponent {
         await this.state.gameConnection.invoke('MakeMove', JSON.stringify({X: x, Y: y}), 1);
         
     }
-    onResign = async () => {
-        await this.state.gameConnection.invoke('LoseGame', 1);
-    }
-    onJoinGame = async (e) => {
-        e.preventDefault()
-        if (!this.state.joined) {
-            this.setState({ joined: false })
-            await this.state.gameConnection.invoke('EnterGame', 1)
-        }
-
-    }
     
-    restart = () => {
-        this.setState({
-            board: [], players: [], loading: true, started: false, joined: false, isWhite: true, turnOf: true, duringMove: false, prevx: 0, prevy: 0, promoteTo: 1, winner: 3,
-            possibleMoves: [], prevMoves: [], promotionVisible: false, ownuser: "", otheruser: "", clock: new Clock({
-                ...fischer,
-                updateInterval,
-                callback,
-            }),
-            whitepoints: 0, blackpoints: 0
-        })
-        this.setState({
-            clock: new Clock({
-                ...fischer,
-                updateInterval,
-                callback: async (state) => {
-                    if (state.status === "done") {
-                        if (this.state.turnOf && this.state.isWhite) {
-                            console.log("black wins")
-                            await this.state.gameConnection.invoke('LoseGame');
-                        }
-                        else if (!this.state.turnOf && !this.state.isWhite) {
-                            console.log("white wins")
-                            await this.state.gameConnection.invoke('LoseGame');
-                        }
-                    }
-                }
-            })
-        })
-        this.forceUpdate();
-    }
+    
+    
+    
   
 }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { HubConnectionBuilder } from '@microsoft/signalr';
 import authService from './api-authorization/AuthorizeService'
 import { HttpTransportType } from '@microsoft/signalr';
@@ -34,10 +34,11 @@ export class BoardComponent extends Component {
             })
             .configureLogging(LogLevel.Information)
             .build(),
-            whitepoints: 0, blackpoints: 0
+            whitepoints: 0, blackpoints: 0, gameType: 0
         };
 
-      
+        //this.restart=this.restart.bind(this)
+        //this.renderJoin=this.renderJoin.bind(this)
 
         this.state.gameConnection.on('AddToGame', (playerlist) => {
             this.setState({ players: playerlist })
@@ -99,6 +100,8 @@ export class BoardComponent extends Component {
         })
 
         this.startconnection();
+
+        
     }
     async startconnection() {
 
@@ -113,5 +116,86 @@ export class BoardComponent extends Component {
     }
     render(){
         return false
+    }
+    componentDidMount(){
+        this.interval = setInterval(() => this.setState({ time: Date.now() }), 1000);
+
+
+        this.setState({
+            clock: new Clock({
+                ...fischer,
+                updateInterval,
+                callback: async (state) => {
+                    if (state.status === "done") {
+                        if (this.state.turnOf && this.state.isWhite) {
+                            console.log("black wins")
+                            await this.state.gameConnection.invoke('LoseGame', this.state.gameType);
+                        }
+                        else if (!this.state.turnOf && !this.state.isWhite) {
+                            console.log("white wins")
+                            await this.state.gameConnection.invoke('LoseGame', this.state.gameType);
+                        }
+                    }
+                }
+            })
+        })
+        console.log("cdm called")
+    }
+
+    restart = () => {
+        this.setState({
+            board: [], players: [], loading: true, started: false, joined: false, isWhite: true, turnOf: true, duringMove: false, prevx: 0, prevy: 0, promoteTo: 1, winner: 3,
+            possibleMoves: [], prevMoves: [], promotionVisible: false, ownuser: "", otheruser: "", clock: new Clock({
+                ...fischer,
+                updateInterval,
+                callback,
+            }),
+            whitepoints: 0, blackpoints: 0
+        })
+        this.setState({
+            clock: new Clock({
+                ...fischer,
+                updateInterval,
+                callback: async (state) => {
+                    if (state.status === "done") {
+                        if (this.state.turnOf && this.state.isWhite) {
+                            console.log("black wins")
+                            await this.state.gameConnection.invoke('LoseGame', this.state.gameType);
+                        }
+                        else if (!this.state.turnOf && !this.state.isWhite) {
+                            console.log("white wins")
+                            await this.state.gameConnection.invoke('LoseGame', this.state.gameType);
+                        }
+                    }
+                }
+            })
+        })
+        this.forceUpdate();
+    }
+
+    
+    renderJoin() {
+        if (!this.state.joined)
+            return (
+                <div className='end-screen'>
+                    <button className='btn btn-secondary btn-lg' onClick={this.onJoinGame}>Join game</button>
+                </div>)
+        else return (
+            <div className='end-screen'>
+                <p>Searching for opponent...</p>
+            </div>
+        )
+
+    }
+    onJoinGame = async (e) => {
+        e.preventDefault()
+        if (!this.state.joined) {
+            this.setState({ joined: false })
+            await this.state.gameConnection.invoke('EnterGame', this.state.gameType)
+        }
+
+    }
+    onResign = async () => {
+        await this.state.gameConnection.invoke('LoseGame', this.state.gameType);
     }
 }
