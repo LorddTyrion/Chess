@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using ReactChess.Models;
+using ReactBoardGame.Models;
 
-namespace ReactChess.Data
+namespace ReactBoardGame.Data
 {
     public partial class ApplicationDbContext : ApiAuthorizationDbContext<User>
     {

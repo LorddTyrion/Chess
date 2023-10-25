@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ReactChess.Controllers
+namespace ReactBoardGame.Controllers
 {
     public class OidcConfigurationController : Controller
     {

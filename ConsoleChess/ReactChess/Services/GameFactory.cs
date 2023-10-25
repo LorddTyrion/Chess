@@ -1,4 +1,4 @@
-﻿namespace ReactChess.Services
+﻿namespace ReactBoardGame.Services
 {
     public enum GameType
     {

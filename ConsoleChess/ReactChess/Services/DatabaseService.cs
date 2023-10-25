@@ -1,15 +1,15 @@
-﻿using ReactChess.Data;
-using ReactChess.Models;
+﻿using ReactBoardGame.Data;
+using ReactBoardGame.Models;
 using FrameworkBackend;
 using Microsoft.EntityFrameworkCore;
 
-namespace ReactChess.Services
+namespace ReactBoardGame.Services
 {
     public class DatabaseService
     {
         public int GameSetup(ApplicationDbContext context, GameController gameController, int gameID)
         {
-            Match m = new Match(); //m.Type = 0;;
+            Match m = new Match(); 
             Game game=gameController.GameById(gameID);
             IdAttribute idattr= (IdAttribute)Attribute.GetCustomAttribute(game.GetType(), typeof(IdAttribute));
             m.Type = Guid.Parse(idattr.Id);
@@ -37,6 +37,7 @@ namespace ReactChess.Services
         public void GameEndedNaturally(ApplicationDbContext context, GameController gameController, int gameID, string CurrentUserId, Color end)
         {
             var match = context.MatchSet.Where(m => (m.Player1Id == CurrentUserId || m.Player2Id == CurrentUserId) && m.Id == gameID).Include(m => m.Player1).Include(m => m.Player2).FirstOrDefault();
+            if (match == null) return;
             match.Result = (GameResult)(int)end;
             match.Player1.Games++;
             match.Player2.Games++;
@@ -61,6 +62,7 @@ namespace ReactChess.Services
         public void GameEndedByResignation(ApplicationDbContext context, string CurrentUserId, Game game)
         {
             var match = context.MatchSet.Where(m => (m.Player1Id == CurrentUserId || m.Player2Id == CurrentUserId) && m.Id == game.DbID).Include(m => m.Player1).Include(m => m.Player2).FirstOrDefault();
+            if (match == null) return;
             match.Result = CurrentUserId == match.Player1Id ? GameResult.SecondWon : GameResult.FirstWon;
             match.Player1.Games++;
             match.Player2.Games++;
@@ -81,6 +83,7 @@ namespace ReactChess.Services
         public void SerializeBoard(ApplicationDbContext context, string CurrentUserId, Game game)
         {
             var match = context.MatchSet.Where(m => (m.Player1Id == CurrentUserId || m.Player2Id == CurrentUserId) && m.Id == game.DbID).Include(m => m.Player1).Include(m => m.Player2).FirstOrDefault();
+            if (match == null) return;
             match.SerializedBoard = game.SerializeBoard();
             context.SaveChanges();
         }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 
-namespace ReactChess.Hubs
+namespace ReactBoardGame.Hubs
 {
     public class IdBasedUserIdProvider : IUserIdProvider
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace ReactChess.Models
+namespace ReactBoardGame.Models
 {
     public class User : IdentityUser
     {

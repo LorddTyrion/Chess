@@ -1,7 +1,7 @@
 ﻿using ConsoleChess;
 using FrameworkBackend;
 
-namespace ReactChess.Services
+namespace ReactBoardGame.Services
 {
     public enum GameState
     {

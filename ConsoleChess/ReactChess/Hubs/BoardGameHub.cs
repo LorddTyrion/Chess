@@ -4,13 +4,13 @@ using ConsoleChess.Pieces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using ReactChess.Data;
-using ReactChess.Services;
-using ReactChess.Models;
+using ReactBoardGame.Data;
+using ReactBoardGame.Services;
+using ReactBoardGame.Models;
 using FrameworkBackend;
 using TicTacToe;
 
-namespace ReactChess.Hubs
+namespace ReactBoardGame.Hubs
 {
     [Authorize]
     public class BoardGameHub : Hub<BoardGameClient>

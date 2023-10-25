@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using ReactChess.Data;
-using ReactChess.Models;
-using ReactChess.Hubs;
-using ReactChess.Services;
+using ReactBoardGame.Data;
+using ReactBoardGame.Models;
+using ReactBoardGame.Hubs;
+using ReactBoardGame.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

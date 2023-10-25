@@ -1,7 +1,7 @@
 ﻿using ConsoleChess;
 using FrameworkBackend;
 
-namespace ReactChess.Hubs
+namespace ReactBoardGame.Hubs
 {
     public interface BoardGameClient
     {
