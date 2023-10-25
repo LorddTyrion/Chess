@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleChess", "ConsoleChes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChessTest", "ChessTest\ChessTest.csproj", "{38B85790-D090-45F1-A0B7-12F30FB8500B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReactChess", "ReactChess\ReactChess.csproj", "{9EB5F36E-E034-4D58-9B1B-63B0C123D51C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReactBoardGame", "ReactChess\ReactBoardGame.csproj", "{9EB5F36E-E034-4D58-9B1B-63B0C123D51C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrameworkBackend", "FrameworkBackend\FrameworkBackend.csproj", "{81B80405-6A1A-47A8-9444-60C880E4A171}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe", "TicTacToe\TicTacToe.csproj", "{20131A1A-20A8-4C86-9C6D-826435674121}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicTacToe", "TicTacToe\TicTacToe.csproj", "{20131A1A-20A8-4C86-9C6D-826435674121}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

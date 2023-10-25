@@ -1,4 +1,4 @@
-﻿namespace ReactChess.Models
+﻿namespace ReactBoardGame.Models
 {
     public enum GameResult
     {

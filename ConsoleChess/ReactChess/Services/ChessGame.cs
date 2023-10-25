@@ -1,6 +1,6 @@
 ﻿
 using ConsoleChess;
-namespace ReactChess.Services
+namespace ReactBoardGame.Services
 {
     [AttributeUsage(AttributeTargets.All)]
     public class IdAttribute : Attribute
@@ -17,6 +17,7 @@ namespace ReactChess.Services
     {
         public ChessGame()
         {
+            Type = GameType.CHESS;
             Board=new ChessBoard();
         }
         public ChessGame(ChessGame game)

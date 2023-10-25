@@ -332,15 +332,23 @@ namespace ConsoleChess
             if (isLong)
             {
                 boardState.squares[targetSquare.X, targetSquare.Y].Piece = initialSquare.Piece;
+                boardState.squares[targetSquare.X, targetSquare.Y].Piece.X = targetSquare.X;
+                boardState.squares[targetSquare.X, targetSquare.Y].Piece.Y = targetSquare.Y;
                 initialSquare.Piece = null;
                 boardState.squares[targetSquare.X, targetSquare.Y + 1].Piece = boardState.squares[targetSquare.X, 0].Piece;
+                boardState.squares[targetSquare.X, targetSquare.Y + 1].Piece.X=targetSquare.X;
+                boardState.squares[targetSquare.X, targetSquare.Y + 1].Piece.Y = targetSquare.Y+1;
                 boardState.squares[targetSquare.X, 0].Piece = null;
             }
             else
             {
                 boardState.squares[targetSquare.X, targetSquare.Y].Piece = initialSquare.Piece;
+                boardState.squares[targetSquare.X, targetSquare.Y].Piece.X = targetSquare.X;
+                boardState.squares[targetSquare.X, targetSquare.Y].Piece.Y = targetSquare.Y;
                 initialSquare.Piece = null;
                 boardState.squares[targetSquare.X, targetSquare.Y - 1].Piece = boardState.squares[targetSquare.X, 7].Piece;
+                boardState.squares[targetSquare.X, targetSquare.Y - 1].Piece.X = targetSquare.X;
+                boardState.squares[targetSquare.X, targetSquare.Y - 1].Piece.Y = targetSquare.Y - 1;
                 boardState.squares[targetSquare.X, 7].Piece = null;
             }
             bool isChecked = isCheck(boardState);

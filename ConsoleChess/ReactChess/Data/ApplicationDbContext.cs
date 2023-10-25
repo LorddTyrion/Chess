@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using ReactChess.Models;
+using ReactBoardGame.Models;
 
-namespace ReactChess.Data
+namespace ReactBoardGame.Data
 {
     public partial class ApplicationDbContext : ApiAuthorizationDbContext<User>
     {
@@ -14,13 +14,7 @@ namespace ReactChess.Data
         {
 
         }
-        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=onlab;Integrated Security= True;");
-            }
-        }*/
+      
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
