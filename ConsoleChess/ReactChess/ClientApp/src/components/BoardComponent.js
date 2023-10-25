@@ -27,8 +27,16 @@ export class BoardComponent extends Component {
                 updateInterval,
                 callback,
             }),
-            gameConnection: new HubConnectionBuilder()
+            /*gameConnection: new HubConnectionBuilder()
             .withUrl('https://localhost:7073/chesshub', {
+                accessTokenFactory: () => {
+                    return authService.getAccessToken();
+                }, transport: HttpTransportType.WebSockets, skipNegotiation: true
+            })
+            .configureLogging(LogLevel.Information)
+            .build(),*/
+            gameConnection: new HubConnectionBuilder()
+            .withUrl('https://reactboardgame.azurewebsites.net/chesshub', {
                 accessTokenFactory: () => {
                     return authService.getAccessToken();
                 }, transport: HttpTransportType.WebSockets, skipNegotiation: true
@@ -132,22 +140,21 @@ export class BoardComponent extends Component {
                 updateInterval,
                 callback: async (state) => {
                     if (state.status === "done") {
+                        console.log("FLAG")
                         if (this.state.turnOf && this.state.isWhite) {
-                            console.log("black wins")
                             await this.state.gameConnection.invoke('LoseGame');
                         }
                         else if (!this.state.turnOf && !this.state.isWhite) {
-                            console.log("white wins")
                             await this.state.gameConnection.invoke('LoseGame');
                         }
                     }
                 }
             })
         })
-        console.log("cdm called")
     }
 
     restart = () => {
+        this.state.clock.pause()
         this.setState({
             board: [], players: [], loading: true, started: false, joined: false, isWhite: true, turnOf: true, duringMove: false, prevx: 0, prevy: 0, promoteTo: 1, winner: 3,
             possibleMoves: [], prevMoves: [], promotionVisible: false, ownuser: "", otheruser: "", clock: new Clock({
@@ -157,18 +164,19 @@ export class BoardComponent extends Component {
             }),
             whitepoints: 0, blackpoints: 0
         })
+        clearInterval(this.interval);
+        this.interval = setInterval(() => this.setState({ time: Date.now() }), 1000);
         this.setState({
             clock: new Clock({
                 ...fischer,
                 updateInterval,
                 callback: async (state) => {
                     if (state.status === "done") {
+                        console.log("FLAG2")
                         if (this.state.turnOf && this.state.isWhite) {
-                            console.log("black wins")
                             await this.state.gameConnection.invoke('LoseGame');
                         }
                         else if (!this.state.turnOf && !this.state.isWhite) {
-                            console.log("white wins")
                             await this.state.gameConnection.invoke('LoseGame');
                         }
                     }
