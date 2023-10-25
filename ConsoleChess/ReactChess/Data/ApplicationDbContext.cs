@@ -14,13 +14,7 @@ namespace ReactChess.Data
         {
 
         }
-        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=onlab;Integrated Security= True;");
-            }
-        }*/
+      
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

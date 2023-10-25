@@ -30,18 +30,12 @@ export class NavMenu extends Component {
       <header>
         <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3 chess-nav" light>
           <Container>
-            <NavbarBrand tag={Link} to="/">ReactChess</NavbarBrand>
+            <NavbarBrand tag={Link} to="/">Board Game Framework</NavbarBrand>
             <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
               <ul className="navbar-nav flex-grow">
                 <NavItem>
-                  <NavLink tag={Link} className="text-light" to="/">Home</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink tag={Link} className="text-light" to="/chessboard">Chess</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink tag={Link} className="text-light" to="/tictactoe">Tic Tac Toe</NavLink>
+                  <NavLink tag={Link} className="text-light mr" to="/">Play</NavLink>
                 </NavItem>
                 <LoginMenu>
                 </LoginMenu>

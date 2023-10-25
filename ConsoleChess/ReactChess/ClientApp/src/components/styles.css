@@ -84,6 +84,20 @@
     font-size: large;
     
 }
+.info-bar-t {
+    width: 600px;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.info-bar-t strong {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: large;
+    
+}
 
 .resign-button button {
     width: fit-content;
@@ -100,9 +114,27 @@
     flex-direction: column;
 }
 
-.cover-image{
-    height: 700px;
-    margin-bottom: 2rem;
+.game-image{
+    height: 200px;
+}
+
+.game-line{
+    width: 400px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+}
+
+.play-button{
+    display: flex;
+    height: fit-content;
+    width: 150px;
+    text-align: center;
+    align-self: flex-end;
+    justify-content: center;
 }
 
 .promote{
@@ -119,3 +151,27 @@
     align-content: center;
     align-items: center;
 }
+
+.no-decor{
+    display: flex;
+    flex-grow: 1;
+    text-align: center;
+    text-decoration: none;
+    justify-content: center;
+    color: #FFF;
+}
+
+.no-decor:hover {
+    color: #FFF
+ }
+
+ .play-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    flex-grow: 1;
+ }
+
+ .mr{
+    margin-right: 2rem;
+ }

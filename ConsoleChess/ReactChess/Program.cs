@@ -76,7 +76,7 @@ app.UseAuthentication();
 app.UseIdentityServer();
 app.UseAuthorization();
 
-app.MapHub<ChessHub>("/chesshub", options =>
+app.MapHub<BoardGameHub>("/chesshub", options =>
 {
     options.Transports =
         Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;

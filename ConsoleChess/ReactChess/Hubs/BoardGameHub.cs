@@ -13,7 +13,7 @@ using TicTacToe;
 namespace ReactChess.Hubs
 {
     [Authorize]
-    public class ChessHub : Hub<ChessClient>
+    public class BoardGameHub : Hub<BoardGameClient>
     {
       
         public ApplicationDbContext _context;
@@ -22,7 +22,7 @@ namespace ReactChess.Hubs
         private string? CurrentUserId => Context.UserIdentifier;
 
        
-        public ChessHub(ApplicationDbContext context, GameController gameController, DatabaseService databaseService)
+        public BoardGameHub(ApplicationDbContext context, GameController gameController, DatabaseService databaseService)
         {
             _context = context;
             _gameController = gameController;

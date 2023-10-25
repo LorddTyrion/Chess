@@ -1,5 +1,4 @@
 import React from 'react';
-//import { Clock } from 'chess-clock'
 import './styles.css';
 import {BoardComponent} from './BoardComponent';
 
@@ -15,7 +14,6 @@ export class TicTacToe extends BoardComponent {
     constructor(props) {
         super(props);
         console.log("I am also derived")
-        //this.setState({gameType: 1})
         
     }
 
@@ -71,7 +69,7 @@ export class TicTacToe extends BoardComponent {
         return move.x+"; "+move.y;
         
     }
-    renderBlack() {
+    renderBoard() {
         let whiteminutes = Math.floor(this.state.clock.state.remainingTime[0] / 60000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
         let blackminutes = Math.floor(this.state.clock.state.remainingTime[1] / 60000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
         let whiteseconds = Math.floor((this.state.clock.state.remainingTime[0] % 60000) / 1000).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
@@ -82,14 +80,14 @@ export class TicTacToe extends BoardComponent {
             const cols = [];
             for (let j = 0; j < 3; j++) {
                 
-                cols.push(<td><button className='chess' style={this.returnColor((i + j) % 2 === 0, false)} onClick={() => this.onClick(i, j)}>{this.returnText(i, j)}&#xFE0E;</button></td>);
+                cols.push(<td><button className='chess' style={this.returnColor(i, j)} onClick={() => this.onClick(i, j)}>{this.returnText(i, j)}</button></td>);
                 
             }
             rows.push(<tr>{cols}</tr>)
         }
         return (
             <div>
-                <div className='flexing info-bar'>
+                <div className='flexing info-bar-t'>
                     <div className='clock-container'>
                         <strong>{!this.state.isWhite ? whiteminutes:blackminutes}:{!this.state.isWhite ?whiteseconds: blackseconds}</strong>
                     </div>
@@ -100,31 +98,26 @@ export class TicTacToe extends BoardComponent {
                         {rows}
                     </tbody>
                 </table>
-                <div className='flexing info-bar'>
+                <div className='flexing info-bar-t'>
                     <div className='clock-container'>
                     <strong>{this.state.isWhite ? whiteminutes:blackminutes}:{this.state.isWhite ?whiteseconds: blackseconds}</strong>
                     </div>
                     <strong>{this.state.ownuser}</strong>
                     <div className='flexing resign-button'><button className='btn btn-secondary' onClick={() => this.onResign()}>Resign</button></div>
-                    <div> <strong>{this.state.turnOf === this.state.isWhite ?"Your turn!":"Opponent's turn!"}</strong></div>
                 </div>
+                <div className='flexing info-bar-t justify-content-center'> <strong style={{ fontSize: '30px'}}>{this.state.turnOf === this.state.isWhite ?"Your turn!":"Opponent's turn!"}</strong></div>
             </div>)
 
 
     }
-    returnColor(white, highlighted) {
-        if (!highlighted) {
-            if (white === true) {
-                return { backgroundColor: 'white', color: 'black', width: '100px', height: '100px', border: 'none', borderRadius: '0px 0px 0px 0px', borderWidth: '0px', textAlign: 'center', bottom: '0', fontSize: '80px' };
-            }
-            return { backgroundColor: 'darkslategray', color: 'black', width: '100px', height: '100px', border: 'none', borderRadius: '0px 0px 0px 0px', borderWidth: '0px', textAlign: 'center', bottom: '0', fontSize: '80px' };
+    returnColor(x, y) {
+        if (this.state.board[3 * x + y].type === 1){
+            return { backgroundColor: 'white', color: 'red', width: '200px', height: '200px', border: '1px solid black',  textAlign: 'center', bottom: '0', fontSize: '200px' };
         }
-        else {
-            if (white === true) {
-                return { backgroundColor: 'rgb(255, 213, 128)', color: 'black', width: '100px', height: '100px', border: 'none', borderRadius: '0px 0px 0px 0px', borderWidth: '0px', textAlign: 'center', bottom: '0', fontSize: '80px' };
-            }
-            return { backgroundColor: 'darkorange', color: 'black', width: '100px', height: '100px', border: 'none', borderRadius: '0px 0px 0px 0px', borderWidth: '0px', textAlign: 'center', bottom: '0', fontSize: '80px' };
-        }
+        return { backgroundColor: 'white', color: 'blue', width: '200px', height: '200px', border: '1px solid black', textAlign: 'center', bottom: '0', fontSize: '200px' };
+        
+        
+           
     }
 
     setBackground() {
@@ -150,7 +143,7 @@ export class TicTacToe extends BoardComponent {
         let content = <div></div>
        
         
-        content = this.state.loading ? <div></div> : this.renderBlack()
+        content = this.state.loading ? <div></div> : this.renderBoard()
     
         let win = <div></div>
 

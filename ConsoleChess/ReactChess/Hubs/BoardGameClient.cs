@@ -3,7 +3,7 @@ using FrameworkBackend;
 
 namespace ReactChess.Hubs
 {
-    public interface ChessClient
+    public interface BoardGameClient
     {
         Task GameCreated(IEnumerable<Field> board);
         Task RefreshBoard(IEnumerable<Field> board, bool success);

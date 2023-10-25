@@ -65,7 +65,7 @@ export class BoardComponent extends Component {
 
             }
             console.log("Game started")
-            this.context.setProgress(true)
+            
             this.forceUpdate()
 
         })
@@ -95,6 +95,7 @@ export class BoardComponent extends Component {
 
         this.state.gameConnection.on('GameEnds', (result) => {
             this.context.setProgress(false)
+            window.onbeforeunload = null
             this.setState({ winner: result })
             this.forceUpdate()
         })
@@ -193,6 +194,16 @@ export class BoardComponent extends Component {
     }
     onJoinGame = async (e) => {
         e.preventDefault()
+        this.context.setProgress(true)
+        window.onbeforeunload = function() {
+            return "Are you sure? If you are in a game, reloading will lose you the match.";
+          };
+          
+          window.onkeydown = function(event) {
+            if (event.keyCode === 116) {
+              window.location.reload();
+            }
+          };
         if (!this.state.joined) {
             this.setState({ joined: false })
             await this.state.gameConnection.invoke('EnterGame', this.state.gameType)
