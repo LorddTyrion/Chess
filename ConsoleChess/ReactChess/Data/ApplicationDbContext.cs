@@ -19,7 +19,9 @@ namespace ReactBoardGame.Data
         {
             base.OnModelCreating(builder);
             OnModelCreatingPartial(builder);
-            builder.Entity<Match>().HasOne(m => m.Player1).WithMany().HasForeignKey(m=>m.Player1Id).OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Match>().HasOne(m => m.Player1)
+                .WithMany().HasForeignKey(m=>m.Player1Id)
+                .OnDelete(DeleteBehavior.Restrict);
             builder.Entity<Match>().HasOne(m => m.Player2).WithMany().HasForeignKey(m => m.Player2Id).OnDelete(DeleteBehavior.Restrict);
             
         }

@@ -27,22 +27,22 @@ export class BoardComponent extends Component {
                 updateInterval,
                 callback,
             }),
-            /*gameConnection: new HubConnectionBuilder()
+            gameConnection: new HubConnectionBuilder()
             .withUrl('https://localhost:7073/chesshub', {
                 accessTokenFactory: () => {
                     return authService.getAccessToken();
                 }, transport: HttpTransportType.WebSockets, skipNegotiation: true
             })
             .configureLogging(LogLevel.Information)
-            .build(),*/
-            gameConnection: new HubConnectionBuilder()
+            .build(),
+            /*gameConnection: new HubConnectionBuilder()
             .withUrl('https://reactboardgame.azurewebsites.net/chesshub', {
                 accessTokenFactory: () => {
                     return authService.getAccessToken();
                 }, transport: HttpTransportType.WebSockets, skipNegotiation: true
             })
             .configureLogging(LogLevel.Information)
-            .build(),
+            .build(),*/
             whitepoints: 0, blackpoints: 0, gameType: 0
         };
 
