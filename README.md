@@ -4,7 +4,7 @@ Ez a program, amely a Board Game Framework névre hallgat, egy webalkalmazás, a
 
 ## A program felépítése
 
-A ReactChess mappa tartalmazza a webalkalmazás frontend és backend részét egyaránt, az adatbázis-kezeléssel együtt. Ennek a projektnek az indításával indul el az alkalmazás. 
+(A ConsoleChess mappán belül) a ReactChess mappa tartalmazza a webalkalmazás frontend és backend részét egyaránt, az adatbázis-kezeléssel együtt. Ennek a projektnek az indításával indul el az alkalmazás. 
 
 A FramewrokBackend mappa tartalmazza a keretrendszer absztrakt ősosztályait, amelyből a közreműködő fejlesztőknek is ki kell indulni.
 
