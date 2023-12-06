@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TicTacToe.TicTacToeBoard">
+    <Position X="8.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAEAAAgAAAACAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>TicTacToeBoard.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TicTacToe.TicTacToeBoardState">
+    <Position X="10.75" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAAQAAEAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TicTacToeBoardState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TicTacToe.TicTacToeField">
+    <Position X="3.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAYAA=</HashCode>
+      <FileName>TicTacToeField.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TicTacToe.TicTacToeMove">
+    <Position X="6" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAYAA=</HashCode>
+      <FileName>TicTacToeMove.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Enum Name="TicTacToe.TicTacToeType">
+    <Position X="9.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAACAAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>TicTacToeBoardState.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
