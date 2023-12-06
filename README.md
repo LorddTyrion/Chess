@@ -30,9 +30,10 @@ Alternatívaként az alábbi lépésekkel lokálisan is futtatható:
 
 1. Nyisd meg a ReactChess/ClientApp mappát például VS Code segítségével!
 2. Add ki az `npm install` parancsot! Lehetséges, hogy egy régen frissített modul miatt függőségi konfliktusok lesznek, ezt `npm install --legacy-peer-depths` segtségével lehet áthidalni.
-3. Nyisd meg a ConsoleChess.sln-t a Visual Studio-ban!
-4. Az adatbázis connection stringjét írd be a ReactChess projekt appsettings.json fájlban.
-5. A Package Manager Console-ban add ki az `Update-Database` parancsot!
-6. Indítsd el a ReactChess projektet!
+3. A node_modules/chess-clock/lib/esm/package.json fájlban a fejlesztő hibás JSON-formátumot használt, a fájl egyetlen sorát cseréljük erre: `{ "type": "module" }`
+4. Nyisd meg a ConsoleChess.sln-t a Visual Studio-ban!
+5. Az adatbázis connection stringjét írd be a ReactChess projekt appsettings.json fájlban.
+6. A Package Manager Console-ban add ki az `Update-Database` parancsot!
+7. Indítsd el a ReactChess projektet!
 
 Ugyanúgy, mint az Azure-ra telepített program esetében, legalább két felhasználót kell regisztrálni az alkalmazás kipróbálásához.
